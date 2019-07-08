@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<vx-card title="User Information">
-			<b>ID: </b>  {{user.id}}
+		<vx-card title="Role Information">
+			<b>ID: </b>  {{role.id}}
 			<vs-divider/>
-			<b>Name: </b> {{user.first_name + ' ' + user.last_name}}
+			<b>Name: </b> {{role.name}}
 			<vs-divider/>
-			<b>Email: </b> {{user.email}}
-			<vs-divider/>
-			<b>Mobile: </b> {{user.mobile}}
-
+			<b>Permissions: </b>
+			<template v-for="permission in role.permissions">
+				 {{permission.name}}
+			</template>
     	</vx-card>
 	</div>
 </template>
@@ -22,20 +22,20 @@ export default {
   	},
   	data() {
 	    return {
-	      	user: [],
+	      	role: [],
 	    }
   	},
   	methods: {
-
-  		//Display User Data.
-  		getUserData()
+  		//Display Role Data.
+  		getRoleData()
   		{
   			let fire = this;
             let config = {
                 headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
-	  		axios.get(`/api/users/${this.$route.params.id}`, config).then(function(response){
-	  			fire.user = response.data.user;
+	  		axios.get(`/api/roles/${this.$route.params.id}`, config).then(function(response){
+	  			console.log(response);
+	  			fire.role = response.data;
 	  		}).catch(function(error){
 	            console.log(error);
 	        }); 

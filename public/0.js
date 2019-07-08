@@ -3755,6 +3755,11 @@ __webpack_require__.r(__webpack_exports__);
   name: "User",
   slug: "user",
   icon: "UserIcon"
+}, {
+  url: "/role",
+  name: "Role",
+  slug: "role",
+  icon: "ShieldIcon"
 }]);
 
 /***/ }),

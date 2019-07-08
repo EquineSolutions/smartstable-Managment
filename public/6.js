@@ -89,7 +89,6 @@ var dict = {
 vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    this.getUserRoles();
     this.getData();
   },
   data: function data() {
@@ -105,20 +104,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     };
   },
   methods: {
-    getUserRoles: function getUserRoles() {
-      var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      }; // axios.get(`/api/users/${his.$route.params.id}}`, config).then(function(response){
-      //   console.log(response);
-      //   fire.userRoles = response.data.roles;
-      //   fire.user_role = fire.userRoles[0];
-      // }).catch(function(error){
-      //   console.log(error);
-      // });
-    },
     getData: function getData() {
       var fire = this;
       var config = {
@@ -127,7 +112,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         }
       };
       axios.get("/api/users/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
-        console.log(response);
         var user = response.data.user;
         fire.fname = user.first_name;
         fire.lname = user.last_name;
@@ -162,7 +146,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           };
           axios.put("/api/users/".concat(fire.$route.params.id), data, config).then(function (response) {
             if (response.data.success) {
-              console.log(response);
               fire.$vs.notify({
                 title: 'Success',
                 text: 'User Successfully Updated',
@@ -181,7 +164,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
               });
             }
           })["catch"](function (error) {
-            // console.log(error);
             fire.$vs.notify({
               title: 'Oops!',
               text: 'An error has been occurred.',
