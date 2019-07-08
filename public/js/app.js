@@ -60639,7 +60639,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         breadcrumb: [{
           title: 'Home',
           active: true
-        }]
+        }],
+        pageTitle: "Home"
       }
     }, {
       path: '/page2',
@@ -60647,7 +60648,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       component: function component() {
         return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./views/Page2.vue */ "./resources/js/src/views/Page2.vue"));
       }
-    },, {
+    }, {
       path: '/user',
       name: 'user',
       beforeEnter: guard,
@@ -60662,7 +60663,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         }, {
           title: 'User',
           active: true
-        }]
+        }],
+        pageTitle: "Users"
       }
     }, {
       path: '/user/create',
@@ -60680,7 +60682,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         }, {
           title: 'Create User',
           active: true
-        }]
+        }],
+        pageTitle: "Create User"
       }
     }, {
       path: '/user/:id',
@@ -60698,7 +60701,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         }, {
           title: 'User Information',
           active: true
-        }]
+        }],
+        pageTitle: "User Information"
       }
     }, {
       path: '/user/edit/:id',
@@ -60716,7 +60720,83 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         }, {
           title: 'Edit User',
           active: true
-        }]
+        }],
+        pageTitle: "Edit User"
+      }
+    }, {
+      path: '/role',
+      name: 'role',
+      beforeEnter: guard,
+      // Using guard before entering the route
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./views/Role/Roles.vue */ "./resources/js/src/views/Role/Roles.vue"));
+      },
+      meta: {
+        breadcrumb: [{
+          title: 'Home',
+          url: '/'
+        }, {
+          title: 'Roles',
+          active: true
+        }],
+        pageTitle: "Roles"
+      }
+    }, {
+      path: '/role/create',
+      name: 'create-role',
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./views/Role/Create.vue */ "./resources/js/src/views/Role/Create.vue"));
+      },
+      meta: {
+        breadcrumb: [{
+          title: 'Home',
+          url: '/'
+        }, {
+          title: 'Roles',
+          url: '/role'
+        }, {
+          title: 'Create Role',
+          active: true
+        }],
+        pageTitle: "Create Role"
+      }
+    }, {
+      path: '/role/:id',
+      name: 'view-role',
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./views/Role/View.vue */ "./resources/js/src/views/Role/View.vue"));
+      },
+      meta: {
+        breadcrumb: [{
+          title: 'Home',
+          url: '/'
+        }, {
+          title: 'Roles',
+          url: '/role'
+        }, {
+          title: 'Role Information',
+          active: true
+        }],
+        pageTitle: "Role Information"
+      }
+    }, {
+      path: '/role/edit/:id',
+      name: 'edit-role',
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./views/Role/Edit.vue */ "./resources/js/src/views/Role/Edit.vue"));
+      },
+      meta: {
+        breadcrumb: [{
+          title: 'Home',
+          url: '/'
+        }, {
+          title: 'Roles',
+          url: '/role'
+        }, {
+          title: 'Edit Role',
+          active: true
+        }],
+        pageTitle: "Edit Role"
       }
     }]
   }, // =============================================================================

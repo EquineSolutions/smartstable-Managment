@@ -44,7 +44,8 @@ const router = new Router({
             meta: {
               breadcrumb: [
                 { title: 'Home', active: true}
-              ]
+              ],
+              pageTitle: "Home"
             }
           },
           {
@@ -52,7 +53,9 @@ const router = new Router({
             name: 'page2',
             component: () => import('./views/Page2.vue'),
           },
-          ,
+
+
+
           {
             path: '/user',
             name: 'user',
@@ -62,7 +65,8 @@ const router = new Router({
               breadcrumb: [
                 { title: 'Home', url: '/'},
                 { title: 'User', active: true}
-              ]
+              ],
+              pageTitle: "Users"
             }
           },
           {
@@ -74,7 +78,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'User', url: '/user'},
                 { title: 'Create User', active: true}
-              ]
+              ],
+              pageTitle: "Create User"
             }
           },
           {
@@ -86,7 +91,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'User', url: '/user'},
                 { title: 'User Information', active: true}
-              ]
+              ],
+              pageTitle: "User Information"
             }
           },
           {
@@ -98,7 +104,65 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'Users', url: '/user'},
                 { title: 'Edit User', active: true}
-              ]
+              ],
+              pageTitle: "Edit User"
+            }
+          },
+
+
+
+
+
+          {
+            path: '/role',
+            name: 'role',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Role/Roles.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Roles', active: true}
+              ],
+              pageTitle: "Roles"
+            }
+          },
+          {
+            path: '/role/create',
+            name: 'create-role',
+            component: () => import('./views/Role/Create.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Roles', url: '/role'},
+                { title: 'Create Role', active: true}
+              ],
+              pageTitle: "Create Role"
+            }
+          },
+          {
+            path: '/role/:id',
+            name: 'view-role',
+            component: () => import('./views/Role/View.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Roles', url: '/role'},
+                { title: 'Role Information', active: true}
+              ],
+              pageTitle: "Role Information"
+            }
+          },
+          {
+            path: '/role/edit/:id',
+            name: 'edit-role',
+            component: () => import('./views/Role/Edit.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Roles', url: '/role'},
+                { title: 'Edit Role', active: true}
+              ],
+              pageTitle: "Edit Role"
             }
           }
         ],
