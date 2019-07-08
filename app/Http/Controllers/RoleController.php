@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Http\Controllers;
+namespace smartstable\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use smartstable\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;

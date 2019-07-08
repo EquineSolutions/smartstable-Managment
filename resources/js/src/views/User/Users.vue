@@ -111,7 +111,7 @@ export default {
 			};
   			axios.delete(`/api/users/${this.userIdToDelete}`, config).then(function(response){
   				console.log(response);
-	  			if(response.data.response) {
+	  			if(response.data.success) {
 	              	fire.$vs.notify({
 		                title:'Success',
 		                text:'User Successfully Deleted',

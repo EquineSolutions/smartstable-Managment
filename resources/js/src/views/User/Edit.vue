@@ -23,6 +23,29 @@
               <span class="text-danger text-sm"  v-show="errors.has('mobile')">{{ errors.first('mobile') }}</span>
             </div>
           </div>
+
+          <div class="vx-row">
+            <div class="vx-col sm:w-1/2 w-full mb-6">
+              <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-bind="password" class="w-full" ref="password" />
+              <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
+            </div>
+            <div class="vx-col sm:w-1/2 w-full mb-2">
+              <vs-input type="password" v-validate="'confirmed:password'" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Confirm Password" name="confirm_password" v-model="confirm_password" class="w-full" data-vv-as="password" />
+              <span class="text-danger text-sm" v-show="errors.has('confirm_password')">{{ errors.first('confirm_password') }}</span>
+            </div>
+          </div>
+
+          <div class="vx-row mt-5">
+            <div class="vx-col w-full">
+              <b>User Role:</b>
+              <ul class="centerx">
+                <li v-for="role in userRoles">
+                  <vs-radio v-model="user_role" :vs-value="role">{{role}}</vs-radio>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           <div class="vx-row">
             <div class="vx-col w-full">
               <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Update</vs-button>
@@ -54,28 +77,54 @@
   Validator.localize('en', dict);
   export default {
     mounted() {
+      this.getUserRoles();
       this.getData();
     },
     data() {
       return {
+        userRoles: [],
+
         fname: "",
         lname: "",
         email: "",
-        mobile: ""
+        mobile: "",
+        password: "",
+        confirm_password: "",
+        user_role: ""
       }
     },
     methods: {
+      getUserRoles()
+      {
+        let fire = this;
+        let config = {
+          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
+        };
+
+        // axios.get(`/api/users/${his.$route.params.id}}`, config).then(function(response){
+        //   console.log(response);
+        //   fire.userRoles = response.data.roles;
+        //   fire.user_role = fire.userRoles[0];
+        // }).catch(function(error){
+        //   console.log(error);
+        // });
+      },
+
       getData(){
         let fire = this;
         let config = {
           headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
         };
         axios.get(`/api/users/${this.$route.params.id}/edit`, config).then(function(response){
+          console.log(response);
           let user = response.data.user;
           fire.fname = user.first_name;
           fire.lname = user.last_name;
           fire.email = user.email;
           fire.mobile = user.mobile;
+          fire.password = '';
+          fire.userRoles = response.data.roles;
+          fire.user_role = response.data.userRole;
         }).catch(function(error){
           console.log(error);
         });
@@ -86,13 +135,21 @@
           if(result) {
             // if form have no errors
             let data = {
-              fname: this.fname,
-              lname: this.lname,
+              first_name: this.fname,
+              last_name: this.lname,
               email: this.email,
               mobile: this.mobile,
+              password: this.password,
+              roles: this.user_role
             };
-            axios.put(`/api/user/${fire.$route.params.id}`, data).then(function(response){
-              if(response.data.response) {
+
+            let config = {
+              headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
+            };
+
+            axios.put(`/api/users/${fire.$route.params.id}`, data, config).then(function(response){
+              if(response.data.success) {
+                console.log(response);
                 fire.$vs.notify({
                   title:'Success',
                   text:'User Successfully Updated',

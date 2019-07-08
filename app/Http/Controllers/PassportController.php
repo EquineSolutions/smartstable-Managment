@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace smartstable\Http\Controllers;
 
-use App\User;
+use smartstable\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
