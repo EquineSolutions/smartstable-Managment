@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace smartstable\Http\Controllers\Api;
 
-use App\Transformers\UserTransformer;
-use App\User;
+use smartstable\Transformers\UserTransformer;
+use smartstable\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use smartstable\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 

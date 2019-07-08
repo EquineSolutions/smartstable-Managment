@@ -47,6 +47,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // For custom error message
 
 
@@ -66,17 +89,36 @@ var dict = {
 vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    this.getUserRoles();
     this.getData();
   },
   data: function data() {
     return {
+      userRoles: [],
       fname: "",
       lname: "",
       email: "",
-      mobile: ""
+      mobile: "",
+      password: "",
+      confirm_password: "",
+      user_role: ""
     };
   },
   methods: {
+    getUserRoles: function getUserRoles() {
+      var fire = this;
+      var config = {
+        headers: {
+          'Authorization': "Bearer " + store.state.tokens.access_token
+        }
+      }; // axios.get(`/api/users/${his.$route.params.id}}`, config).then(function(response){
+      //   console.log(response);
+      //   fire.userRoles = response.data.roles;
+      //   fire.user_role = fire.userRoles[0];
+      // }).catch(function(error){
+      //   console.log(error);
+      // });
+    },
     getData: function getData() {
       var fire = this;
       var config = {
@@ -85,11 +127,15 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         }
       };
       axios.get("/api/users/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
+        console.log(response);
         var user = response.data.user;
         fire.fname = user.first_name;
         fire.lname = user.last_name;
         fire.email = user.email;
         fire.mobile = user.mobile;
+        fire.password = '';
+        fire.userRoles = response.data.roles;
+        fire.user_role = response.data.userRole;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -102,13 +148,21 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         if (result) {
           // if form have no errors
           var data = {
-            fname: _this.fname,
-            lname: _this.lname,
+            first_name: _this.fname,
+            last_name: _this.lname,
             email: _this.email,
-            mobile: _this.mobile
+            mobile: _this.mobile,
+            password: _this.password,
+            roles: _this.user_role
           };
-          axios.put("/api/user/".concat(fire.$route.params.id), data).then(function (response) {
-            if (response.data.response) {
+          var config = {
+            headers: {
+              'Authorization': "Bearer " + store.state.tokens.access_token
+            }
+          };
+          axios.put("/api/users/".concat(fire.$route.params.id), data, config).then(function (response) {
+            if (response.data.success) {
+              console.log(response);
               fire.$vs.notify({
                 title: 'Success',
                 text: 'User Successfully Updated',
@@ -368,6 +422,137 @@ var render = function() {
                 ],
                 1
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "vx-row" }, [
+              _c(
+                "div",
+                { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                [
+                  _c(
+                    "vs-input",
+                    _vm._b(
+                      {
+                        ref: "password",
+                        staticClass: "w-full",
+                        attrs: {
+                          type: "password",
+                          "icon-pack": "feather",
+                          icon: "icon-lock",
+                          "icon-no-border": "",
+                          "label-placeholder": "Password",
+                          name: "password"
+                        }
+                      },
+                      "vs-input",
+                      _vm.password,
+                      false
+                    )
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.has("password"),
+                          expression: "errors.has('password')"
+                        }
+                      ],
+                      staticClass: "text-danger text-sm"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.first("password")))]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                [
+                  _c("vs-input", {
+                    directives: [
+                      {
+                        name: "validate",
+                        rawName: "v-validate",
+                        value: "confirmed:password",
+                        expression: "'confirmed:password'"
+                      }
+                    ],
+                    staticClass: "w-full",
+                    attrs: {
+                      type: "password",
+                      "icon-pack": "feather",
+                      icon: "icon-lock",
+                      "icon-no-border": "",
+                      "label-placeholder": "Confirm Password",
+                      name: "confirm_password",
+                      "data-vv-as": "password"
+                    },
+                    model: {
+                      value: _vm.confirm_password,
+                      callback: function($$v) {
+                        _vm.confirm_password = $$v
+                      },
+                      expression: "confirm_password"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.has("confirm_password"),
+                          expression: "errors.has('confirm_password')"
+                        }
+                      ],
+                      staticClass: "text-danger text-sm"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.first("confirm_password")))]
+                  )
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "vx-row mt-5" }, [
+              _c("div", { staticClass: "vx-col w-full" }, [
+                _c("b", [_vm._v("User Role:")]),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  { staticClass: "centerx" },
+                  _vm._l(_vm.userRoles, function(role) {
+                    return _c(
+                      "li",
+                      [
+                        _c(
+                          "vs-radio",
+                          {
+                            attrs: { "vs-value": role },
+                            model: {
+                              value: _vm.user_role,
+                              callback: function($$v) {
+                                _vm.user_role = $$v
+                              },
+                              expression: "user_role"
+                            }
+                          },
+                          [_vm._v(_vm._s(role))]
+                        )
+                      ],
+                      1
+                    )
+                  }),
+                  0
+                )
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "vx-row" }, [
