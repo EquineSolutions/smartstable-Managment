@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace smartstable;
 
 
 use Illuminate\Notifications\Notifiable;

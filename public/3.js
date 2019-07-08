@@ -119,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]("/api/users/".concat(this.userIdToDelete), config).then(function (response) {
         console.log(response);
 
-        if (response.data.response) {
+        if (response.data.success) {
           fire.$vs.notify({
             title: 'Success',
             text: 'User Successfully Deleted',

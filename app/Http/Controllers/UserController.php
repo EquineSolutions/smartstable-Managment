@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace smartstable\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use smartstable\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -77,16 +77,17 @@ class UserController extends Controller
      *
      * @param  int  $id
      * @return Response
+     *
+     * Updated response....
      */
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
-        $userRoles = $user->roles->pluck('name','name')->all();
+        $roles = Role::pluck('name')->all();
+        $userRole = $user->roles->pluck('name')->first();
         return response()->json(['user' =>$user ,
             'roles' => $roles,
-            'userRoles' => $userRoles
+            'userRole' => $userRole
         ], 200);
     }
 
@@ -100,7 +101,9 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'mobile' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'
@@ -112,7 +115,7 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try{
-            $input = $request->only('name', 'email', 'password');
+            $input = $request->only('first_name', 'last_name', 'mobile', 'email', 'password');
         if(!empty($input['password'])){
             $input['password'] = Hash::make($input['password']); //update the password
         }else{
@@ -123,7 +126,7 @@ class UserController extends Controller
         DB::table('model_has_roles')->where('model_id',$id)->delete();
         $user->assignRole($request->input('roles'));
         DB::commit();
-        return response()->json(['success' =>'User updated successfully' ], 200);
+        return response()->json(['success' =>'User updated successfully','User' => $user ], 200);
 
         } catch (\Exception $e) {
             DB::rollback();
