@@ -61177,9 +61177,9 @@ var themeConfig = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/mac2/Code/SmartStable/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Users/mac2/Code/SmartStable/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /Users/mac2/Code/SmartStable/resources/assets/css/main.css */"./resources/assets/css/main.css");
+__webpack_require__(/*! /Users/mac2/Code/smartstable-Managment/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/mac2/Code/smartstable-Managment/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Users/mac2/Code/smartstable-Managment/resources/assets/css/main.css */"./resources/assets/css/main.css");
 
 
 /***/ })
