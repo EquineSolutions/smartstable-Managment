@@ -35,12 +35,12 @@
 			          			<div class="flex mb-4">
 									  <div class="w-1/3">
 									  		<vx-tooltip color="primary" text="View Data">
-									  			<vs-button @click="hideTooltip(indextr)" :to="`/user/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
+									  			<vs-button @click="hideTooltip" :to="`/user/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  		</vx-tooltip>
 									  </div>
 									  <div class="w-1/3" style="margin: 0 10px;">
 									  		<vx-tooltip color="warning" text="Edit User">
-									  			<vs-button @click="hideTooltip(indextr)" :to="`/user/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
+									  			<vs-button @click="hideTooltip" :to="`/user/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  		</vx-tooltip>
 									  </div>
 									  <div class="w-1/3">
@@ -136,8 +136,13 @@ export default {
 	        }); 
   		},
 
-		hideTooltip(index){
-			document.getElementsByClassName('vs-tooltip')[index].style.display='none'
+		//Hide Tool Tip After Navigation
+		hideTooltip()
+		{
+			let el = document.getElementsByClassName('vs-tooltip');
+			while (el.length > 0) {
+				el[0].parentNode.removeChild(el[0]);
+			}
 		}
   	}
 }
