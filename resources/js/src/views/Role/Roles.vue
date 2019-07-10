@@ -1,15 +1,13 @@
 <template>
 	<div>
-		<!-- Users Table -->
-		<vx-card title="Users List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
+		<!-- Roles Table -->
+		<vx-card title="Roles List">
+			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
 
-			<vs-table search :data="users">
+			<vs-table search :data="roles">
 		      	<template slot="thead">
 			        <vs-th sort-key="id">ID</vs-th>
-			        <vs-th sort-key="first_name">Name</vs-th>
-			        <vs-th sort-key="email">Email</vs-th>
-			        <vs-th sort-key="mobile">Mobile</vs-th>
+			        <vs-th sort-key="first_name">Role</vs-th>
 			        <vs-th>Action</vs-th>
 		      	</template>
 		      	<template slot-scope="{data}">
@@ -18,16 +16,8 @@
 			            	{{ data[indextr].id }}
 			          	</vs-td>
 
-			         	<vs-td :data="data[indextr].first_name">
-			            	{{ data[indextr].first_name + ' ' + data[indextr].last_name}}
-			          	</vs-td>
-
-			          	<vs-td :data="data[indextr].email">
-			            	{{ data[indextr].email }}
-			          	</vs-td>
-
-			         	 <vs-td :data="data[indextr].mobile">
-			            	{{ data[indextr].mobile }}
+			         	<vs-td :data="data[indextr].role">
+			            	{{ data[indextr].role}}
 			          	</vs-td>
 
 			          	<vs-td>
@@ -35,17 +25,17 @@
 			          			<div class="flex mb-4">
 									  <div class="w-1/3">
 									  		<vx-tooltip color="primary" text="View Data">
-									  			<vs-button @click="hideTooltip" :to="`/user/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
+									  			<vs-button @click="hideTooltip" :to="`/role/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  		</vx-tooltip>
 									  </div>
 									  <div class="w-1/3" style="margin: 0 10px;">
-									  		<vx-tooltip color="warning" text="Edit User">
-									  			<vs-button @click="hideTooltip" :to="`/user/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
+									  		<vx-tooltip color="warning" text="Edit Role">
+									  			<vs-button @click="hideTooltip" :to="`/role/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  		</vx-tooltip>
 									  </div>
 									  <div class="w-1/3">
-									  		<vx-tooltip color="danger" text="Delete User">
-									  			<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteUser(data[indextr])"></vs-button>
+									  		<vx-tooltip color="danger" text="Delete Role">
+									  			<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRole(data[indextr])"></vs-button>
 									  		</vx-tooltip>
 									  </div>
 								</div>
@@ -68,58 +58,58 @@ export default {
   	},
   	data() {
 	    return {
-	      	users: [],
-	      	userIdToDelete: null,
+	      	roles: [],
+	      	roleIdToDelete: null,
 	    }
   	},
   	methods: {
-
-  		//Get A List Of All Users.
+  		//Get A List Of All Roles.
   		getData()
   		{
   			let fire = this;
 			let config = {
 				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
 			};
-			axios.get('/api/users', config).then(function(response){
-	  			fire.users = response.data.users;
+			axios.get('/api/roles', config).then(function(response){
+				console.log(response);
+	  			fire.roles = response.data.roles;
 	  		}).catch(function(error){
 	            console.log(error);
 	        });
   		},
 
-  		// Confirm Dialog To Delete The User
-  		confirmDeleteUser(user) 
+  		// Confirm Dialog To Delete The Role
+  		confirmDeleteRole(role)
   		{
   			let fire = this;
-  			this.userIdToDelete = user.id;
+  			this.roleIdToDelete = role.id;
   			this.$vs.dialog({
   				type: 'confirm',
 		        color: 'danger',
 		        title: `Are you sure!`,
 		        text: 'This data can not be retrieved again.',
-		        accept: fire.deleteUser
+		        accept: fire.deleteRole
 	      	});
   		},
 
-  		//Delete A Single User By UserID.
-  		deleteUser()
+  		//Delete A Single Role By RoleID.
+  		deleteRole()
   		{
   			let fire = this;
 			let config = {
 				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
 			};
-  			axios.delete(`/api/users/${this.userIdToDelete}`, config).then(function(response){
+  			axios.delete(`/api/roles/${this.roleIdToDelete}`, config).then(function(response){
   				console.log(response);
 	  			if(response.data.success) {
 	              	fire.$vs.notify({
-		                title:'Success',
-		                text:'User Successfully Deleted',
+		                title: 'Success',
+		                text: 'Role Successfully Deleted',
 		                color:'success',
 		                iconPack: 'feather',
-		                icon:'icon-check'
+		                icon: 'icon-check'
 	              	});
-					fire.users = fire.users.filter(function(value){return value.id != fire.userIdToDelete;});
+					fire.roles = fire.roles.filter(function(value){return value.id != fire.roleIdToDelete;});
             	    } else {
 	              	fire.$vs.notify({
 	                	title:'Oops!',

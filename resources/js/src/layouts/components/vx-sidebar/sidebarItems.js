@@ -31,5 +31,11 @@ export default [
     name: "User",
     slug: "user",
     icon: "UserIcon",
+  },
+  {
+    url: "/role",
+    name: "Role",
+    slug: "role",
+    icon: "ShieldIcon",
   }
 ]
