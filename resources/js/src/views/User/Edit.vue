@@ -128,7 +128,7 @@
             let config = {
               headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
-            
+
             axios.put(`/api/users/${fire.$route.params.id}`, data, config).then(function(response){
               if(response.data.success) {
                 fire.$vs.notify({
