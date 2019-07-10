@@ -77,7 +77,6 @@
   Validator.localize('en', dict);
   export default {
     mounted() {
-      this.getUserRoles();
       this.getData();
     },
     data() {
@@ -94,29 +93,12 @@
       }
     },
     methods: {
-      getUserRoles()
-      {
-        let fire = this;
-        let config = {
-          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-        };
-
-        // axios.get(`/api/users/${his.$route.params.id}}`, config).then(function(response){
-        //   console.log(response);
-        //   fire.userRoles = response.data.roles;
-        //   fire.user_role = fire.userRoles[0];
-        // }).catch(function(error){
-        //   console.log(error);
-        // });
-      },
-
       getData(){
         let fire = this;
         let config = {
           headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
         };
         axios.get(`/api/users/${this.$route.params.id}/edit`, config).then(function(response){
-          console.log(response);
           let user = response.data.user;
           fire.fname = user.first_name;
           fire.lname = user.last_name;
@@ -149,7 +131,6 @@
 
             axios.put(`/api/users/${fire.$route.params.id}`, data, config).then(function(response){
               if(response.data.success) {
-                console.log(response);
                 fire.$vs.notify({
                   title:'Success',
                   text:'User Successfully Updated',
@@ -166,7 +147,6 @@
                 });
               }
             }).catch(function(error){
-              // console.log(error);
               fire.$vs.notify({
                 title:'Oops!',
                 text:'An error has been occurred.',
