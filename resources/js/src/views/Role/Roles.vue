@@ -16,8 +16,8 @@
 			            	{{ data[indextr].id }}
 			          	</vs-td>
 
-			         	<vs-td :data="data[indextr].role">
-			            	{{ data[indextr].role}}
+			         	<vs-td :data="data[indextr].name">
+			            	{{ data[indextr].name}}
 			          	</vs-td>
 
 			          	<vs-td>
@@ -71,7 +71,6 @@ export default {
 				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
 			};
 			axios.get('/api/roles', config).then(function(response){
-				console.log(response);
 	  			fire.roles = response.data.roles;
 	  		}).catch(function(error){
 	            console.log(error);
@@ -100,7 +99,6 @@ export default {
 				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
 			};
   			axios.delete(`/api/roles/${this.roleIdToDelete}`, config).then(function(response){
-  				console.log(response);
 	  			if(response.data.success) {
 	              	fire.$vs.notify({
 		                title: 'Success',

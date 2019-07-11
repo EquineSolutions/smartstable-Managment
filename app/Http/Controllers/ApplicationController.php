@@ -1,9 +1,9 @@
 <?php
 
-namespace smartstable\Http\Controllers;
+namespace App\Http\Controllers;
 
-use smartstable\User;
-use smartstable\Http\Controllers\Controller;
+use App\User;
+use App\Http\Controllers\Controller;
 
 class ApplicationController extends Controller
 {
