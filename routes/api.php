@@ -14,12 +14,12 @@ use Illuminate\Http\Request;
 */
 
 
-Route::post('login', 'PassportController@login');
-Route::post('register', 'PassportController@register');
+Route::post('login', 'Api\PassportController@login');
+Route::post('register', 'Api\PassportController@register');
 
 Route::middleware('auth:api')->group(function () {
-    Route::resource('roles','RoleController');
-    Route::resource('users','UserController');
+    Route::resource('roles','Api\RoleController');
+    Route::resource('users','Api\UserController');
 });
 
 //Route::group(['prefix' => 'user'], function () {
