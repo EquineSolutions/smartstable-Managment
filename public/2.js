@@ -49,8 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 var dict = {
   custom: {
     role_name: {
-      required: 'Please enter the role name',
-      alpha: "The role may only contain alphabetic characters"
+      required: 'Please enter the role name'
     }
   }
 }; // register custom messages
@@ -76,7 +75,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         }
       };
       axios.get('/api/roles/create', config).then(function (response) {
-        fire.permissions = response.data.roles;
+        fire.permissions = response.data.permission;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -91,15 +90,16 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             headers: {
               'Authorization': "Bearer " + store.state.tokens.access_token
             }
-          };
-          console.log(store.state.tokens.access_token); // if form have no errors
+          }; // if form have no errors
 
           var formData = new FormData();
-          formData.append('role_name', _this.role_name);
-          formData.append('permissions', _this.rolePermissions);
-          axios.post('/api/roles', formData, config).then(function (response) {
-            console.log(response);
+          formData.append('name', _this.role_name); // formData.append('permission[]', ['rr', 'vdfvf']);
 
+          for (var i = 0; i < fire.rolePermissions.length; i++) {
+            formData.append('permission[]', fire.rolePermissions[i]);
+          }
+
+          axios.post('/api/roles', formData, config).then(function (response) {
             if (response.data.success) {
               fire.$vs.notify({
                 title: 'Success',
@@ -119,7 +119,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
               });
             }
           })["catch"](function (error) {
-            // console.log(error);
             fire.$vs.notify({
               title: 'Oops!',
               text: 'An error has been occurred.',
@@ -219,8 +218,8 @@ var render = function() {
                     {
                       name: "validate",
                       rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
+                      value: "required",
+                      expression: "'required'"
                     }
                   ],
                   staticClass: "w-full",
@@ -275,7 +274,7 @@ var render = function() {
                       _c(
                         "vs-checkbox",
                         {
-                          attrs: { "vs-value": permission },
+                          attrs: { "vs-value": permission.name },
                           model: {
                             value: _vm.rolePermissions,
                             callback: function($$v) {
@@ -284,7 +283,7 @@ var render = function() {
                             expression: "rolePermissions"
                           }
                         },
-                        [_vm._v(_vm._s(permission))]
+                        [_vm._v(_vm._s(permission.name))]
                       )
                     ],
                     1

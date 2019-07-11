@@ -81,7 +81,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get('/api/roles', config).then(function (response) {
-        console.log(response);
         fire.roles = response.data.roles;
       })["catch"](function (error) {
         console.log(error);
@@ -108,8 +107,6 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios["delete"]("/api/roles/".concat(this.roleIdToDelete), config).then(function (response) {
-        console.log(response);
-
         if (response.data.success) {
           fire.$vs.notify({
             title: 'Success',
@@ -260,10 +257,10 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("vs-td", { attrs: { data: data[indextr].role } }, [
+                          _c("vs-td", { attrs: { data: data[indextr].name } }, [
                             _vm._v(
                               "\n\t\t\t            \t" +
-                                _vm._s(data[indextr].role) +
+                                _vm._s(data[indextr].name) +
                                 "\n\t\t\t          \t"
                             )
                           ]),

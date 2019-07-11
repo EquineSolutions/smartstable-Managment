@@ -6,8 +6,8 @@
 			<b>Name: </b> {{role.name}}
 			<vs-divider/>
 			<b>Permissions: </b>
-			<template v-for="permission in role.permissions">
-				 {{permission.name}}
+			<template v-for="(permission, index) in permissions">
+				{{permission.name}}<template v-if="index != permissions.length-1"> // </template>
 			</template>
     	</vx-card>
 	</div>
@@ -18,11 +18,12 @@
 
 export default {
 	mounted() {
-    	this.getUserData();
+    	this.getRoleData();
   	},
   	data() {
 	    return {
 	      	role: [],
+			permissions: []
 	    }
   	},
   	methods: {
@@ -34,8 +35,8 @@ export default {
                 headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
 	  		axios.get(`/api/roles/${this.$route.params.id}`, config).then(function(response){
-	  			console.log(response);
-	  			fire.role = response.data;
+	  			fire.role = response.data.role;
+	  			fire.permissions = response.data.rolePermissions;
 	  		}).catch(function(error){
 	            console.log(error);
 	        }); 
