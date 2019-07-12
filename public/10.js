@@ -44,7 +44,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get("/api/users/".concat(this.$route.params.id), config).then(function (response) {
-        fire.user = response.data.user;
+        fire.user = response.data.data;
       })["catch"](function (error) {
         console.log(error);
       });
