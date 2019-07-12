@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Validator;
@@ -26,15 +27,15 @@ class UserController extends Controller
     public function show(User $user)
     {
         $this->authorize('index', User::class);
-        return response()->json(['user' => $user], 200);
+//        return response()->json(['user' => $user], 200);
+        return fractal($user, new UserTransformer());
     }
 
     public function index()
     {
         $this->authorize('index', User::class);
-        $data = User::orderBy('id','DESC')->get();
-        return response()->json(['users' =>$data ], 200);
-
+//        return response()->json(['users' =>$data ], 200);
+        return fractal(User::orderBy('id','DESC')->get(), new UserTransformer());
     }
 
     /**
@@ -62,7 +63,18 @@ class UserController extends Controller
         $this->authorize('index', User::class);
         $data = $request->validated();
 
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path() . '/uploads/images/user/';
+            $image->move($destinationPath, $file_name);
+
+            $data['image'] = $file_name;
+        }
+
         $data['password'] = bcrypt($data['password']); //Hash password
+
         $user = User::create($data);
         $user->assignRole($request->input('roles'));
         return response()->json(['success' =>'User created successfully' ], 200);
@@ -107,6 +119,16 @@ class UserController extends Controller
 
         if(!empty($data['password'])){
             $data['password'] = bcrypt($data['password']); //update the password
+        }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path() . '/uploads/images/user/';
+            $image->move($destinationPath, $file_name);
+
+            $data['image'] = $file_name;
         }
 
         $user->update($data);
