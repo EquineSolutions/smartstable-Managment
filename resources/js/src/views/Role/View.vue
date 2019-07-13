@@ -35,6 +35,7 @@ export default {
                 headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
 	  		axios.get(`/api/roles/${this.$route.params.id}`, config).then(function(response){
+	  			console.log(response);
 	  			fire.role = response.data.role;
 	  			fire.permissions = response.data.rolePermissions;
 	  		}).catch(function(error){
