@@ -91,7 +91,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get('/api/users', config).then(function (response) {
-        fire.users = response.data.users;
+        fire.users = response.data.data;
       })["catch"](function (error) {
         console.log(error);
       });
