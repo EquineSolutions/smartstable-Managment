@@ -48,8 +48,7 @@ __webpack_require__.r(__webpack_exports__);
 var dict = {
   custom: {
     role_name: {
-      required: 'Please enter the role name',
-      alpha: "The role may only contain alphabetic characters"
+      required: 'Please enter the role name'
     }
   }
 }; // register custom messages
@@ -75,8 +74,9 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         }
       };
       axios.get("/api/roles/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
-        fire.permissions = response.data.roles;
-        fire.role_name = response.data.role_name;
+        console.log(response);
+        fire.permissions = response.data.permission;
+        fire.role_name = response.data.role.name;
         fire.rolePermissions = response.data.rolePermissions;
       })["catch"](function (error) {
         console.log(error);
@@ -218,8 +218,8 @@ var render = function() {
                     {
                       name: "validate",
                       rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
+                      value: "required",
+                      expression: "'required'"
                     }
                   ],
                   staticClass: "w-full",
@@ -274,7 +274,7 @@ var render = function() {
                       _c(
                         "vs-checkbox",
                         {
-                          attrs: { "vs-value": permission },
+                          attrs: { "vs-value": permission.name },
                           model: {
                             value: _vm.rolePermissions,
                             callback: function($$v) {
@@ -283,7 +283,7 @@ var render = function() {
                             expression: "rolePermissions"
                           }
                         },
-                        [_vm._v(_vm._s(permission))]
+                        [_vm._v(_vm._s(permission.name))]
                       )
                     ],
                     1

@@ -1,10 +1,14 @@
 <?php
 
-namespace smartstable\Providers;
+namespace App\Providers;
 
+use App\Policies\RolePolicy;
+use App\Policies\UserPolicy;
+use App\User;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Spatie\Permission\Models\Role;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'smartstable\Model' => 'smartstable\Policies\ModelPolicy',
+        Role::class => RolePolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
