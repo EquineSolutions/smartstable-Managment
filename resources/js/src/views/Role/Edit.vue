@@ -4,7 +4,7 @@
       <form>
         <div class="vx-row">
           <div class="vx-col w-full mb-2">
-            <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-shield" icon-no-border label-placeholder="Role Name" v-model="role_name" name='role_name' />
+            <vs-input class="w-full" v-validate="'required'" icon-pack="feather" icon="icon-shield" icon-no-border label-placeholder="Role Name" v-model="role_name" name='role_name' />
             <span class="text-danger text-sm"  v-show="errors.has('role_name')">{{ errors.first('role_name') }}</span>
           </div>
         </div>
@@ -14,7 +14,7 @@
             <b>Role Permissions:</b>
             <ul class="centerx">
               <li v-for="(permission, index) in permissions" :key="index">
-                <vs-checkbox v-model="rolePermissions" :vs-value="permission">{{permission}}</vs-checkbox>
+                <vs-checkbox v-model="rolePermissions" :vs-value="permission.name">{{permission.name}}</vs-checkbox>
               </li>
             </ul>
           </div>
@@ -38,8 +38,7 @@
   const dict = {
     custom: {
       role_name: {
-        required: 'Please enter the role name',
-        alpha: "The role may only contain alphabetic characters"
+        required: 'Please enter the role name'
       }
     }
   };
@@ -69,8 +68,9 @@
         };
 
         axios.get(`/api/roles/${this.$route.params.id}/edit`, config).then(function(response){
-          fire.permissions = response.data.roles;
-          fire.role_name = response.data.role_name;
+          console.log(response);
+          fire.permissions = response.data.permission;
+          fire.role_name = response.data.role.name;
           fire.rolePermissions = response.data.rolePermissions;
         }).catch(function(error){
           console.log(error);

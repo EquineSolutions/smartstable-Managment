@@ -27,11 +27,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    this.getUserData();
+    this.getRoleData();
   },
   data: function data() {
     return {
-      role: []
+      role: [],
+      permissions: []
     };
   },
   methods: {
@@ -44,8 +45,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get("/api/roles/".concat(this.$route.params.id), config).then(function (response) {
-        console.log(response);
-        fire.role = response.data;
+        fire.role = response.data.role;
+        fire.permissions = response.data.rolePermissions;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -87,9 +88,10 @@ var render = function() {
           _vm._v(" "),
           _c("b", [_vm._v("Permissions: ")]),
           _vm._v(" "),
-          _vm._l(_vm.role.permissions, function(permission) {
+          _vm._l(_vm.permissions, function(permission, index) {
             return [
-              _vm._v("\n\t\t\t\t " + _vm._s(permission.name) + "\n\t\t\t")
+              _vm._v("\n\t\t\t\t" + _vm._s(permission.name)),
+              index != _vm.permissions.length - 1 ? [_vm._v(" // ")] : _vm._e()
             ]
           })
         ],
