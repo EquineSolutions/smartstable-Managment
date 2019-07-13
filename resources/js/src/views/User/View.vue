@@ -35,7 +35,7 @@ export default {
                 headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
 	  		axios.get(`/api/users/${this.$route.params.id}`, config).then(function(response){
-	  			fire.user = response.data.user;
+	  			fire.user = response.data.data;
 	  		}).catch(function(error){
 	            console.log(error);
 	        }); 

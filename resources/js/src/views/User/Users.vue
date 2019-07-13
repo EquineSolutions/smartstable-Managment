@@ -82,7 +82,7 @@ export default {
 				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
 			};
 			axios.get('/api/users', config).then(function(response){
-	  			fire.users = response.data.users;
+	  			fire.users = response.data.data;
 	  		}).catch(function(error){
 	            console.log(error);
 	        });

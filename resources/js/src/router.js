@@ -55,7 +55,7 @@ const router = new Router({
           },
 
 
-
+          // USER CRUD PAGES
           {
             path: '/user',
             name: 'user',
@@ -72,6 +72,7 @@ const router = new Router({
           {
             path: '/user/create',
             name: 'create-user',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/Create.vue'),
             meta: {
               breadcrumb: [
@@ -85,6 +86,7 @@ const router = new Router({
           {
             path: '/user/:id',
             name: 'view-user',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/View.vue'),
             meta: {
               breadcrumb: [
@@ -98,6 +100,7 @@ const router = new Router({
           {
             path: '/user/edit/:id',
             name: 'edit-user',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/Edit.vue'),
             meta: {
               breadcrumb: [
@@ -112,7 +115,7 @@ const router = new Router({
 
 
 
-
+          // ROLE CRUD PAGES
           {
             path: '/role',
             name: 'role',
@@ -129,6 +132,7 @@ const router = new Router({
           {
             path: '/role/create',
             name: 'create-role',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/Role/Create.vue'),
             meta: {
               breadcrumb: [
@@ -142,6 +146,7 @@ const router = new Router({
           {
             path: '/role/:id',
             name: 'view-role',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/Role/View.vue'),
             meta: {
               breadcrumb: [
@@ -155,6 +160,7 @@ const router = new Router({
           {
             path: '/role/edit/:id',
             name: 'edit-role',
+            beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/Role/Edit.vue'),
             meta: {
               breadcrumb: [
@@ -164,7 +170,24 @@ const router = new Router({
               ],
               pageTitle: "Edit Role"
             }
-          }
+          },
+
+
+
+          // PROFILE PAGE
+          {
+            path: '/profile',
+            name: 'profile',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Profile/Profile.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Profile', active: true}
+              ],
+              pageTitle: "Profile"
+            }
+          },
         ],
       },
     // =============================================================================
@@ -211,6 +234,7 @@ router.afterEach(() => {
 
 function guard(to, from, next){
   let now = Date.now();
+  console.log(store.state);
   if(store.state.tokens.access_token != null || now >= store.state.tokens.expires_in ) {
     // or however you store your logged in state
     next(); // allow to enter route
