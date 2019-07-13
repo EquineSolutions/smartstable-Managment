@@ -80,11 +80,10 @@ class PassportController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'userRole' => $userRole,
-            'rolePermissions' => $rolePermissions,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'user_id' => $user->id
         ]);
     }
 

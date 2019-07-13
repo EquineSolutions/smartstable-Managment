@@ -115,8 +115,8 @@
 			<!-- USER META -->
 			<div class="the-navbar__user-meta flex items-center">
 				<div class="text-right leading-tight hidden sm:block">
-					<p class="font-semibold">John Doe</p>
-					<small>Available</small>
+					<p class="font-semibold">{{user.name}}</p>
+					<small>{{user.email}}</small>
 				</div>
 				<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
 					<div class="con-img ml-3"><img src="../../../../assets/images/portrait/small/avatar-s-11.png" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block"></div>
@@ -151,6 +151,10 @@ export default {
     },
     data() {
         return {
+        	user:{
+        		name: store.state.currentUser.first_name + " " + store.state.currentUser.last_name,
+        		email: store.state.currentUser.email,
+			},
             navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
             searchQuery: '',
             showFullSearch: false,

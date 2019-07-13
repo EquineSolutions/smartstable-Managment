@@ -87,7 +87,6 @@ export default {
           // if form have no errors
           const formData = new FormData();
           formData.append('name', this.role_name);
-          // formData.append('permission[]', ['rr', 'vdfvf']);
           for (var i = 0; i < fire.rolePermissions.length; i++) {
             formData.append('permission[]', fire.rolePermissions[i]);
           }

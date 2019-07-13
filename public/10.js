@@ -136,9 +136,13 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             last_name: _this.lname,
             email: _this.email,
             mobile: _this.mobile,
-            password: _this.password,
             roles: _this.user_role
           };
+
+          if (_this.password != "") {
+            data["password"] = _this.password;
+          }
+
           var config = {
             headers: {
               'Authorization': "Bearer " + store.state.tokens.access_token
@@ -411,26 +415,25 @@ var render = function() {
                 "div",
                 { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
                 [
-                  _c(
-                    "vs-input",
-                    _vm._b(
-                      {
-                        ref: "password",
-                        staticClass: "w-full",
-                        attrs: {
-                          type: "password",
-                          "icon-pack": "feather",
-                          icon: "icon-lock",
-                          "icon-no-border": "",
-                          "label-placeholder": "Password",
-                          name: "password"
-                        }
+                  _c("vs-input", {
+                    ref: "password",
+                    staticClass: "w-full",
+                    attrs: {
+                      type: "password",
+                      "icon-pack": "feather",
+                      icon: "icon-lock",
+                      "icon-no-border": "",
+                      "label-placeholder": "Password",
+                      name: "password"
+                    },
+                    model: {
+                      value: _vm.password,
+                      callback: function($$v) {
+                        _vm.password = $$v
                       },
-                      "vs-input",
-                      _vm.password,
-                      false
-                    )
-                  ),
+                      expression: "password"
+                    }
+                  }),
                   _vm._v(" "),
                   _c(
                     "span",
