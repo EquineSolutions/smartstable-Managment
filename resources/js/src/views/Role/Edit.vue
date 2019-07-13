@@ -68,10 +68,13 @@
         };
 
         axios.get(`/api/roles/${this.$route.params.id}/edit`, config).then(function(response){
-          console.log(response);
-          fire.permissions = response.data.permission;
+          fire.permissions = response.data.permissions;
+          fire.permissions = response.data.permissions;
           fire.role_name = response.data.role.name;
-          fire.rolePermissions = response.data.rolePermissions;
+          for (let i =0; i<response.data.rolePermissions.length; i++){
+            fire.rolePermissions.push(response.data.rolePermissions[i].name)
+          }
+          // fire.rolePermissions = response.data.rolePermissions;
         }).catch(function(error){
           console.log(error);
         });
@@ -85,13 +88,13 @@
             let config = {
               headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
             };
-            // if form have no errors
-            const formData = new FormData();
-            formData.append('role_name', this.role_name);
-            formData.append('permissions', this.rolePermissions);
 
-            axios.put(`/api/roles/${this.$route.params.id}`, formData, config).then(function(response){
-              console.log(response);
+            let data = {
+              name: this.role_name,
+              permission: this.rolePermissions,
+            };
+
+            axios.put(`/api/roles/${this.$route.params.id}`, data, config).then(function(response){
               if(response.data.success) {
                 fire.$vs.notify({
                   title:'Success',

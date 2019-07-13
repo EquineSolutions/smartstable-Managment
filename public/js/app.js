@@ -60885,7 +60885,7 @@ router.afterEach(function () {
 
 function guard(to, from, next) {
   var now = Date.now();
-  console.log(store.state);
+  console.log(store.state.currentUser);
 
   if (store.state.tokens.access_token != null || now >= store.state.tokens.expires_in) {
     // or however you store your logged in state
@@ -60976,6 +60976,7 @@ var actions = {
         var now = Date.now();
         responseData.expires_at = responseData.expires_at + now;
         context.commit('updateTokens', responseData);
+        context.commit('updateUser', responseData);
         resolve(response);
       })["catch"](function (response) {
         reject(response);
@@ -61111,6 +61112,20 @@ var mutations = {
   // ////////////////////////////////////////////
   updateTokens: function updateTokens(state, tokens) {
     state.tokens = tokens;
+  },
+  updateUser: function updateUser(state, data) {
+    state.currentUser.id = data.user_id;
+    var config = {
+      headers: {
+        'Authorization': "Bearer " + state.tokens.access_token
+      }
+    };
+    axios.get("/api/users/".concat(data.user_id), config).then(function (response) {
+      state.currentUser = response.data.data;
+      resolve(response);
+    })["catch"](function (response) {
+      reject(response);
+    });
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mutations);
@@ -61147,8 +61162,11 @@ var state = {
     token_type: null
   },
   currentUser: {
+    id: null,
     name: null,
-    email: null
+    email: null,
+    mobile: null,
+    photo: null
   },
   isSidebarActive: true,
   breakpoint: null,

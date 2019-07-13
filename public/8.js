@@ -47,7 +47,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Profile"
+  mounted: function mounted() {
+    this.getUserData();
+  },
+  name: "Profile",
+  data: function data() {
+    return {
+      user: {
+        id: store.state.currentUser.id,
+        first_name: store.state.currentUser.first_name,
+        last_name: store.state.currentUser.last_name,
+        email: store.state.currentUser.email,
+        mobile: store.state.currentUser.mobile,
+        photo: store.state.currentUser.photo
+      }
+    };
+  },
+  methods: {
+    //Display User Data.
+    getUserData: function getUserData() {
+      var fire = this;
+      var config = {
+        headers: {
+          'Authorization': "Bearer " + store.state.tokens.access_token
+        }
+      };
+      axios.get("/api/users/".concat(store.state.currentUser.id), config).then(function (response) {
+        fire.user = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -146,7 +177,11 @@ var render = function() {
                 },
                 [
                   _c("b", [_vm._v("Name: ")]),
-                  _vm._v(" Mohamed Swilam\n            ")
+                  _vm._v(
+                    " " +
+                      _vm._s(_vm.user.first_name + " " + _vm.user.last_name) +
+                      "\n            "
+                  )
                 ]
               ),
               _vm._v(" "),
@@ -164,7 +199,7 @@ var render = function() {
                 },
                 [
                   _c("b", [_vm._v("Email: ")]),
-                  _vm._v(" mohamed_swilam@hotmail.com\n            ")
+                  _vm._v(" " + _vm._s(_vm.user.email) + "\n            ")
                 ]
               ),
               _vm._v(" "),
@@ -182,7 +217,7 @@ var render = function() {
                 },
                 [
                   _c("b", [_vm._v("Mobile: ")]),
-                  _vm._v(" 01096436702\n            ")
+                  _vm._v(" " + _vm._s(_vm.user.mobile) + "\n            ")
                 ]
               )
             ],
@@ -210,7 +245,7 @@ var render = function() {
                       attrs: {
                         "icon-pack": "feather",
                         icon: "icon-edit",
-                        to: "/role/create"
+                        to: "/user/edit/" + _vm.user.id
                       }
                     },
                     [_vm._v("Update Information")]

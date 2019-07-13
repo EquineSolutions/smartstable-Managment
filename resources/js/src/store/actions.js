@@ -69,7 +69,8 @@ const actions = {
 
                 responseData.expires_at = responseData.expires_at + now;
 
-                context.commit('updateTokens', responseData)
+                context.commit('updateTokens', responseData);
+                context.commit('updateUser', responseData);
 
                 resolve(response);
             }).catch(response => {

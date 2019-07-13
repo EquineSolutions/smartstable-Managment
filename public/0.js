@@ -414,6 +414,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      user: {
+        name: store.state.currentUser.first_name + " " + store.state.currentUser.last_name,
+        email: store.state.currentUser.email
+      },
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
@@ -2212,10 +2216,10 @@ var render = function() {
                   { staticClass: "text-right leading-tight hidden sm:block" },
                   [
                     _c("p", { staticClass: "font-semibold" }, [
-                      _vm._v("John Doe")
+                      _vm._v(_vm._s(_vm.user.name))
                     ]),
                     _vm._v(" "),
-                    _c("small", [_vm._v("Available")])
+                    _c("small", [_vm._v(_vm._s(_vm.user.email))])
                   ]
                 ),
                 _vm._v(" "),

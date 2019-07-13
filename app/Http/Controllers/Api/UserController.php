@@ -115,24 +115,33 @@ class UserController extends Controller
     {
         $this->authorize('edit', [User::class, $user]);
 
-        $data = $request->validated();
+        $data = $request->all();
 
-        if(!empty($data['password'])){
-            $data['password'] = bcrypt($data['password']); //update the password
+        DB::beginTransaction();
+        try{
+
+            if(!empty($input['password'])){
+                $input['password'] = Hash::make($input['password']); //update the password
+            }
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path() . '/uploads/images/user/';
+                $image->move($destinationPath, $file_name);
+
+                $data['image'] = $file_name;
+            }
+            $user->update($data);
+            $user->save();
+            DB::table('model_has_roles')->where('model_id',$user->id)->delete();
+            $user->assignRole($request->input('roles'));
+            DB::commit();
+            return response()->json(['success' =>'User updated successfully' ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' =>$e ], 500);
         }
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-
-            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path() . '/uploads/images/user/';
-            $image->move($destinationPath, $file_name);
-
-            $data['image'] = $file_name;
-        }
-
-        $user->update($data);
-        $user->save();
         return response()->json(['success' =>'User updated successfully','User' => $user ], 200);
 
     }

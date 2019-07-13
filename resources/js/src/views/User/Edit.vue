@@ -26,7 +26,7 @@
 
           <div class="vx-row">
             <div class="vx-col sm:w-1/2 w-full mb-6">
-              <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-bind="password" class="w-full" ref="password" />
+              <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-model="password" class="w-full" ref="password" />
               <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
             </div>
             <div class="vx-col sm:w-1/2 w-full mb-2">
@@ -121,9 +121,12 @@
               last_name: this.lname,
               email: this.email,
               mobile: this.mobile,
-              password: this.password,
               roles: this.user_role
             };
+
+            if(this.password != ""){
+              data["password"] = this.password;
+            }
 
             let config = {
               headers: {'Authorization': "Bearer " + store.state.tokens.access_token}

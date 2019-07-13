@@ -93,7 +93,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           }; // if form have no errors
 
           var formData = new FormData();
-          formData.append('name', _this.role_name); // formData.append('permission[]', ['rr', 'vdfvf']);
+          formData.append('name', _this.role_name);
 
           for (var i = 0; i < fire.rolePermissions.length; i++) {
             formData.append('permission[]', fire.rolePermissions[i]);

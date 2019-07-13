@@ -74,10 +74,14 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         }
       };
       axios.get("/api/roles/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
-        console.log(response);
-        fire.permissions = response.data.permission;
+        fire.permissions = response.data.permissions;
+        fire.permissions = response.data.permissions;
         fire.role_name = response.data.role.name;
-        fire.rolePermissions = response.data.rolePermissions;
+
+        for (var i = 0; i < response.data.rolePermissions.length; i++) {
+          fire.rolePermissions.push(response.data.rolePermissions[i].name);
+        } // fire.rolePermissions = response.data.rolePermissions;
+
       })["catch"](function (error) {
         console.log(error);
       });
@@ -92,14 +96,12 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             headers: {
               'Authorization': "Bearer " + store.state.tokens.access_token
             }
-          }; // if form have no errors
-
-          var formData = new FormData();
-          formData.append('role_name', _this.role_name);
-          formData.append('permissions', _this.rolePermissions);
-          axios.put("/api/roles/".concat(_this.$route.params.id), formData, config).then(function (response) {
-            console.log(response);
-
+          };
+          var data = {
+            name: _this.role_name,
+            permission: _this.rolePermissions
+          };
+          axios.put("/api/roles/".concat(_this.$route.params.id), data, config).then(function (response) {
             if (response.data.success) {
               fire.$vs.notify({
                 title: 'Success',
