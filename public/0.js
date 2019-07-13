@@ -401,8 +401,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -2256,7 +2254,7 @@ var render = function() {
                                   "flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white",
                                 on: {
                                   click: function($event) {
-                                    return _vm.$router.push("/pages/profile")
+                                    return _vm.$router.push("/profile")
                                   }
                                 }
                               },
@@ -2270,84 +2268,6 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("span", { staticClass: "ml-2" }, [
                                   _vm._v("Profile")
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.$router.push("/apps/email")
-                                  }
-                                }
-                              },
-                              [
-                                _c("feather-icon", {
-                                  attrs: {
-                                    icon: "MailIcon",
-                                    svgClasses: "w-4 h-4"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "ml-2" }, [
-                                  _vm._v("Inbox")
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.$router.push("/apps/todo")
-                                  }
-                                }
-                              },
-                              [
-                                _c("feather-icon", {
-                                  attrs: {
-                                    icon: "CheckSquareIcon",
-                                    svgClasses: "w-4 h-4"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "ml-2" }, [
-                                  _vm._v("Tasks")
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.$router.push("/apps/chat")
-                                  }
-                                }
-                              },
-                              [
-                                _c("feather-icon", {
-                                  attrs: {
-                                    icon: "MessageSquareIcon",
-                                    svgClasses: "w-4 h-4"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "ml-2" }, [
-                                  _vm._v("Chat")
                                 ])
                               ],
                               1
