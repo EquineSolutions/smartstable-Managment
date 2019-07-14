@@ -84,7 +84,6 @@ __webpack_require__.r(__webpack_exports__);
     login: function login(user) {
       var fire = this;
       store.dispatch('login', user).then(function (response) {
-        console.log(response);
         fire.$vs.notify({
           title: 'Welcome Back!',
           text: 'We are happy to see you again.',

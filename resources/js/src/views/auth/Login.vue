@@ -76,7 +76,6 @@ export default {
         login(user){
             let fire = this;
             store.dispatch('login', user).then(response => {
-                console.log(response);
                 fire.$vs.notify({
                     title:'Welcome Back!',
                     text:'We are happy to see you again.',

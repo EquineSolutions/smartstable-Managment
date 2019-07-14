@@ -93,25 +93,24 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
   },
   data: function data() {
     return {
+      roles: [],
+      user: {},
+      user_role: "",
       userRoles: [],
       fname: "",
       lname: "",
       email: "",
       mobile: "",
       password: "",
-      confirm_password: "",
-      user_role: ""
+      confirm_password: ""
     };
   },
   methods: {
+    //Get User Data
     getData: function getData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/users/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
+      axios.get("/api/users/".concat(this.$route.params.id, "/edit"), store.state.config).then(function (response) {
+        fire.roles = response.data;
         var user = response.data.user;
         fire.fname = user.first_name;
         fire.lname = user.last_name;
@@ -124,6 +123,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         console.log(error);
       });
     },
+    //Update User Submission
     submitForm: function submitForm() {
       var _this = this;
 
@@ -143,44 +143,29 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             data["password"] = _this.password;
           }
 
-          var config = {
-            headers: {
-              'Authorization': "Bearer " + store.state.tokens.access_token
-            }
-          };
-          axios.put("/api/users/".concat(fire.$route.params.id), data, config).then(function (response) {
+          axios.put("/api/users/".concat(_this.$route.params.id), data, store.state.config).then(function (response) {
             if (response.data.success) {
-              fire.$vs.notify({
-                title: 'Success',
-                text: 'User Successfully Updated',
-                color: 'success',
-                iconPack: 'feather',
-                icon: 'icon-check'
-              });
+              fire.vs_alert('Success', 'User Successfully Updated', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "user"
               });
             } else {
-              fire.$vs.notify({
-                title: 'Oops!',
-                text: response.data,
-                color: 'danger'
-              });
+              fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.$vs.notify({
-              title: 'Oops!',
-              text: 'An error has been occurred.',
-              color: 'danger'
-            });
+            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'Please, solve all issues before submitting.',
-            color: 'danger'
-          });
+          _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+      });
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
       });
     }
   }
@@ -312,7 +297,7 @@ var render = function() {
             _c("div", { staticClass: "vx-row" }, [
               _c(
                 "div",
-                { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
                 [
                   _c("vs-input", {
                     directives: [
@@ -413,7 +398,7 @@ var render = function() {
             _c("div", { staticClass: "vx-row" }, [
               _c(
                 "div",
-                { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
                 [
                   _c("vs-input", {
                     ref: "password",

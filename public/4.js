@@ -55,12 +55,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -75,12 +69,7 @@ __webpack_require__.r(__webpack_exports__);
     //Get A List Of All Roles.
     getData: function getData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get('/api/roles', config).then(function (response) {
+      axios.get('/api/roles', store.state.config).then(function (response) {
         fire.roles = response.data.roles;
       })["catch"](function (error) {
         console.log(error);
@@ -101,36 +90,17 @@ __webpack_require__.r(__webpack_exports__);
     //Delete A Single Role By RoleID.
     deleteRole: function deleteRole() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios["delete"]("/api/roles/".concat(this.roleIdToDelete), config).then(function (response) {
+      axios["delete"]("/api/roles/".concat(this.roleIdToDelete), store.state.config).then(function (response) {
         if (response.data.success) {
-          fire.$vs.notify({
-            title: 'Success',
-            text: 'Role Successfully Deleted',
-            color: 'success',
-            iconPack: 'feather',
-            icon: 'icon-check'
-          });
+          fire.vs_alert('Success', 'Role Successfully Deleted.', 'success');
           fire.roles = fire.roles.filter(function (value) {
             return value.id != fire.roleIdToDelete;
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'An error has been occurred.',
-            color: 'danger'
-          });
+          fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
         }
       })["catch"](function (error) {
-        fire.$vs.notify({
-          title: 'Oops!',
-          text: 'An error has been occurred.',
-          color: 'danger'
-        });
+        fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
       });
     },
     //Hide Tool Tip After Navigation
@@ -140,6 +110,14 @@ __webpack_require__.r(__webpack_exports__);
       while (el.length > 0) {
         el[0].parentNode.removeChild(el[0]);
       }
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
     }
   }
 });
@@ -274,29 +252,17 @@ var render = function() {
                                     "div",
                                     { staticClass: "w-1/3" },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "primary",
-                                            text: "View Data"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          to: "/role/" + data[indextr].id,
+                                          radius: "",
+                                          color: "primary",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-eye"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              to: "/role/" + data[indextr].id,
-                                              radius: "",
-                                              color: "primary",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-eye"
-                                            },
-                                            on: { click: _vm.hideTooltip }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: { click: _vm.hideTooltip }
+                                      })
                                     ],
                                     1
                                   ),
@@ -308,31 +274,17 @@ var render = function() {
                                       staticStyle: { margin: "0 10px" }
                                     },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "warning",
-                                            text: "Edit Role"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          to: "/role/edit/" + data[indextr].id,
+                                          radius: "",
+                                          color: "warning",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-edit"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              to:
-                                                "/role/edit/" +
-                                                data[indextr].id,
-                                              radius: "",
-                                              color: "warning",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-edit"
-                                            },
-                                            on: { click: _vm.hideTooltip }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: { click: _vm.hideTooltip }
+                                      })
                                     ],
                                     1
                                   ),
@@ -341,34 +293,22 @@ var render = function() {
                                     "div",
                                     { staticClass: "w-1/3" },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "danger",
-                                            text: "Delete Role"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          radius: "",
+                                          color: "danger",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-trash"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              radius: "",
-                                              color: "danger",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-trash"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.confirmDeleteRole(
-                                                  data[indextr]
-                                                )
-                                              }
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.confirmDeleteRole(
+                                              data[indextr]
+                                            )
+                                          }
+                                        }
+                                      })
                                     ],
                                     1
                                   )

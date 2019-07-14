@@ -66,11 +66,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -85,12 +80,7 @@ __webpack_require__.r(__webpack_exports__);
     //Get A List Of All Users.
     getData: function getData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get('/api/users', config).then(function (response) {
+      axios.get('/api/users', store.state.config).then(function (response) {
         fire.users = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -111,47 +101,44 @@ __webpack_require__.r(__webpack_exports__);
     //Delete A Single User By UserID.
     deleteUser: function deleteUser() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios["delete"]("/api/users/".concat(this.userIdToDelete), config).then(function (response) {
-        console.log(response);
-
+      axios["delete"]("/api/users/".concat(this.userIdToDelete), store.state.config).then(function (response) {
         if (response.data.success) {
-          fire.$vs.notify({
-            title: 'Success',
-            text: 'User Successfully Deleted',
-            color: 'success',
-            iconPack: 'feather',
-            icon: 'icon-check'
-          });
+          fire.vs_alert('Success', 'User Successfully Deleted', 'success');
           fire.users = fire.users.filter(function (value) {
             return value.id != fire.userIdToDelete;
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'An error has been occurred.',
-            color: 'danger'
-          });
+          fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
         }
       })["catch"](function (error) {
-        fire.$vs.notify({
-          title: 'Oops!',
-          text: 'An error has been occurred.',
-          color: 'danger'
-        });
+        fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
       });
     },
-    //Hide Tool Tip After Navigation
+    //Navigate To A New Page With Route Name And UserID
+    redirect: function redirect(name, userID) {
+      // this.hideTooltip();
+      this.$router.push({
+        name: name,
+        params: {
+          id: userID
+        }
+      });
+    },
+    //Hide Tool Tip Before Navigation
     hideTooltip: function hideTooltip() {
       var el = document.getElementsByClassName('vs-tooltip');
 
       while (el.length > 0) {
         el[0].parentNode.removeChild(el[0]);
       }
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
     }
   }
 });
@@ -318,29 +305,23 @@ var render = function() {
                                     "div",
                                     { staticClass: "w-1/3" },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "primary",
-                                            text: "View Data"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          radius: "",
+                                          color: "primary",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-eye"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              to: "/user/" + data[indextr].id,
-                                              radius: "",
-                                              color: "primary",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-eye"
-                                            },
-                                            on: { click: _vm.hideTooltip }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.redirect(
+                                              "view-user",
+                                              data[indextr].id
+                                            )
+                                          }
+                                        }
+                                      })
                                     ],
                                     1
                                   ),
@@ -352,31 +333,23 @@ var render = function() {
                                       staticStyle: { margin: "0 10px" }
                                     },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "warning",
-                                            text: "Edit User"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          radius: "",
+                                          color: "warning",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-edit"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              to:
-                                                "/user/edit/" +
-                                                data[indextr].id,
-                                              radius: "",
-                                              color: "warning",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-edit"
-                                            },
-                                            on: { click: _vm.hideTooltip }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.redirect(
+                                              "edit-user",
+                                              data[indextr].id
+                                            )
+                                          }
+                                        }
+                                      })
                                     ],
                                     1
                                   ),
@@ -385,34 +358,22 @@ var render = function() {
                                     "div",
                                     { staticClass: "w-1/3" },
                                     [
-                                      _c(
-                                        "vx-tooltip",
-                                        {
-                                          attrs: {
-                                            color: "danger",
-                                            text: "Delete User"
-                                          }
+                                      _c("vs-button", {
+                                        attrs: {
+                                          radius: "",
+                                          color: "danger",
+                                          type: "border",
+                                          "icon-pack": "feather",
+                                          icon: "icon-trash"
                                         },
-                                        [
-                                          _c("vs-button", {
-                                            attrs: {
-                                              radius: "",
-                                              color: "danger",
-                                              type: "border",
-                                              "icon-pack": "feather",
-                                              icon: "icon-trash"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.confirmDeleteUser(
-                                                  data[indextr]
-                                                )
-                                              }
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.confirmDeleteUser(
+                                              data[indextr]
+                                            )
+                                          }
+                                        }
+                                      })
                                     ],
                                     1
                                   )

@@ -22,6 +22,8 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('users','Api\UserController');
 });
 
+Route::middleware('auth:api')->post('profile/{id}', 'Api\UserController@updateProfileData');
+
 //Route::group(['prefix' => 'user'], function () {
 //    Route::get('', 'Api\UserController@index');
 //    Route::get('{id}', 'Api\UserController@show');
