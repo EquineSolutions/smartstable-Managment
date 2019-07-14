@@ -33,20 +33,15 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									  <div class="w-1/3">
-									  		<vx-tooltip color="primary" text="View Data">
-									  			<vs-button @click="hideTooltip" :to="`/user/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
-									  		</vx-tooltip>
+									<div class="w-1/3">
+											<vs-button @click="redirect('view-user', data[indextr].id)" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
+
 									  <div class="w-1/3" style="margin: 0 10px;">
-									  		<vx-tooltip color="warning" text="Edit User">
-									  			<vs-button @click="hideTooltip" :to="`/user/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
-									  		</vx-tooltip>
+											<vs-button @click="redirect('edit-user', data[indextr].id)" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
 									  <div class="w-1/3">
-									  		<vx-tooltip color="danger" text="Delete User">
-									  			<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteUser(data[indextr])"></vs-button>
-									  		</vx-tooltip>
+											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteUser(data[indextr])"></vs-button>
 									  </div>
 								</div>
 							</vs-row>
@@ -77,11 +72,8 @@ export default {
   		//Get A List Of All Users.
   		getData()
   		{
-  			let fire = this;
-			let config = {
-				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-			};
-			axios.get('/api/users', config).then(function(response){
+			let fire = this;
+			axios.get('/api/users', store.state.config).then(function(response){
 	  			fire.users = response.data.data;
 	  		}).catch(function(error){
 	            console.log(error);
@@ -89,9 +81,9 @@ export default {
   		},
 
   		// Confirm Dialog To Delete The User
-  		confirmDeleteUser(user) 
+  		confirmDeleteUser(user)
   		{
-  			let fire = this;
+			let fire = this;
   			this.userIdToDelete = user.id;
   			this.$vs.dialog({
   				type: 'confirm',
@@ -105,44 +97,46 @@ export default {
   		//Delete A Single User By UserID.
   		deleteUser()
   		{
-  			let fire = this;
-			let config = {
-				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-			};
-  			axios.delete(`/api/users/${this.userIdToDelete}`, config).then(function(response){
-  				console.log(response);
+			let fire = this;
+  			axios.delete(`/api/users/${this.userIdToDelete}`, store.state.config).then(function(response){
 	  			if(response.data.success) {
-	              	fire.$vs.notify({
-		                title:'Success',
-		                text:'User Successfully Deleted',
-		                color:'success',
-		                iconPack: 'feather',
-		                icon:'icon-check'
-	              	});
+					fire.vs_alert ('Success', 'User Successfully Deleted', 'success');
 					fire.users = fire.users.filter(function(value){return value.id != fire.userIdToDelete;});
-            	    } else {
-	              	fire.$vs.notify({
-	                	title:'Oops!',
-	                	text:'An error has been occurred.',
-		                color:'danger'
-	              	});
+				} else {
+	              	fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	            }
 	  		}).catch(function(error){
-	            fire.$vs.notify({
-                	title:'Oops!',
-                	text:'An error has been occurred.',
-	                color:'danger'
-              	});
+				fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	        }); 
   		},
 
-		//Hide Tool Tip After Navigation
+		//Navigate To A New Page With Route Name And UserID
+		redirect(name, userID)
+		{
+			// this.hideTooltip();
+			this.$router.push({
+				name: name,
+				params: { id: userID }
+			});
+		},
+
+		//Hide Tool Tip Before Navigation
 		hideTooltip()
 		{
 			let el = document.getElementsByClassName('vs-tooltip');
 			while (el.length > 0) {
 				el[0].parentNode.removeChild(el[0]);
 			}
+		},
+
+		//Vuesax alert
+		vs_alert (title, text, color)
+		{
+			this.$vs.notify({
+				title: title,
+				text: text,
+				color: color
+			});
 		}
   	}
 }

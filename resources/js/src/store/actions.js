@@ -63,7 +63,6 @@ const actions = {
             };
 
             axios.post('/api/login', data).then( response => {
-                console.log(response);
                 let responseData = response.data;
                 let now = Date.now();
 
@@ -77,7 +76,18 @@ const actions = {
                 reject(response);
             })
         })
-    }
+    },
+
+    updateProfile(context, data) {
+        return new Promise((resolve, reject) => {
+            axios.post(`/api/profile/${store.state.currentUser.id}`, data, store.state.config).then(function (response) {
+                context.commit('updateUserInfo', response.data.User.data);
+                resolve(response);
+            }).catch(response => {
+                reject(response);
+            });
+        });
+    },
 
 }
 

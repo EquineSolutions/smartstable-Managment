@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="vx-row">
-            <div class="vx-col sm:w-1/2 w-full mb-6">
+            <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email*" v-model="email" name='email' />
               <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
             </div>
@@ -25,7 +25,7 @@
           </div>
 
           <div class="vx-row">
-            <div class="vx-col sm:w-1/2 w-full mb-6">
+            <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-model="password" class="w-full" ref="password" />
               <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
             </div>
@@ -81,6 +81,13 @@
     },
     data() {
       return {
+
+        roles: [],
+        user: {
+
+        },
+        user_role: "",
+
         userRoles: [],
 
         fname: "",
@@ -88,17 +95,16 @@
         email: "",
         mobile: "",
         password: "",
-        confirm_password: "",
-        user_role: ""
+        confirm_password: ""
+
       }
     },
     methods: {
+      //Get User Data
       getData(){
         let fire = this;
-        let config = {
-          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-        };
-        axios.get(`/api/users/${this.$route.params.id}/edit`, config).then(function(response){
+        axios.get(`/api/users/${this.$route.params.id}/edit`, store.state.config).then(function(response){
+          fire.roles = response.data;
           let user = response.data.user;
           fire.fname = user.first_name;
           fire.lname = user.last_name;
@@ -111,6 +117,8 @@
           console.log(error);
         });
       },
+
+      //Update User Submission
       submitForm() {
         let fire = this;
         this.$validator.validateAll().then(result => {
@@ -128,43 +136,32 @@
               data["password"] = this.password;
             }
 
-            let config = {
-              headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-            };
-
-            axios.put(`/api/users/${fire.$route.params.id}`, data, config).then(function(response){
+            axios.put(`/api/users/${this.$route.params.id}`, data, store.state.config).then(function(response){
               if(response.data.success) {
-                fire.$vs.notify({
-                  title:'Success',
-                  text:'User Successfully Updated',
-                  color:'success',
-                  iconPack: 'feather',
-                  icon:'icon-check'
-                });
+                fire.vs_alert ('Success', 'User Successfully Updated', 'success');
                 router.push({ name: "user"})
               } else {
-                fire.$vs.notify({
-                  title:'Oops!',
-                  text: response.data,
-                  color:'danger'
-                });
+                fire.vs_alert ('Oops!', response.data, 'danger');
               }
             }).catch(function(error){
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+              fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
             });
-          }else{
-            fire.$vs.notify({
-              title:'Oops!',
-              text:'Please, solve all issues before submitting.',
-              color:'danger'
-            });
+          } else {
+            this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
         })
+      },
+
+      //Vuesax alert
+      vs_alert (title, text, color)
+      {
+        this.$vs.notify({
+          title: title,
+          text: text,
+          color: color
+        });
       }
+
     },
   }
 </script>

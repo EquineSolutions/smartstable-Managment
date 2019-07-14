@@ -60,74 +60,57 @@
       }
     },
     methods: {
+        //Get All Roles
       getRole()
       {
         let fire = this;
-        let config = {
-          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-        };
-
-        axios.get(`/api/roles/${this.$route.params.id}/edit`, config).then(function(response){
-          fire.permissions = response.data.permissions;
+        axios.get(`/api/roles/${this.$route.params.id}/edit`, store.state.config).then(function(response){
           fire.permissions = response.data.permissions;
           fire.role_name = response.data.role.name;
           for (let i =0; i<response.data.rolePermissions.length; i++){
             fire.rolePermissions.push(response.data.rolePermissions[i].name)
           }
-          // fire.rolePermissions = response.data.rolePermissions;
         }).catch(function(error){
           console.log(error);
         });
       },
 
+        //Update Role Submission
       submitForm()
       {
         let fire = this;
         this.$validator.validateAll().then(result => {
           if(result) {
-            let config = {
-              headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-            };
-
             let data = {
               name: this.role_name,
               permission: this.rolePermissions,
             };
 
-            axios.put(`/api/roles/${this.$route.params.id}`, data, config).then(function(response){
+            axios.put(`/api/roles/${this.$route.params.id}`, data, store.state.config).then(function(response){
               if(response.data.success) {
-                fire.$vs.notify({
-                  title:'Success',
-                  text:'Role Successfully Updated',
-                  color:'success',
-                  iconPack: 'feather',
-                  icon:'icon-check'
-                });
-                router.push({ name: "role"})
+                  fire.vs_alert ('Success', 'Role Successfully Updated', 'success');
+                  router.push({ name: "role"});
               } else {
-                fire.$vs.notify({
-                  title:'Oops!',
-                  text: response.data,
-                  color:'danger'
-                });
-
+                  fire.vs_alert ('Oops!', response.data, 'danger');
               }
             }).catch(function(error){
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+                fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
             });
-          }else{
-            fire.$vs.notify({
-              title:'Oops!',
-              text:'Please, solve all issues before submitting.',
-              color:'danger'
-            });
+          } else {
+              this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
         })
-      }
+      },
+
+        //Vuesax alert
+        vs_alert (title, text, color)
+        {
+            this.$vs.notify({
+                title: title,
+                text: text,
+                color: color
+            });
+        }
     },
   }
 </script>

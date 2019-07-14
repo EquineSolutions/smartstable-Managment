@@ -86,6 +86,7 @@ const router = new Router({
           {
             path: '/user/:id',
             name: 'view-user',
+            props: true,
             beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/View.vue'),
             meta: {
@@ -100,6 +101,7 @@ const router = new Router({
           {
             path: '/user/edit/:id',
             name: 'edit-user',
+            props: true,
             beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/Edit.vue'),
             meta: {
@@ -234,7 +236,7 @@ router.afterEach(() => {
 
 function guard(to, from, next){
   let now = Date.now();
-  console.log(store.state.currentUser);
+  // console.log(store.state.currentUser);
   if(store.state.tokens.access_token != null || now >= store.state.tokens.expires_in ) {
     // or however you store your logged in state
     next(); // allow to enter route

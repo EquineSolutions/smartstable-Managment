@@ -23,7 +23,7 @@ const state = {
         name: null,
         email: null,
         mobile: null,
-        photo: null,
+        image: null,
     },
 
     isSidebarActive: true,

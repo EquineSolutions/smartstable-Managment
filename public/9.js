@@ -39,13 +39,7 @@ __webpack_require__.r(__webpack_exports__);
     //Display Role Data.
     getRoleData: function getRoleData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/roles/".concat(this.$route.params.id), config).then(function (response) {
-        console.log(response);
+      axios.get("/api/roles/".concat(this.$route.params.id), store.state.config).then(function (response) {
         fire.role = response.data.role;
         fire.permissions = response.data.rolePermissions;
       })["catch"](function (error) {

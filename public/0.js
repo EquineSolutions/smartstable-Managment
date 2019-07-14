@@ -414,10 +414,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      user: {
-        name: store.state.currentUser.first_name + " " + store.state.currentUser.last_name,
-        email: store.state.currentUser.email
-      },
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
@@ -2216,10 +2212,18 @@ var render = function() {
                   { staticClass: "text-right leading-tight hidden sm:block" },
                   [
                     _c("p", { staticClass: "font-semibold" }, [
-                      _vm._v(_vm._s(_vm.user.name))
+                      _vm._v(
+                        _vm._s(
+                          _vm.$store.state.currentUser.first_name +
+                            " " +
+                            _vm.$store.state.currentUser.last_name
+                        )
+                      )
                     ]),
                     _vm._v(" "),
-                    _c("small", [_vm._v(_vm._s(_vm.user.email))])
+                    _c("small", [
+                      _vm._v(_vm._s(_vm.$store.state.currentUser.email))
+                    ])
                   ]
                 ),
                 _vm._v(" "),
@@ -2235,7 +2239,7 @@ var render = function() {
                         staticClass:
                           "rounded-full shadow-md cursor-pointer block",
                         attrs: {
-                          src: __webpack_require__(/*! ../../../../assets/images/portrait/small/avatar-s-11.png */ "./resources/assets/images/portrait/small/avatar-s-11.png"),
+                          src: _vm.$store.state.currentUser.image,
                           alt: "",
                           width: "40",
                           height: "40"
@@ -3159,17 +3163,6 @@ render._withStripped = true
 /***/ (function(module, exports) {
 
 module.exports = "/images/logo.png?a5d6fa57427643c6ebe37859086c9a63";
-
-/***/ }),
-
-/***/ "./resources/assets/images/portrait/small/avatar-s-11.png":
-/*!****************************************************************!*\
-  !*** ./resources/assets/images/portrait/small/avatar-s-11.png ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/avatar-s-11.png?51a23c074bd7469a69e220c62dce541a";
 
 /***/ }),
 

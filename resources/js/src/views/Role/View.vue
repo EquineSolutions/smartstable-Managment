@@ -30,12 +30,8 @@ export default {
   		//Display Role Data.
   		getRoleData()
   		{
-  			let fire = this;
-            let config = {
-                headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-            };
-	  		axios.get(`/api/roles/${this.$route.params.id}`, config).then(function(response){
-	  			console.log(response);
+			let fire = this;
+	  		axios.get(`/api/roles/${this.$route.params.id}`, store.state.config).then(function(response){
 	  			fire.role = response.data.role;
 	  			fire.permissions = response.data.rolePermissions;
 	  		}).catch(function(error){

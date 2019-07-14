@@ -97,11 +97,7 @@ export default {
     getUserRoles()
     {
       let fire = this;
-      let config = {
-        headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-      };
-
-      axios.get('/api/users/create', config).then(function(response){
+      axios.get('/api/users/create', store.state.config).then(function(response){
         fire.userRoles = response.data.roles;
         fire.user_role = fire.userRoles[0];
       }).catch(function(error){
@@ -114,12 +110,8 @@ export default {
       let fire = this;
       this.$validator.validateAll().then(result => {
         if(result) {
-          let config = {
-            headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-          };
-          console.log(store.state.tokens.access_token);
-
           // if form have no errors
+
           const formData = new FormData();
           formData.append('first_name', this.first_name);
           formData.append('last_name', this.last_name);
@@ -128,42 +120,32 @@ export default {
           formData.append('password', this.password);
           formData.append('roles', this.user_role);
 
-          axios.post('/api/users', formData, config).then(function(response){
-            console.log(response);
+          axios.post('/api/users', formData, store.state.config).then(function(response){
             if(response.data.success) {
-              fire.$vs.notify({
-                title:'Success',
-                text:'User Successfully Added',
-                color:'success',
-                iconPack: 'feather',
-                icon:'icon-check'
-              });
+              fire.vs_alert ('Success', 'User Successfully Added', 'success');
               router.push({ name: "user"})
             } else {
-                fire.$vs.notify({
-                    title:'Oops!',
-                    text: response.data,
-                    color:'danger'
-                });
-
+              fire.vs_alert ('Oops!', response.data, 'danger');
             }
           }).catch(function(error){
-              // console.log(error);
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+            fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
           });
-        }else{
-            fire.$vs.notify({
-                title:'Oops!',
-                text:'Please, solve all issues before submitting.',
-                color:'danger'
-              });
+        } else {
+            this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
       })
+    },
+
+    //Vuesax alert
+    vs_alert (title, text, color)
+    {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
     }
+
   },
 }
 </script>

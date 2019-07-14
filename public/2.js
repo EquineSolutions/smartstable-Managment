@@ -67,31 +67,23 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     };
   },
   methods: {
+    //Get All Permissions
     getPermissions: function getPermissions() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get('/api/roles/create', config).then(function (response) {
+      axios.get('/api/roles/create', store.state.config).then(function (response) {
         fire.permissions = response.data.permission;
       })["catch"](function (error) {
         console.log(error);
       });
     },
+    //Create Role Submission
     submitForm: function submitForm() {
       var _this = this;
 
       var fire = this;
       this.$validator.validateAll().then(function (result) {
         if (result) {
-          var config = {
-            headers: {
-              'Authorization': "Bearer " + store.state.tokens.access_token
-            }
-          }; // if form have no errors
-
+          // if form have no errors
           var formData = new FormData();
           formData.append('name', _this.role_name);
 
@@ -99,39 +91,29 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             formData.append('permission[]', fire.rolePermissions[i]);
           }
 
-          axios.post('/api/roles', formData, config).then(function (response) {
+          axios.post('/api/roles', formData, store.state.config).then(function (response) {
             if (response.data.success) {
-              fire.$vs.notify({
-                title: 'Success',
-                text: 'Role Successfully Added',
-                color: 'success',
-                iconPack: 'feather',
-                icon: 'icon-check'
-              });
+              fire.vs_alert('Success', 'Role Successfully Added', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "role"
               });
             } else {
-              fire.$vs.notify({
-                title: 'Oops!',
-                text: response.data,
-                color: 'danger'
-              });
+              fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.$vs.notify({
-              title: 'Oops!',
-              text: 'An error has been occurred.',
-              color: 'danger'
-            });
+            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'Please, solve all issues before submitting.',
-            color: 'danger'
-          });
+          _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+      });
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
       });
     }
   }
