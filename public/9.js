@@ -40,8 +40,8 @@ __webpack_require__.r(__webpack_exports__);
     getRoleData: function getRoleData() {
       var fire = this;
       axios.get("/api/roles/".concat(this.$route.params.id), store.state.config).then(function (response) {
-        fire.role = response.data.role;
-        fire.permissions = response.data.rolePermissions;
+        fire.role = response.data.data.role;
+        fire.permissions = response.data.data.rolePermissions;
       })["catch"](function (error) {
         console.log(error);
       });

@@ -103,7 +103,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getUserRoles: function getUserRoles() {
       var fire = this;
       axios.get('/api/users/create', store.state.config).then(function (response) {
-        fire.userRoles = response.data.roles;
+        fire.userRoles = response.data.data.roles;
         fire.user_role = fire.userRoles[0];
       })["catch"](function (error) {
         console.log(error);
@@ -124,7 +124,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           formData.append('password', _this.password);
           formData.append('roles', _this.user_role);
           axios.post('/api/users', formData, store.state.config).then(function (response) {
-            if (response.data.success) {
+            if (response.data.status == 200) {
               fire.vs_alert('Success', 'User Successfully Added', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "user"

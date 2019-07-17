@@ -99,7 +99,7 @@ export default {
   		{
 			let fire = this;
   			axios.delete(`/api/users/${this.userIdToDelete}`, store.state.config).then(function(response){
-	  			if(response.data.success) {
+	  			if(response.data.status == 200) {
 					fire.vs_alert ('Success', 'User Successfully Deleted', 'success');
 					fire.users = fire.users.filter(function(value){return value.id != fire.userIdToDelete;});
 				} else {

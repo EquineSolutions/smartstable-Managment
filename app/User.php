@@ -41,4 +41,9 @@ class User extends Authenticatable
     ];
 
     protected $guard_name = 'api';
+
+
+    public function AauthAcessToken(){
+        return $this->hasMany('\App\OauthAccessToken');
+    }
 }
