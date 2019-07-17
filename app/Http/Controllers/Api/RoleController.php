@@ -27,7 +27,14 @@ class RoleController extends Controller
     {
         $this->authorize('index', Role::class);
         $roles = Role::orderBy('id','DESC')->get();
-        return response()->json(['roles' =>$roles ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Roles loaded successfully',
+            'data' => [
+                'roles' =>$roles
+            ]
+        ];
+        return response()->json($output);
     }
 
 
@@ -39,7 +46,14 @@ class RoleController extends Controller
     public function create()
     {
         $permission = Permission::get();
-        return response()->json(['permission' =>$permission ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'permission' =>$permission
+            ]
+        ];
+        return response()->json($output);
     }
 
 
@@ -60,12 +74,20 @@ class RoleController extends Controller
             $role = Role::create(['name' => $data['name']]);
             $role->syncPermissions($data['permission']);
             DB::commit();
-            return response()->json(['success' =>'Role created successfully' ], 200);
+            $output = [
+                'status' => 200,
+                'message' => 'Role created successfully',
+            ];
 
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['error' =>$e->getMessage() ], 500);
+            $output = [
+                'status' => 500,
+                'error' => $e->getMessage(),
+            ];
         }
+
+        return response()->json($output);
 
     }
 
@@ -83,7 +105,15 @@ class RoleController extends Controller
             ->where("role_has_permissions.role_id",$role->id)
             ->get();
 
-        return response()->json(['role' => $role , 'rolePermissions' => $rolePermissions], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role ,
+                'rolePermissions' => $rolePermissions
+            ]
+        ];
+        return response()->json($output);
     }
 
 
@@ -98,15 +128,16 @@ class RoleController extends Controller
     {
         $this->authorize('show', [Role::class, $role]);
         $permissions = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $role->id)
-            ->join('permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-            ->select('permissions.id' ,'permissions.name')
-            ->get();
-        return response()->json([
-            'role' => $role,
-            'permissions' => $permissions,
-            'rolePermissions' => $rolePermissions,
-        ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role,
+                'permission' => $permissions,
+                'rolePermissions' => $role->permissions,
+            ]
+        ];
+        return response()->json($output);
     }
 
 
@@ -122,14 +153,18 @@ class RoleController extends Controller
     {
         $this->authorize('show', [Role::class, $role]);
 
-        $data = $request->validated();
+        $data = $request->all();
 
         $role->name = $data['name'];
         $role->save();
 
         $role->syncPermissions($data['permission']);
 
-        return response()->json(['success' =>'Role updated successfully' ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Role updated successfully',
+        ];
+        return response()->json($output);
     }
 
 
@@ -144,6 +179,10 @@ class RoleController extends Controller
     {
         $this->authorize('show', [Role::class, $role]);
         DB::table("roles")->where('id',$role->id)->delete();
-        return response()->json(['success' =>'Role deleted successfully' ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Role deleted successfully',
+        ];
+        return response()->json($output);
     }
 }

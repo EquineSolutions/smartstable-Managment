@@ -98,7 +98,7 @@ export default {
     {
       let fire = this;
       axios.get('/api/users/create', store.state.config).then(function(response){
-        fire.userRoles = response.data.roles;
+        fire.userRoles = response.data.data.roles;
         fire.user_role = fire.userRoles[0];
       }).catch(function(error){
         console.log(error);
@@ -121,7 +121,7 @@ export default {
           formData.append('roles', this.user_role);
 
           axios.post('/api/users', formData, store.state.config).then(function(response){
-            if(response.data.success) {
+            if(response.data.status == 200) {
               fire.vs_alert ('Success', 'User Successfully Added', 'success');
               router.push({ name: "user"})
             } else {

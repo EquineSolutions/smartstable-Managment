@@ -81,8 +81,6 @@
     },
     data() {
       return {
-
-        roles: [],
         user: {
 
         },
@@ -104,15 +102,14 @@
       getData(){
         let fire = this;
         axios.get(`/api/users/${this.$route.params.id}/edit`, store.state.config).then(function(response){
-          fire.roles = response.data;
-          let user = response.data.user;
+          let user = response.data.data.user;
           fire.fname = user.first_name;
           fire.lname = user.last_name;
           fire.email = user.email;
           fire.mobile = user.mobile;
           fire.password = '';
-          fire.userRoles = response.data.roles;
-          fire.user_role = response.data.userRole;
+          fire.userRoles = response.data.data.roles;
+          fire.user_role = response.data.data.userRole;
         }).catch(function(error){
           console.log(error);
         });
@@ -132,12 +129,12 @@
               roles: this.user_role
             };
 
-            if(this.password != ""){
+            if(this.password != "") {
               data["password"] = this.password;
             }
 
             axios.put(`/api/users/${this.$route.params.id}`, data, store.state.config).then(function(response){
-              if(response.data.success) {
+              if(response.data.status == 200) {
                 fire.vs_alert ('Success', 'User Successfully Updated', 'success');
                 router.push({ name: "user"})
               } else {

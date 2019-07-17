@@ -66,7 +66,7 @@ export default {
     {
       let fire = this;
       axios.get('/api/roles/create', store.state.config).then(function(response){
-        fire.permissions = response.data.permission;
+        fire.permissions = response.data.data.permission;
       }).catch(function(error){
         console.log(error);
       });
@@ -86,7 +86,7 @@ export default {
           }
 
           axios.post('/api/roles', formData, store.state.config).then(function(response){
-            if(response.data.success) {
+            if(response.data.status == 200) {
               fire.vs_alert ('Success', 'Role Successfully Added', 'success');
               router.push({ name: "role"})
             } else {

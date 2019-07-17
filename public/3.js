@@ -70,11 +70,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getRole: function getRole() {
       var fire = this;
       axios.get("/api/roles/".concat(this.$route.params.id, "/edit"), store.state.config).then(function (response) {
-        fire.permissions = response.data.permissions;
-        fire.role_name = response.data.role.name;
+        fire.permissions = response.data.data.permission;
+        fire.role_name = response.data.data.role.name;
 
-        for (var i = 0; i < response.data.rolePermissions.length; i++) {
-          fire.rolePermissions.push(response.data.rolePermissions[i].name);
+        for (var i = 0; i < response.data.data.rolePermissions.length; i++) {
+          fire.rolePermissions.push(response.data.data.rolePermissions[i].name);
         }
       })["catch"](function (error) {
         console.log(error);
@@ -92,7 +92,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             permission: _this.rolePermissions
           };
           axios.put("/api/roles/".concat(_this.$route.params.id), data, store.state.config).then(function (response) {
-            if (response.data.success) {
+            if (response.data.status == 200) {
               fire.vs_alert('Success', 'Role Successfully Updated', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "role"

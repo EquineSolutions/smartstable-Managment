@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Laravel\Passport\HasApiTokens;
 
 class PassportController extends Controller
 {
@@ -86,6 +87,13 @@ class PassportController extends Controller
             'user_id' => $user->id
         ]);
     }
-
+    public function logout(Request $request)
+    {
+        var_dump($request->user()); die;
+        Auth::user()->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
 
 }

@@ -70,7 +70,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var fire = this;
       axios.get('/api/roles', store.state.config).then(function (response) {
-        fire.roles = response.data.roles;
+        fire.roles = response.data.data.roles;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -91,7 +91,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteRole: function deleteRole() {
       var fire = this;
       axios["delete"]("/api/roles/".concat(this.roleIdToDelete), store.state.config).then(function (response) {
-        if (response.data.success) {
+        if (response.data.status == 200) {
           fire.vs_alert('Success', 'Role Successfully Deleted.', 'success');
           fire.roles = fire.roles.filter(function (value) {
             return value.id != fire.roleIdToDelete;
