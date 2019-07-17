@@ -119,7 +119,7 @@
 					<small>{{$store.state.currentUser.email}}</small>
 				</div>
 				<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-					<div class="con-img ml-3"><img :src="$store.state.currentUser.image" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block"></div>
+					<div class="con-img ml-3"><img :src="$store.state.currentUser.image" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block profile-image"></div>
 					<vs-dropdown-menu class="vx-navbar-dropdown">
 						<ul style="min-width: 9rem">
 							<li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/profile')"><feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Profile</span></li>
@@ -297,3 +297,11 @@ export default {
     },
 }
 </script>
+
+<style>
+	.profile-image{
+		object-fit: cover;
+	}
+
+
+</style>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Transformers\RoleTransformer;
 use App\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use App\User;
@@ -27,14 +28,14 @@ class UserController extends Controller
     public function show(User $user)
     {
         $this->authorize('index', User::class);
-//        return response()->json(['user' => $user], 200);
+
         return fractal($user, new UserTransformer());
     }
 
     public function index()
     {
         $this->authorize('index', User::class);
-//        return response()->json(['users' =>$data ], 200);
+
         return fractal(User::orderBy('id','DESC')->get(), new UserTransformer());
     }
 
@@ -47,20 +48,22 @@ class UserController extends Controller
     public function create()
     {
         $this->authorize('index', User::class);
-        $roles = Role::pluck('name')->all();
-        return response()->json(['roles' =>$roles ], 200);
+
+        return fractal(Role::all(), new RoleTransformer());
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param UserRequest $request
      * @return Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(UserRequest $request)
     {
         $this->authorize('index', User::class);
+
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -94,11 +97,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $this->authorize('edit', [User::class, $user]);
-        $roles = Role::pluck('name')->all();
-        $userRole = $user->roles->pluck('name')->first();
-        return response()->json(['user' =>$user ,
-            'roles' => $roles,
-            'userRole' => $userRole
+
+        return response()->json([
+            'roles' => Role::all(),
+            'user' => $user->with('roles')
         ], 200);
     }
 
@@ -117,23 +119,21 @@ class UserController extends Controller
 
         $data = $request->all();
 
-        DB::beginTransaction();
-        try{
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
 
-            if(!empty($input['password'])){
-                $input['password'] = Hash::make($input['password']); //update the password
-            }
-            $user->update($data);
-            $user->save();
-            DB::table('model_has_roles')->where('model_id',$user->id)->delete();
-            $user->assignRole($request->input('roles'));
-            DB::commit();
-            return response()->json(['success' =>'User updated successfully' ], 200);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['error' =>$e ], 500);
+            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path() . '/uploads/images/user/';
+            $image->move($destinationPath, $file_name);
+
+            $data['image'] = $file_name;
         }
-        return response()->json(['success' =>'User updated successfully','User' => $user ], 200);
+
+        if(!empty($input['password'])){
+            $input['password'] = Hash::make($input['password']); //update the password
+        }
+        $user->update($data);
+        return fractal($user, new UserTransformer());
 
     }
 
@@ -152,29 +152,4 @@ class UserController extends Controller
         return response()->json(['success' =>'User deleted successfully'], 200);
     }
 
-
-    public function updateProfileData(Request $request, $id) {
-
-        $user = User::find($id);
-        $this->authorize('edit', [User::class, $user]);
-        $data = $request->all();
-
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']); //update the password
-        }
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-
-            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path() . '/uploads/images/user/';
-            $image->move($destinationPath, $file_name);
-
-            $data['image'] = $file_name;
-        }
-
-        $user->update($data);
-
-        $user->save();
-        return response()->json(['success' =>'User updated successfully','User' => fractal($user, new UserTransformer()) ], 200);
-    }
 }
