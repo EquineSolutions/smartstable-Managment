@@ -93,7 +93,6 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
   },
   data: function data() {
     return {
-      roles: [],
       user: {},
       user_role: "",
       userRoles: [],
@@ -110,15 +109,14 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getData: function getData() {
       var fire = this;
       axios.get("/api/users/".concat(this.$route.params.id, "/edit"), store.state.config).then(function (response) {
-        fire.roles = response.data;
-        var user = response.data.user;
+        var user = response.data.data.user;
         fire.fname = user.first_name;
         fire.lname = user.last_name;
         fire.email = user.email;
         fire.mobile = user.mobile;
         fire.password = '';
-        fire.userRoles = response.data.roles;
-        fire.user_role = response.data.userRole;
+        fire.userRoles = response.data.data.roles;
+        fire.user_role = response.data.data.userRole;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -144,7 +142,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           }
 
           axios.put("/api/users/".concat(_this.$route.params.id), data, store.state.config).then(function (response) {
-            if (response.data.success) {
+            if (response.data.status == 200) {
               fire.vs_alert('Success', 'User Successfully Updated', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "user"

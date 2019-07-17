@@ -65,10 +65,10 @@
       {
         let fire = this;
         axios.get(`/api/roles/${this.$route.params.id}/edit`, store.state.config).then(function(response){
-          fire.permissions = response.data.permissions;
-          fire.role_name = response.data.role.name;
-          for (let i =0; i<response.data.rolePermissions.length; i++){
-            fire.rolePermissions.push(response.data.rolePermissions[i].name)
+          fire.permissions = response.data.data.permission;
+          fire.role_name = response.data.data.role.name;
+          for (let i =0; i<response.data.data.rolePermissions.length; i++){
+            fire.rolePermissions.push(response.data.data.rolePermissions[i].name)
           }
         }).catch(function(error){
           console.log(error);
@@ -87,7 +87,7 @@
             };
 
             axios.put(`/api/roles/${this.$route.params.id}`, data, store.state.config).then(function(response){
-              if(response.data.success) {
+              if(response.data.status == 200) {
                   fire.vs_alert ('Success', 'Role Successfully Updated', 'success');
                   router.push({ name: "role"});
               } else {
