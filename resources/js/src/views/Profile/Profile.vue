@@ -203,5 +203,7 @@
 </script>
 
 <style>
-
+    .vx-card .vx-card__collapsible-content img {
+        object-fit: cover;
+    }
 </style>
