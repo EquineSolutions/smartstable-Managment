@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 
 
 Route::post('login', 'Api\PassportController@login');
-Route::post('register', 'Api\PassportController@register');
+// Route::post('register', 'Api\PassportController@register');
+Route::get('logout', 'Api\PassportController@logout');
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('roles','Api\RoleController');

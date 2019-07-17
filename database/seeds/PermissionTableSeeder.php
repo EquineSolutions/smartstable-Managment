@@ -21,6 +21,17 @@ class PermissionTableSeeder extends Seeder
            'role-edit',
            'role-delete'
         ];
+        \Illuminate\Database\Eloquent\Model::unguard();
+
+        env('DB_CONNECTION') != 'sqlite' ? DB::statement('SET FOREIGN_KEY_CHECKS=0;') : '';
+
+        // Seed roles
+        DB::table('roles')->delete();
+        DB::table('roles')->truncate();
+
+        // Seed permissions
+        DB::table('permissions')->delete();
+        DB::table('permissions')->truncate();
 
 
         foreach ($permissions as $permission) {
@@ -30,6 +41,7 @@ class PermissionTableSeeder extends Seeder
         $role = Role::create(['name' => 'super-admin', 'guard_name' => 'api']);
         $role->givePermissionTo(Permission::all());
 
+        env('DB_CONNECTION') != 'sqlite' ? DB::statement('SET FOREIGN_KEY_CHECKS=1;') : '';
     }
 }
 

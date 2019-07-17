@@ -71,7 +71,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getPermissions: function getPermissions() {
       var fire = this;
       axios.get('/api/roles/create', store.state.config).then(function (response) {
-        fire.permissions = response.data.permission;
+        fire.permissions = response.data.data.permission;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -92,7 +92,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           }
 
           axios.post('/api/roles', formData, store.state.config).then(function (response) {
-            if (response.data.success) {
+            if (response.data.status == 200) {
               fire.vs_alert('Success', 'Role Successfully Added', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "role"

@@ -45,4 +45,4 @@
 
   </body>
 </html>
-<?php /**PATH /Users/mac2/Code/smartstable-Managment/resources/views/application.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/html/Equine/smartstable-Managment/resources/views/application.blade.php ENDPATH**/ ?>
