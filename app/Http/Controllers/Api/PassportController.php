@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Laravel\Passport\HasApiTokens;
+use Lcobucci\JWT\Parser;
 
 class PassportController extends Controller
 {
@@ -88,13 +89,13 @@ class PassportController extends Controller
             )->toDateTimeString()
         ]);
     }
-    public function logout(Request $request)
-    {
-        var_dump($request->user()); die;
-        Auth::user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
-    }
+
+public function logout(Request $request) {
+    $value = $request->bearerToken();
+    $id = (new Parser())->parse($value)->getHeader('jti');
+    $token = $request->user()->tokens->find($id);
+    $token->revoke();
+    return Response(['status' => 200, 'message' => 'You are successfully logged out'], 200);
+}
 
 }

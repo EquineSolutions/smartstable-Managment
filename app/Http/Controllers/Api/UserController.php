@@ -14,8 +14,6 @@ use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
 use League\Fractal;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
 
 class UserController extends Controller
 {
