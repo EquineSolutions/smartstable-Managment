@@ -38,12 +38,7 @@ __webpack_require__.r(__webpack_exports__);
     //Display User Data.
     getUserData: function getUserData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/users/".concat(this.$route.params.id), config).then(function (response) {
+      axios.get("/api/users/".concat(this.$route.params.id), store.state.config).then(function (response) {
         fire.user = response.data.data;
       })["catch"](function (error) {
         console.log(error);

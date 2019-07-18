@@ -30,15 +30,12 @@ export default {
   		//Display User Data.
   		getUserData()
   		{
-  			let fire = this;
-            let config = {
-                headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-            };
-	  		axios.get(`/api/users/${this.$route.params.id}`, config).then(function(response){
+			let fire = this;
+	  		axios.get(`/api/users/${this.$route.params.id}`, store.state.config).then(function(response){
 	  			fire.user = response.data.data;
 	  		}).catch(function(error){
 	            console.log(error);
-	        }); 
+	        });
   		}
   	}
 }

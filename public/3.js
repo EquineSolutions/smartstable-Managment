@@ -66,72 +66,54 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     };
   },
   methods: {
+    //Get All Roles
     getRole: function getRole() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
+      axios.get("/api/roles/".concat(this.$route.params.id, "/edit"), store.state.config).then(function (response) {
+        fire.permissions = response.data.data.permission;
+        fire.role_name = response.data.data.role.name;
+
+        for (var i = 0; i < response.data.data.rolePermissions.length; i++) {
+          fire.rolePermissions.push(response.data.data.rolePermissions[i].name);
         }
-      };
-      axios.get("/api/roles/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
-        console.log(response);
-        fire.permissions = response.data.permission;
-        fire.role_name = response.data.role.name;
-        fire.rolePermissions = response.data.rolePermissions;
       })["catch"](function (error) {
         console.log(error);
       });
     },
+    //Update Role Submission
     submitForm: function submitForm() {
       var _this = this;
 
       var fire = this;
       this.$validator.validateAll().then(function (result) {
         if (result) {
-          var config = {
-            headers: {
-              'Authorization': "Bearer " + store.state.tokens.access_token
-            }
-          }; // if form have no errors
-
-          var formData = new FormData();
-          formData.append('role_name', _this.role_name);
-          formData.append('permissions', _this.rolePermissions);
-          axios.put("/api/roles/".concat(_this.$route.params.id), formData, config).then(function (response) {
-            console.log(response);
-
-            if (response.data.success) {
-              fire.$vs.notify({
-                title: 'Success',
-                text: 'Role Successfully Updated',
-                color: 'success',
-                iconPack: 'feather',
-                icon: 'icon-check'
-              });
+          var data = {
+            name: _this.role_name,
+            permission: _this.rolePermissions
+          };
+          axios.put("/api/roles/".concat(_this.$route.params.id), data, store.state.config).then(function (response) {
+            if (response.data.status == 200) {
+              fire.vs_alert('Success', 'Role Successfully Updated', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "role"
               });
             } else {
-              fire.$vs.notify({
-                title: 'Oops!',
-                text: response.data,
-                color: 'danger'
-              });
+              fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.$vs.notify({
-              title: 'Oops!',
-              text: 'An error has been occurred.',
-              color: 'danger'
-            });
+            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'Please, solve all issues before submitting.',
-            color: 'danger'
-          });
+          _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+      });
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
       });
     }
   }

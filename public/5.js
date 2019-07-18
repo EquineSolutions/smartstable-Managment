@@ -102,13 +102,8 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
   methods: {
     getUserRoles: function getUserRoles() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get('/api/users/create', config).then(function (response) {
-        fire.userRoles = response.data.roles;
+      axios.get('/api/users/create', store.state.config).then(function (response) {
+        fire.userRoles = response.data.data.roles;
         fire.user_role = fire.userRoles[0];
       })["catch"](function (error) {
         console.log(error);
@@ -120,13 +115,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
       var fire = this;
       this.$validator.validateAll().then(function (result) {
         if (result) {
-          var config = {
-            headers: {
-              'Authorization': "Bearer " + store.state.tokens.access_token
-            }
-          };
-          console.log(store.state.tokens.access_token); // if form have no errors
-
+          // if form have no errors
           var formData = new FormData();
           formData.append('first_name', _this.first_name);
           formData.append('last_name', _this.last_name);
@@ -134,42 +123,29 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           formData.append('mobile', _this.mobile);
           formData.append('password', _this.password);
           formData.append('roles', _this.user_role);
-          axios.post('/api/users', formData, config).then(function (response) {
-            console.log(response);
-
-            if (response.data.success) {
-              fire.$vs.notify({
-                title: 'Success',
-                text: 'User Successfully Added',
-                color: 'success',
-                iconPack: 'feather',
-                icon: 'icon-check'
-              });
+          axios.post('/api/users', formData, store.state.config).then(function (response) {
+            if (response.data.status == 200) {
+              fire.vs_alert('Success', 'User Successfully Added', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "user"
               });
             } else {
-              fire.$vs.notify({
-                title: 'Oops!',
-                text: response.data,
-                color: 'danger'
-              });
+              fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            // console.log(error);
-            fire.$vs.notify({
-              title: 'Oops!',
-              text: 'An error has been occurred.',
-              color: 'danger'
-            });
+            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'Please, solve all issues before submitting.',
-            color: 'danger'
-          });
+          _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+      });
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
       });
     }
   }
