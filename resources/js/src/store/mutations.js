@@ -96,6 +96,26 @@ const mutations = {
 
     updateTokens(state, tokens) {
         state.tokens = tokens;
+    },
+
+    updateUser(state, data)
+    {
+        return new Promise((resolve, reject) => {
+            state.currentUser.id = data.user_id;
+            state.config = {
+                headers: {'Authorization': "Bearer " + state.tokens.access_token}
+            };
+            axios.get(`/api/users/${data.user_id}`, state.config).then(response => {
+                state.currentUser = response.data.data;
+                resolve(response);
+            }).catch(response => {
+                reject(response);
+            })
+        });
+    },
+
+    updateUserInfo(state, data) {
+        state.currentUser = data;
     }
 
 

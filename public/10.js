@@ -93,37 +93,35 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
   },
   data: function data() {
     return {
+      user: {},
+      user_role: "",
       userRoles: [],
       fname: "",
       lname: "",
       email: "",
       mobile: "",
       password: "",
-      confirm_password: "",
-      user_role: ""
+      confirm_password: ""
     };
   },
   methods: {
+    //Get User Data
     getData: function getData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/users/".concat(this.$route.params.id, "/edit"), config).then(function (response) {
-        var user = response.data.user;
+      axios.get("/api/users/".concat(this.$route.params.id, "/edit"), store.state.config).then(function (response) {
+        var user = response.data.data.user;
         fire.fname = user.first_name;
         fire.lname = user.last_name;
         fire.email = user.email;
         fire.mobile = user.mobile;
         fire.password = '';
-        fire.userRoles = response.data.roles;
-        fire.user_role = response.data.userRole;
+        fire.userRoles = response.data.data.roles;
+        fire.user_role = response.data.data.userRole;
       })["catch"](function (error) {
         console.log(error);
       });
     },
+    //Update User Submission
     submitForm: function submitForm() {
       var _this = this;
 
@@ -136,47 +134,36 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             last_name: _this.lname,
             email: _this.email,
             mobile: _this.mobile,
-            password: _this.password,
             roles: _this.user_role
           };
-          var config = {
-            headers: {
-              'Authorization': "Bearer " + store.state.tokens.access_token
-            }
-          };
-          axios.put("/api/users/".concat(fire.$route.params.id), data, config).then(function (response) {
-            if (response.data.success) {
-              fire.$vs.notify({
-                title: 'Success',
-                text: 'User Successfully Updated',
-                color: 'success',
-                iconPack: 'feather',
-                icon: 'icon-check'
-              });
+
+          if (_this.password != "") {
+            data["password"] = _this.password;
+          }
+
+          axios.put("/api/users/".concat(_this.$route.params.id), data, store.state.config).then(function (response) {
+            if (response.data.status == 200) {
+              fire.vs_alert('Success', 'User Successfully Updated', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "user"
               });
             } else {
-              fire.$vs.notify({
-                title: 'Oops!',
-                text: response.data,
-                color: 'danger'
-              });
+              fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.$vs.notify({
-              title: 'Oops!',
-              text: 'An error has been occurred.',
-              color: 'danger'
-            });
+            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
           });
         } else {
-          fire.$vs.notify({
-            title: 'Oops!',
-            text: 'Please, solve all issues before submitting.',
-            color: 'danger'
-          });
+          _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+      });
+    },
+    //Vuesax alert
+    vs_alert: function vs_alert(title, text, color) {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
       });
     }
   }
@@ -308,7 +295,7 @@ var render = function() {
             _c("div", { staticClass: "vx-row" }, [
               _c(
                 "div",
-                { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
                 [
                   _c("vs-input", {
                     directives: [
@@ -409,28 +396,27 @@ var render = function() {
             _c("div", { staticClass: "vx-row" }, [
               _c(
                 "div",
-                { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
                 [
-                  _c(
-                    "vs-input",
-                    _vm._b(
-                      {
-                        ref: "password",
-                        staticClass: "w-full",
-                        attrs: {
-                          type: "password",
-                          "icon-pack": "feather",
-                          icon: "icon-lock",
-                          "icon-no-border": "",
-                          "label-placeholder": "Password",
-                          name: "password"
-                        }
+                  _c("vs-input", {
+                    ref: "password",
+                    staticClass: "w-full",
+                    attrs: {
+                      type: "password",
+                      "icon-pack": "feather",
+                      icon: "icon-lock",
+                      "icon-no-border": "",
+                      "label-placeholder": "Password",
+                      name: "password"
+                    },
+                    model: {
+                      value: _vm.password,
+                      callback: function($$v) {
+                        _vm.password = $$v
                       },
-                      "vs-input",
-                      _vm.password,
-                      false
-                    )
-                  ),
+                      expression: "password"
+                    }
+                  }),
                   _vm._v(" "),
                   _c(
                     "span",

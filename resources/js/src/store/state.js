@@ -19,8 +19,11 @@ const state = {
         token_type: null
     },
     currentUser: {
+        id: null,
         name: null,
-        email: null
+        email: null,
+        mobile: null,
+        image: null,
     },
 
     isSidebarActive: true,

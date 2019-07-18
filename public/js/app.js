@@ -60703,6 +60703,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }, {
       path: '/user/:id',
       name: 'view-user',
+      props: true,
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
@@ -60724,6 +60725,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }, {
       path: '/user/edit/:id',
       name: 'edit-user',
+      props: true,
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
@@ -60884,8 +60886,7 @@ router.afterEach(function () {
 });
 
 function guard(to, from, next) {
-  var now = Date.now();
-  console.log(store.state);
+  var now = Date.now(); // console.log(store.state.currentUser);
 
   if (store.state.tokens.access_token != null || now >= store.state.tokens.expires_in) {
     // or however you store your logged in state
@@ -60971,11 +60972,21 @@ var actions = {
         password: user.password
       };
       axios.post('/api/login', data).then(function (response) {
-        console.log(response);
         var responseData = response.data;
         var now = Date.now();
         responseData.expires_at = responseData.expires_at + now;
         context.commit('updateTokens', responseData);
+        context.commit('updateUser', responseData);
+        resolve(response);
+      })["catch"](function (response) {
+        reject(response);
+      });
+    });
+  },
+  updateProfile: function updateProfile(context, data) {
+    return new Promise(function (resolve, reject) {
+      axios.post("/api/profile/".concat(store.state.currentUser.id), data, store.state.config).then(function (response) {
+        context.commit('updateUserInfo', response.data.User.data);
         resolve(response);
       })["catch"](function (response) {
         reject(response);
@@ -61111,6 +61122,25 @@ var mutations = {
   // ////////////////////////////////////////////
   updateTokens: function updateTokens(state, tokens) {
     state.tokens = tokens;
+  },
+  updateUser: function updateUser(state, data) {
+    return new Promise(function (resolve, reject) {
+      state.currentUser.id = data.user_id;
+      state.config = {
+        headers: {
+          'Authorization': "Bearer " + state.tokens.access_token
+        }
+      };
+      axios.get("/api/users/".concat(data.user_id), state.config).then(function (response) {
+        state.currentUser = response.data.data;
+        resolve(response);
+      })["catch"](function (response) {
+        reject(response);
+      });
+    });
+  },
+  updateUserInfo: function updateUserInfo(state, data) {
+    state.currentUser = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mutations);
@@ -61147,8 +61177,11 @@ var state = {
     token_type: null
   },
   currentUser: {
+    id: null,
     name: null,
-    email: null
+    email: null,
+    mobile: null,
+    image: null
   },
   isSidebarActive: true,
   breakpoint: null,

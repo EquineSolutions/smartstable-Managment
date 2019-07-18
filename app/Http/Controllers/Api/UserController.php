@@ -111,7 +111,8 @@ class UserController extends Controller
             'message' => 'Roles loaded successfully',
             'data' => [
                 'roles' => $roles,
-                'userRole' => $userRole
+                'userRole' => $userRole,
+                'user' => $user
             ]
         ];
         return response()->json($output);
@@ -134,7 +135,6 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try{
-
             if(!empty($input['password'])){
                 $input['password'] = Hash::make($input['password']); //update the password
             }
@@ -184,5 +184,31 @@ class UserController extends Controller
             'message' => 'User deleted successfully',
         ];
         return response()->json($output);
+    }
+
+
+    public function updateProfileData(Request $request, $id) {
+
+        $user = User::find($id);
+        $this->authorize('edit', [User::class, $user]);
+        $data = $request->all();
+
+        if(!empty($input['password'])){
+            $input['password'] = Hash::make($input['password']); //update the password
+        }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path() . '/uploads/images/user/';
+            $image->move($destinationPath, $file_name);
+
+            $data['image'] = $file_name;
+        }
+
+        $user->update($data);
+
+        $user->save();
+        return response()->json(['success' =>'User updated successfully','User' => fractal($user, new UserTransformer()) ], 200);
     }
 }

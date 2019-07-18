@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Requests\RoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use App\Transformers\RoleTranformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -67,7 +68,7 @@ class RoleController extends Controller
         $this->authorize('index', Role::class);
 
         $data = $request->validated();
-
+        DB::beginTransaction();
         try{
             $role = Role::create(['name' => $data['name']]);
             $role->syncPermissions($data['permission']);
@@ -125,18 +126,14 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $this->authorize('show', [Role::class, $role]);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $role->id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
-
+        $permissions = Permission::get();
         $output = [
             'status' => 200,
             'message' => 'Permissions loaded successfully',
             'data' => [
                 'role' => $role,
-                'permission' => $permission,
-                'rolePermissions' => $rolePermissions,
+                'permission' => $permissions,
+                'rolePermissions' => $role->permissions,
             ]
         ];
         return response()->json($output);
@@ -151,7 +148,7 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         $this->authorize('show', [Role::class, $role]);
 
@@ -159,7 +156,6 @@ class RoleController extends Controller
 
         $role->name = $data['name'];
         $role->save();
-
 
         $role->syncPermissions($data['permission']);
 
