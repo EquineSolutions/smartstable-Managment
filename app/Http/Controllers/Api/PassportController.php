@@ -89,12 +89,12 @@ class PassportController extends Controller
         ]);
     }
 
-public function logout(Request $request) {
-    $value = $request->bearerToken();
-    $id = (new Parser())->parse($value)->getHeader('jti');
-    $token = $request->user()->tokens->find($id);
-    $token->revoke();
-    return Response(['status' => 200, 'message' => 'You are successfully logged out'], 200);
-}
+    public function logout(Request $request) {
+        $value = $request->bearerToken();
+        $id = (new Parser())->parse($value)->getHeader('jti');
+        $token = $request->user()->tokens->find($id);
+        $token->revoke();
+        return Response(['status' => 200, 'message' => 'You are successfully logged out'], 200);
+    }
 
 }
