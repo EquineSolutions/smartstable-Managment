@@ -66,35 +66,39 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "vx-card",
-        { attrs: { title: "Role Information" } },
+  return _vm.can("role-list")
+    ? _c(
+        "div",
         [
-          _c("b", [_vm._v("ID: ")]),
-          _vm._v("  " + _vm._s(_vm.role.id) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Name: ")]),
-          _vm._v(" " + _vm._s(_vm.role.name) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Permissions: ")]),
-          _vm._v(" "),
-          _vm._l(_vm.permissions, function(permission, index) {
-            return [
-              _vm._v("\n\t\t\t\t" + _vm._s(permission.name)),
-              index != _vm.permissions.length - 1 ? [_vm._v(" // ")] : _vm._e()
-            ]
-          })
+          _c(
+            "vx-card",
+            { attrs: { title: "Role Information" } },
+            [
+              _c("b", [_vm._v("ID: ")]),
+              _vm._v("  " + _vm._s(_vm.role.id) + "\n\t\t\t"),
+              _c("vs-divider"),
+              _vm._v(" "),
+              _c("b", [_vm._v("Name: ")]),
+              _vm._v(" " + _vm._s(_vm.role.name) + "\n\t\t\t"),
+              _c("vs-divider"),
+              _vm._v(" "),
+              _c("b", [_vm._v("Permissions: ")]),
+              _vm._v(" "),
+              _vm._l(_vm.permissions, function(permission, index) {
+                return [
+                  _vm._v("\n\t\t\t\t" + _vm._s(permission.name)),
+                  index != _vm.permissions.length - 1
+                    ? [_vm._v(" // ")]
+                    : _vm._e()
+                ]
+              })
+            ],
+            2
+          )
         ],
-        2
+        1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

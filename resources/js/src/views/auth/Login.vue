@@ -40,10 +40,10 @@
                                         label-placeholder="Password"
                                         v-model="user.password"
                                         class="w-full mt-6 no-icon-border" />
-                                    <div class="flex flex-wrap justify-between my-5">
-                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
-                                        <router-link to="#">Forgot Password?</router-link>
-                                    </div>
+<!--                                    <div class="flex flex-wrap justify-between my-5">-->
+<!--                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>-->
+<!--                                        <router-link to="#">Forgot Password?</router-link>-->
+<!--                                    </div>-->
                                     <div class="p-8">
                                         <vs-button class="float-right">Login</vs-button>
                                     </div>
@@ -82,14 +82,14 @@ export default {
                     color:'success'
                 });
                 router.push({ path: `/` });
-            }).catch(response => {
+            }).catch(error => {
                 fire.$vs.notify({
                     title:'Oops!',
-                    text:'The email or password that you\'ve entered is incorrect.',
+                    text:error.response.data.message,
                     color:'danger'
                 });
                 fire.resetUser();
-            })
+            });
         },
 
         resetUser() {

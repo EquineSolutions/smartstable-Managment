@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="can('role-list')">
 		<vx-card title="Role Information">
 			<b>ID: </b>  {{role.id}}
 			<vs-divider/>
