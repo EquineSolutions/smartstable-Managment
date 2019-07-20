@@ -70,13 +70,29 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var fire = this;
       axios.get('/api/roles', store.state.config).then(function (response) {
+<<<<<<< HEAD
         fire.roles = response.data.roles;
+=======
+        fire.roles = response.data.data.roles;
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     // Confirm Dialog To Delete The Role
     confirmDeleteRole: function confirmDeleteRole(role) {
+<<<<<<< HEAD
       var fire = this;
       this.roleIdToDelete = role.id;
       this.$vs.dialog({
@@ -92,12 +108,45 @@ __webpack_require__.r(__webpack_exports__);
       var fire = this;
       axios["delete"]("/api/roles/".concat(this.roleIdToDelete), store.state.config).then(function (response) {
         if (response.data.success) {
+=======
+      var fire = this;
+      this.roleIdToDelete = role.id;
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: "Are you sure!",
+        text: 'This data can not be retrieved again.',
+        accept: fire.deleteRole
+      });
+    },
+    //Delete A Single Role By RoleID.
+    deleteRole: function deleteRole() {
+      var fire = this;
+      axios["delete"]("/api/roles/".concat(this.roleIdToDelete), store.state.config).then(function (response) {
+        if (response.data.status == 200) {
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
           fire.vs_alert('Success', 'Role Successfully Deleted.', 'success');
           fire.roles = fire.roles.filter(function (value) {
             return value.id != fire.roleIdToDelete;
           });
         } else {
           fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
+<<<<<<< HEAD
+=======
+        }
+      })["catch"](function (error) {
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
         }
       })["catch"](function (error) {
         fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
@@ -188,6 +237,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+<<<<<<< HEAD
   return _c(
     "div",
     [
@@ -342,13 +392,206 @@ var render = function() {
               )
             ],
             2
+=======
+  return _vm.can("role-list")
+    ? _c(
+        "div",
+        [
+          _c(
+            "vx-card",
+            { attrs: { title: "Roles List" } },
+            [
+              _vm.can("role-create")
+                ? _c(
+                    "vs-button",
+                    {
+                      staticClass: "mb-4 md:mb-0",
+                      staticStyle: {
+                        float: "right",
+                        "border-radius": "55px",
+                        "margin-left": "20px"
+                      },
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-plus",
+                        to: "/role/create"
+                      }
+                    },
+                    [_vm._v("Create Role")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "vs-table",
+                {
+                  attrs: { search: "", data: _vm.roles },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var data = ref.data
+                          return _vm._l(data, function(tr, indextr) {
+                            return _c(
+                              "vs-tr",
+                              { key: indextr },
+                              [
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].id } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(data[indextr].id) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].name } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(data[indextr].name) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  [
+                                    _c("vs-row", [
+                                      _c("div", { staticClass: "flex mb-4" }, [
+                                        _vm.can("role-list")
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "w-1/3" },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    to:
+                                                      "/role/" +
+                                                      data[indextr].id,
+                                                    radius: "",
+                                                    color: "primary",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-eye"
+                                                  },
+                                                  on: { click: _vm.hideTooltip }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.can("role-edit")
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass: "w-1/3",
+                                                staticStyle: {
+                                                  margin: "0 10px"
+                                                }
+                                              },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    to:
+                                                      "/role/edit/" +
+                                                      data[indextr].id,
+                                                    radius: "",
+                                                    color: "warning",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-edit"
+                                                  },
+                                                  on: { click: _vm.hideTooltip }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.can("role-delete")
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "w-1/3" },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    radius: "",
+                                                    color: "danger",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-trash"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.confirmDeleteRole(
+                                                        data[indextr]
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e()
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          })
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    4199215497
+                  )
+                },
+                [
+                  _c(
+                    "template",
+                    { slot: "thead" },
+                    [
+                      _c("vs-th", { attrs: { "sort-key": "id" } }, [
+                        _vm._v("ID")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", { attrs: { "sort-key": "first_name" } }, [
+                        _vm._v("Role")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", [_vm._v("Action")])
+                    ],
+                    1
+                  )
+                ],
+                2
+              )
+            ],
+            1
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
           )
         ],
         1
       )
+<<<<<<< HEAD
     ],
     1
   )
+=======
+    : _vm._e()
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="can('role-create')">
     <vx-card title='Create New Role'>
       <form>
         <div class="vx-row">
@@ -66,10 +66,15 @@ export default {
     {
       let fire = this;
       axios.get('/api/roles/create', store.state.config).then(function(response){
-        fire.permissions = response.data.permission;
-      }).catch(function(error){
-        console.log(error);
-      });
+      fire.permissions = response.data.data.permission;
+    }).catch(function(error){
+        if(error.response.status == 403) { // Un-Authorized
+          fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+          router.push({ name: "pageError403"});
+        } else if (error.response.status == 401){ // Un-Authenticated
+          router.push({ name: "pageLogin"})
+        }
+    });
     },
 
     //Create Role Submission
@@ -86,14 +91,22 @@ export default {
           }
 
           axios.post('/api/roles', formData, store.state.config).then(function(response){
-            if(response.data.success) {
+            if(response.data.status == 200) {
               fire.vs_alert ('Success', 'Role Successfully Added', 'success');
               router.push({ name: "role"})
             } else {
               fire.vs_alert ('Oops!', response.data, 'danger');
             }
           }).catch(function(error){
-            fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+            if (error.response.status == 422){ // Validation Error
+              let errors = error.response.data.errors;
+              fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if(error.response.status == 403) { // Un-Authorized
+              fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+              router.push({ name: "pageError403"});
+            } else if (error.response.status == 401){ // Un-Authenticated
+              router.push({ name: "pageLogin"})
+            }
           });
         } else {
           this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');

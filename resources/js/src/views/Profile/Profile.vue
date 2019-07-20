@@ -80,6 +80,7 @@
 </template>
 
 <script>
+    import router from './../../router'
     export default {
         mounted() {
             this.getUserData();
@@ -121,8 +122,13 @@
                 };
                 axios.get(`/api/users/${store.state.currentUser.id}`, config).then(function(response){
                     fire.user = response.data.data;
-                }).catch(function(error){
-                    console.log(error);
+                }).catch(error => {
+                    console.log(error.response.data.code);
+                    if (error.response.data.code == 403){ // unauthorized
+                        router.push('home');
+                    }else if (error.response.data.code == 401){ // unauthenticated
+                        router.push('login');
+                    }
                 });
             },
 
@@ -147,8 +153,6 @@
                         {
                             formData.append('image', this.form.imageFile);
                         }
-
-
 
                         store.dispatch('updateProfile', formData).then(response => {
                             fire.user = response.data.User.data;

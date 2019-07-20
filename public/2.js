@@ -9,6 +9,9 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+<<<<<<< HEAD
+=======
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../../router */ "./resources/js/src/router.js");
 //
 //
 //
@@ -58,6 +61,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 //
 //
 //
@@ -90,6 +94,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+=======
+
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getUserData();
@@ -130,7 +187,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/users/".concat(store.state.currentUser.id), config).then(function (response) {
         fire.user = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
+        console.log(error.response.data.code);
+
+        if (error.response.data.code == 403) {
+          // unauthorized
+          _router__WEBPACK_IMPORTED_MODULE_0__["default"].push('home');
+        } else if (error.response.data.code == 401) {
+          // unauthenticated
+          _router__WEBPACK_IMPORTED_MODULE_0__["default"].push('login');
+        }
       });
     },
     //Update User Information

@@ -69,7 +69,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
 
+=======
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -89,6 +92,7 @@ __webpack_require__.r(__webpack_exports__);
           text: 'We are happy to see you again.',
           color: 'success'
         });
+<<<<<<< HEAD
         _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
           path: "/"
         });
@@ -96,6 +100,12 @@ __webpack_require__.r(__webpack_exports__);
         fire.$vs.notify({
           title: 'Oops!',
           text: 'The email or password that you\'ve entered is incorrect.',
+=======
+      })["catch"](function (error) {
+        fire.$vs.notify({
+          title: 'Oops!',
+          text: error.response.data.message,
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
           color: 'danger'
         });
         fire.resetUser();
@@ -242,6 +252,7 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
+<<<<<<< HEAD
                                 {
                                   staticClass:
                                     "flex flex-wrap justify-between my-5"
@@ -271,6 +282,8 @@ var render = function() {
                               _vm._v(" "),
                               _c(
                                 "div",
+=======
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
                                 { staticClass: "p-8" },
                                 [
                                   _c(

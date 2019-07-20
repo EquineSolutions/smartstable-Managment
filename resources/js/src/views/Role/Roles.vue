@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div v-if="can('role-list')">
 		<!-- Roles Table -->
 		<vx-card title="Roles List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
+			<vs-button v-if="can('role-create')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
 
 			<vs-table search :data="roles">
 		      	<template slot="thead">
@@ -23,13 +23,13 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									  <div class="w-1/3">
+									  <div class="w-1/3" v-if="can('role-list')">
 											<vs-button @click="hideTooltip" :to="`/role/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
-									  <div class="w-1/3" style="margin: 0 10px;">
+									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('role-edit')">
 											<vs-button @click="hideTooltip" :to="`/role/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
-									  <div class="w-1/3">
+									  <div class="w-1/3" v-if="can('role-delete')">
 											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRole(data[indextr])"></vs-button>
 									  </div>
 								</div>
@@ -62,9 +62,14 @@ export default {
   		{
 			let fire = this;
 			axios.get('/api/roles', store.state.config).then(function(response){
-	  			fire.roles = response.data.roles;
+	  			fire.roles = response.data.data.roles;
 	  		}).catch(function(error){
-	            console.log(error);
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        });
   		},
 
@@ -87,14 +92,19 @@ export default {
   		{
 			let fire = this;
   			axios.delete(`/api/roles/${this.roleIdToDelete}`, store.state.config).then(function(response){
-	  			if(response.data.success) {
+	  			if(response.data.status == 200) {
 					fire.vs_alert ('Success', 'Role Successfully Deleted.', 'success');
 					fire.roles = fire.roles.filter(function(value){return value.id != fire.roleIdToDelete;});
-            	    } else {
+				} else {
 					fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	            }
 	  		}).catch(function(error){
-				fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        }); 
   		},
 

@@ -41,4 +41,14 @@ class User extends Authenticatable
     ];
 
     protected $guard_name = 'api';
+
+
+    public function AauthAcessToken(){
+        return $this->hasMany('\App\OauthAccessToken');
+    }
+
+    public function getImageAttribute($image)
+    {
+        return $image? '/uploads/images/user/'.$image:'/uploads/images/user/default.png';
+    }
 }
