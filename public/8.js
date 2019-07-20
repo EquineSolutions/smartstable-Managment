@@ -9,7 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../router */ "./resources/js/src/router.js");
 //
 //
 //
@@ -69,7 +68,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -88,9 +86,6 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Welcome Back!',
           text: 'We are happy to see you again.',
           color: 'success'
-        });
-        _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-          path: "/"
         });
       })["catch"](function (error) {
         fire.$vs.notify({

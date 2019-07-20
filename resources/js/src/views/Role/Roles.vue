@@ -64,7 +64,12 @@ export default {
 			axios.get('/api/roles', store.state.config).then(function(response){
 	  			fire.roles = response.data.data.roles;
 	  		}).catch(function(error){
-	            console.log(error);
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        });
   		},
 
@@ -90,11 +95,16 @@ export default {
 	  			if(response.data.status == 200) {
 					fire.vs_alert ('Success', 'Role Successfully Deleted.', 'success');
 					fire.roles = fire.roles.filter(function(value){return value.id != fire.roleIdToDelete;});
-            	    } else {
+				} else {
 					fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	            }
 	  		}).catch(function(error){
-				fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        }); 
   		},
 

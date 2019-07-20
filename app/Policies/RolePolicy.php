@@ -23,11 +23,21 @@ class RolePolicy
 
     public function index(User $user)
     {
-        return $user->hasRole('super-admin');
+        return $user->hasPermissionTo('role-list');
     }
 
-    public function show(User $user, Role $role)
+    public function create(User $user)
     {
-        return $user->hasRole('super-admin');
+        return $user->hasPermissionTo('role-create');
+    }
+
+    public function edit(User $user)
+    {
+        return $user->hasPermissionTo('role-edit');
+    }
+
+    public function destroy(User $user)
+    {
+        return $user->hasPermissionTo('role-delete');
     }
 }

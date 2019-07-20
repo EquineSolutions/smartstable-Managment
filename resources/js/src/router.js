@@ -220,8 +220,8 @@ const router = new Router({
             component: () => import('@/views/auth/Error404.vue')
           },
           {
-            path: '/error-401',
-            name: 'pageError401',
+            path: '/error-403',
+            name: 'pageError403',
             component: () => import('@/views/auth/NotAuthorized.vue')
           },
         ]
@@ -272,7 +272,7 @@ function guard(to, from, next) {
     next();
   }).catch(error=>{
     if (error.response.status == 403){ // unauthorized
-      next('/');
+      next('/error-403');
     }else if (error.response.status == 401){ // unauthenticated
       next('/login');
     }
