@@ -71,9 +71,24 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getPermissions: function getPermissions() {
       var fire = this;
       axios.get('/api/roles/create', store.state.config).then(function (response) {
+<<<<<<< HEAD
         fire.permissions = response.data.permission;
+=======
+        fire.permissions = response.data.data.permission;
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     //Create Role Submission
@@ -92,7 +107,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           }
 
           axios.post('/api/roles', formData, store.state.config).then(function (response) {
+<<<<<<< HEAD
             if (response.data.success) {
+=======
+            if (response.data.status == 200) {
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
               fire.vs_alert('Success', 'Role Successfully Added', 'success');
               _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
                 name: "role"
@@ -101,7 +120,22 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
               fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
+            if (error.response.status == 422) {
+              // Validation Error
+              var errors = error.response.data.errors;
+              fire.vs_alert('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if (error.response.status == 403) {
+              // Un-Authorized
+              fire.vs_alert('Oops!', error.response.data.message, 'danger');
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageError403"
+              });
+            } else if (error.response.status == 401) {
+              // Un-Authenticated
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageLogin"
+              });
+            }
           });
         } else {
           _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
@@ -185,6 +219,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+<<<<<<< HEAD
   return _c(
     "div",
     [
@@ -221,67 +256,103 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
+=======
+  return _vm.can("role-create")
+    ? _c(
+        "div",
+        [
+          _c("vx-card", { attrs: { title: "Create New Role" } }, [
+            _c("form", [
+              _c("div", { staticClass: "vx-row" }, [
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
                 _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("role_name"),
-                        expression: "errors.has('role_name')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("role_name")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-5" }, [
-            _c("div", { staticClass: "vx-col w-full" }, [
-              _c("b", [_vm._v("Role Permissions:")]),
-              _vm._v(" "),
-              _c(
-                "ul",
-                { staticClass: "centerx" },
-                _vm._l(_vm.permissions, function(permission, index) {
-                  return _c(
-                    "li",
-                    { key: index },
-                    [
-                      _c(
-                        "vs-checkbox",
+                  "div",
+                  { staticClass: "vx-col w-full mb-2" },
+                  [
+                    _c("vs-input", {
+                      directives: [
                         {
-                          attrs: { "vs-value": permission.name },
-                          model: {
-                            value: _vm.rolePermissions,
-                            callback: function($$v) {
-                              _vm.rolePermissions = $$v
-                            },
-                            expression: "rolePermissions"
-                          }
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required",
+                          expression: "'required'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-shield",
+                        "icon-no-border": "",
+                        "label-placeholder": "Role Name",
+                        name: "role_name"
+                      },
+                      model: {
+                        value: _vm.role_name,
+                        callback: function($$v) {
+                          _vm.role_name = $$v
                         },
-                        [_vm._v(_vm._s(permission.name))]
+                        expression: "role_name"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("role_name"),
+                            expression: "errors.has('role_name')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("role_name")))]
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row mt-5" }, [
+                _c("div", { staticClass: "vx-col w-full" }, [
+                  _c("b", [_vm._v("Role Permissions:")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticClass: "centerx" },
+                    _vm._l(_vm.permissions, function(permission, index) {
+                      return _c(
+                        "li",
+                        { key: index },
+                        [
+                          _c(
+                            "vs-checkbox",
+                            {
+                              attrs: { "vs-value": permission.name },
+                              model: {
+                                value: _vm.rolePermissions,
+                                callback: function($$v) {
+                                  _vm.rolePermissions = $$v
+                                },
+                                expression: "rolePermissions"
+                              }
+                            },
+                            [_vm._v(_vm._s(permission.name))]
+                          )
+                        ],
+                        1
                       )
-                    ],
-                    1
+                    }),
+                    0
                   )
-                }),
-                0
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-10" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col w-full" },
-              [
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row mt-10" }, [
                 _c(
+<<<<<<< HEAD
                   "vs-button",
                   {
                     staticClass: "mr-3 mb-2",
@@ -308,16 +379,49 @@ var render = function() {
                     }
                   },
                   [_vm._v("Reset")]
+=======
+                  "div",
+                  { staticClass: "vx-col w-full" },
+                  [
+                    _c(
+                      "vs-button",
+                      {
+                        staticClass: "mr-3 mb-2",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.submitForm($event)
+                          }
+                        }
+                      },
+                      [_vm._v("Submit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "vs-button",
+                      {
+                        staticClass: "mb-2",
+                        attrs: { color: "warning", type: "border" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.role_name = ""
+                          }
+                        }
+                      },
+                      [_vm._v("Reset")]
+                    )
+                  ],
+                  1
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
                 )
-              ],
-              1
-            )
+              ])
+            ])
           ])
-        ])
-      ])
-    ],
-    1
-  )
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

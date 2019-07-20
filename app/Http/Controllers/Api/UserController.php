@@ -15,6 +15,10 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
+use League\Fractal;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
@@ -29,14 +33,24 @@ class UserController extends Controller
     {
         $this->authorize('index', User::class);
 
-        return fractal($user, new UserTransformer());
+        $output = [
+            'status' => 200,
+            'message' => 'User loaded successfully',
+            'data' => $user
+        ];
+        return response()->json($output,200);
     }
 
     public function index()
     {
         $this->authorize('index', User::class);
-
-        return fractal(User::orderBy('id','DESC')->get(), new UserTransformer());
+        $data = User::orderBy('id','DESC')->get();
+        $output = [
+            'status' => 200,
+            'message' => 'User loaded successfully',
+            'data' => $data
+        ];
+        return response()->json($output,200);
     }
 
     /**
@@ -47,9 +61,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        $this->authorize('index', User::class);
-
-        return fractal(Role::all(), new RoleTransformer());
+        $this->authorize('create', User::class);
+        $roles = Role::pluck('name')->all();
+        return response()->json([
+            'status' => 200,
+            'message' => 'roles loaded successfully',
+            'data' => $roles
+        ],200);
     }
 
 
@@ -62,25 +80,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $this->authorize('index', User::class);
-
+        $this->authorize('create', User::class);
         $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-
-            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path() . '/uploads/images/user/';
-            $image->move($destinationPath, $file_name);
-
-            $data['image'] = $file_name;
-        }
-
         $data['password'] = bcrypt($data['password']); //Hash password
-
         $user = User::create($data);
         $user->assignRole($request->input('roles'));
-        return response()->json(['success' =>'User created successfully' ], 200);
+        return response()->json([
+            'status' => 200,
+            'message' => 'User created successfully',
+            'data' => []
+        ],200);
     }
 
 
@@ -97,11 +107,18 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $this->authorize('edit', [User::class, $user]);
-
-        return response()->json([
-            'roles' => Role::all(),
-            'user' => $user->with('roles')
-        ], 200);
+        $roles = Role::pluck('name')->all();
+        $userRole = $user->roles->pluck('name')->first();
+        $output = [
+            'status' => 200,
+            'message' => 'Roles loaded successfully',
+            'data' => [
+                'roles' => $roles,
+                'userRole' => $userRole,
+                'user' => $user
+            ]
+        ];
+        return response()->json($output,200);
     }
 
     /**
@@ -113,27 +130,44 @@ class UserController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
         $this->authorize('edit', [User::class, $user]);
 
         $data = $request->all();
+        DB::beginTransaction();
+        try{
+            if(!empty($input['password'])){
+                $input['password'] = Hash::make($input['password']); //update the password
+            }
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
+                $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path() . '/uploads/images/user/';
+                $image->move($destinationPath, $file_name);
 
-            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path() . '/uploads/images/user/';
-            $image->move($destinationPath, $file_name);
-
-            $data['image'] = $file_name;
+                $data['image'] = $file_name;
+            }
+            $user->update($data);
+            $user->save();
+            DB::table('model_has_roles')->where('model_id',$user->id)->delete();
+            $user->assignRole($request->input('roles'));
+            DB::commit();
+            $output = [
+                'status' => 200,
+                'message' => 'User updated successfully',
+            ];
+            $status = 200;
+        } catch (\Exception $e) {
+            DB::rollback();
+            $output = [
+                'status' => 500,
+                'error' => $e->getMessage(),
+            ];
+            $status = 500;
         }
-
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']); //update the password
-        }
-        $user->update($data);
-        return fractal($user, new UserTransformer());
+        return response()->json($output,$status);
 
     }
 
@@ -147,9 +181,57 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('edit', [User::class, $user]);
+        $this->authorize('destroy', User::class);
         $user->delete();
-        return response()->json(['success' =>'User deleted successfully'], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'User deleted successfully',
+        ];
+        return response()->json($output,200);
+    }
+    public function updateProfileData(Request $request, $id) {
+
+        $user = User::find($id);
+        $this->authorize('edit', [User::class, $user]);
+        $data = $request->all();
+
+        if(!empty($input['password'])){
+            $input['password'] = Hash::make($input['password']); //update the password
+        }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $file_name = md5(time() . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path() . '/uploads/images/user/';
+            $image->move($destinationPath, $file_name);
+
+            $data['image'] = $file_name;
+        }
+
+        $user->update($data);
+
+        $user->save();
+        $output = [
+            'status' => 200,
+            'message' => 'User updated successfully',
+        ];
+        return response()->json(['success' =>'User updated successfully','User' => fractal($user, new UserTransformer()) ], 200);
     }
 
+    public function all_user_info(Request $request) {
+        $role_id = $request->user()->roles->pluck('id')->first();
+        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+            ->where("role_has_permissions.role_id",$role_id)
+            ->get();
+        $output = [
+            'status' => 200,
+            'message' => 'User loaded successfully',
+            'data' => [
+                'user' => $request->user(),
+                'role' => $request->user()->roles->pluck('name','id')->first(),
+                'rolePermissions' => $rolePermissions
+            ]
+        ];
+        return response()->json($output);
+    }
 }

@@ -263,6 +263,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_perfect_scrollbar__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_perfect_scrollbar__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../router */ "./resources/js/src/router.js");
 //
 //
 //
@@ -401,6 +402,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -504,6 +506,25 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    logout: function logout() {
+      var fire = this;
+      store.dispatch('logout').then(function (response) {
+        fire.$vs.notify({
+          title: 'Good Bye!',
+          text: 'We were happy to see you.',
+          color: 'success'
+        });
+        _router__WEBPACK_IMPORTED_MODULE_3__["default"].push({
+          path: "/login"
+        });
+      })["catch"](function (response) {
+        fire.$vs.notify({
+          title: 'Oops!',
+          text: 'Something went wrong!',
+          color: 'danger'
+        });
+      });
+    },
     showSidebar: function showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true);
     },
@@ -1234,28 +1255,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1265,6 +1264,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      domain: window.location.origin,
       navbarType: _themeConfig_js__WEBPACK_IMPORTED_MODULE_3__["default"].navbarType || 'floating',
       navbarColor: _themeConfig_js__WEBPACK_IMPORTED_MODULE_3__["default"].navbarColor || '#fff',
       footerType: _themeConfig_js__WEBPACK_IMPORTED_MODULE_3__["default"].footerType || 'static',
@@ -1324,6 +1324,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    onCopy: function onCopy() {
+      this.$vs.notify({
+        title: 'Done!',
+        text: 'URL copied successfully.',
+        color: 'success',
+        iconPack: 'feather',
+        icon: 'icon-check-circle'
+      });
+    },
     changeRouteTitle: function changeRouteTitle(title) {
       this.routeTitle = title;
     },
@@ -1438,7 +1447,11 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
+<<<<<<< HEAD
 exports.push([module.i, ".profile-image{\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n\n\n", ""]);
+=======
+exports.push([module.i, ".image-fit{\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n\n", ""]);
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 
 // exports
 
@@ -2286,7 +2299,11 @@ var render = function() {
                     _c("div", { staticClass: "con-img ml-3" }, [
                       _c("img", {
                         staticClass:
+<<<<<<< HEAD
                           "rounded-full shadow-md cursor-pointer block profile-image",
+=======
+                          "rounded-full shadow-md cursor-pointer block image-fit",
+>>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
                         attrs: {
                           src: _vm.$store.state.currentUser.image,
                           alt: "",
@@ -2337,11 +2354,7 @@ var render = function() {
                               {
                                 staticClass:
                                   "flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.$router.push("/login")
-                                  }
-                                }
+                                on: { click: _vm.logout }
                               },
                               [
                                 _c("feather-icon", {
@@ -2571,89 +2584,92 @@ var render = function() {
                 },
                 [
                   _vm._l(_vm.sidebarItems, function(sidebarItem, index) {
-                    return [
-                      sidebarItem.header && !_vm.sidebarItemsMin
-                        ? _c(
-                            "span",
-                            {
-                              key: "header-" + index,
-                              staticClass: "navigation-header truncate"
-                            },
-                            [_vm._v(_vm._s(sidebarItem.header))]
-                          )
-                        : !sidebarItem.header
-                        ? [
-                            !sidebarItem.submenu
-                              ? _c(
-                                  "vx-sidebar-item",
-                                  {
-                                    key: "sidebarItem-" + index,
-                                    ref: "sidebarLink",
-                                    refInFor: true,
-                                    attrs: {
-                                      index: index,
-                                      to:
-                                        sidebarItem.slug != "external"
-                                          ? sidebarItem.url
-                                          : "",
-                                      href:
-                                        sidebarItem.slug == "external"
-                                          ? sidebarItem.url
-                                          : "",
-                                      icon: sidebarItem.icon,
-                                      target: sidebarItem.target,
-                                      isDisabled: sidebarItem.isDisabled
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "span",
+                    return _vm.can(sidebarItem.permission) ||
+                      sidebarItem.permission == undefined
+                      ? [
+                          sidebarItem.header && !_vm.sidebarItemsMin
+                            ? _c(
+                                "span",
+                                {
+                                  key: "header-" + index,
+                                  staticClass: "navigation-header truncate"
+                                },
+                                [_vm._v(_vm._s(sidebarItem.header))]
+                              )
+                            : !sidebarItem.header
+                            ? [
+                                !sidebarItem.submenu
+                                  ? _c(
+                                      "vx-sidebar-item",
                                       {
-                                        directives: [
-                                          {
-                                            name: "show",
-                                            rawName: "v-show",
-                                            value: !_vm.sidebarItemsMin,
-                                            expression: "!sidebarItemsMin"
-                                          }
-                                        ],
-                                        staticClass: "truncate"
+                                        key: "sidebarItem-" + index,
+                                        ref: "sidebarLink",
+                                        refInFor: true,
+                                        attrs: {
+                                          index: index,
+                                          to:
+                                            sidebarItem.slug != "external"
+                                              ? sidebarItem.url
+                                              : "",
+                                          href:
+                                            sidebarItem.slug == "external"
+                                              ? sidebarItem.url
+                                              : "",
+                                          icon: sidebarItem.icon,
+                                          target: sidebarItem.target,
+                                          isDisabled: sidebarItem.isDisabled
+                                        }
                                       },
-                                      [_vm._v(_vm._s(sidebarItem.name))]
-                                    ),
-                                    _vm._v(" "),
-                                    sidebarItem.tag &&
-                                    (_vm.isMouseEnter || !_vm.reduce)
-                                      ? _c(
-                                          "vs-chip",
+                                      [
+                                        _c(
+                                          "span",
                                           {
-                                            staticClass: "ml-auto",
-                                            attrs: {
-                                              color: sidebarItem.tagColor
-                                            }
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value: !_vm.sidebarItemsMin,
+                                                expression: "!sidebarItemsMin"
+                                              }
+                                            ],
+                                            staticClass: "truncate"
                                           },
-                                          [_vm._v(_vm._s(sidebarItem.tag))]
-                                        )
-                                      : _vm._e()
-                                  ],
-                                  1
-                                )
-                              : [
-                                  _c("vx-sidebar-group", {
-                                    key: "group-" + index,
-                                    ref: "sidebarGrp",
-                                    refInFor: true,
-                                    attrs: {
-                                      openHover: _vm.openGroupHover,
-                                      group: sidebarItem,
-                                      groupIndex: index,
-                                      open: _vm.isGroupActive(sidebarItem)
-                                    }
-                                  })
-                                ]
-                          ]
-                        : _vm._e()
-                    ]
+                                          [_vm._v(_vm._s(sidebarItem.name))]
+                                        ),
+                                        _vm._v(" "),
+                                        sidebarItem.tag &&
+                                        (_vm.isMouseEnter || !_vm.reduce)
+                                          ? _c(
+                                              "vs-chip",
+                                              {
+                                                staticClass: "ml-auto",
+                                                attrs: {
+                                                  color: sidebarItem.tagColor
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(sidebarItem.tag))]
+                                            )
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : [
+                                      _c("vx-sidebar-group", {
+                                        key: "group-" + index,
+                                        ref: "sidebarGrp",
+                                        refInFor: true,
+                                        attrs: {
+                                          openHover: _vm.openGroupHover,
+                                          group: sidebarItem,
+                                          groupIndex: index,
+                                          open: _vm.isGroupActive(sidebarItem)
+                                        }
+                                      })
+                                    ]
+                              ]
+                            : _vm._e()
+                        ]
+                      : _vm._e()
                   })
                 ],
                 2
@@ -3024,114 +3040,39 @@ var render = function() {
                                   : _vm._e(),
                                 _vm._v(" "),
                                 _c(
-                                  "vs-dropdown",
+                                  "vx-tooltip",
                                   {
                                     staticClass:
                                       "ml-auto md:block hidden cursor-pointer",
-                                    attrs: { "vs-trigger-click": "" }
+                                    attrs: {
+                                      color: "primary",
+                                      text: "Copy URL"
+                                    }
                                   },
                                   [
                                     _c("vs-button", {
+                                      directives: [
+                                        {
+                                          name: "clipboard",
+                                          rawName: "v-clipboard:copy",
+                                          value: _vm.domain + _vm.$route.path,
+                                          expression: "domain+$route.path",
+                                          arg: "copy"
+                                        },
+                                        {
+                                          name: "clipboard",
+                                          rawName: "v-clipboard:success",
+                                          value: _vm.onCopy,
+                                          expression: "onCopy",
+                                          arg: "success"
+                                        }
+                                      ],
                                       attrs: {
                                         radius: "",
-                                        icon: "icon-settings",
+                                        icon: "icon-link",
                                         "icon-pack": "feather"
                                       }
-                                    }),
-                                    _vm._v(" "),
-                                    _c(
-                                      "vs-dropdown-menu",
-                                      { staticClass: "w-32" },
-                                      [
-                                        _c("vs-dropdown-item", [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "flex items-center",
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/pages/profile"
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("feather-icon", {
-                                                staticClass:
-                                                  "inline-block mr-2",
-                                                attrs: {
-                                                  icon: "UserIcon",
-                                                  svgClasses: "w-4 h-4"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c("span", [_vm._v("Profile")])
-                                            ],
-                                            1
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("vs-dropdown-item", [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "flex items-center",
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/apps/todo"
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("feather-icon", {
-                                                staticClass:
-                                                  "inline-block mr-2",
-                                                attrs: {
-                                                  icon: "CheckSquareIcon",
-                                                  svgClasses: "w-4 h-4"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c("span", [_vm._v("Tasks")])
-                                            ],
-                                            1
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("vs-dropdown-item", [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass: "flex items-center",
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/apps/email"
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("feather-icon", {
-                                                staticClass:
-                                                  "inline-block mr-2",
-                                                attrs: {
-                                                  icon: "MailIcon",
-                                                  svgClasses: "w-4 h-4"
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c("span", [_vm._v("Inbox")])
-                                            ],
-                                            1
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    )
+                                    })
                                   ],
                                   1
                                 )
@@ -3738,12 +3679,14 @@ __webpack_require__.r(__webpack_exports__);
   url: "/user",
   name: "User",
   slug: "user",
-  icon: "UserIcon"
+  icon: "UserIcon",
+  permission: 'user-list'
 }, {
   url: "/role",
   name: "Role",
   slug: "role",
-  icon: "ShieldIcon"
+  icon: "ShieldIcon",
+  permission: 'role-list'
 }]);
 
 /***/ }),

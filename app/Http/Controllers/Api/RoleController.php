@@ -14,7 +14,6 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
 
-
 class RoleController extends Controller
 {
 
@@ -28,7 +27,15 @@ class RoleController extends Controller
     {
         $this->authorize('index', Role::class);
 
-        return fractal(Role::orderBy('id','DESC')->get(), new RoleTransformer());
+        $roles = Role::orderBy('id','DESC')->get();
+        $output = [
+            'status' => 200,
+            'message' => 'Roles loaded successfully',
+            'data' => [
+                'roles' =>$roles
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -40,9 +47,17 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $this->authorize('index', Role::class);
 
-        return fractal(Permission::get(), new PermissionTransformer());
+        $permission = Permission::get();
+        $this->authorize('create', Role::class);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'permission' =>$permission
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -55,7 +70,7 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $this->authorize('index', Role::class);
+        $this->authorize('create', Role::class);
 
         $data = $request->validated();
 
@@ -64,12 +79,22 @@ class RoleController extends Controller
             $role = Role::create(['name' => $data['name']]);
             $role->syncPermissions($data['permission']);
             DB::commit();
-            return fractal($role, new RoleTransformer())->parseIncludes('permissions');
 
+            $output = [
+                'status' => 200,
+                'message' => 'Role created successfully',
+            ];
+            $status =200;
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['error' =>$e->getMessage()], 500);
+            $output = [
+                'status' => 500,
+                'error' => $e->getMessage(),
+            ];
+            $status =500;
         }
+
+        return response()->json($output,$status);
 
     }
 
@@ -82,9 +107,20 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
+        $this->authorize('index', Role::class);
+        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+            ->where("role_has_permissions.role_id",$role->id)
+            ->get();
 
-        return fractal($role->with('permissions')->get(), new RoleTransformer())->parseIncludes('permissions');
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role ,
+                'rolePermissions' => $rolePermissions
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -97,12 +133,18 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
-
-        return response()->json([
-            'role' => $role->with('permissions')->get(),
-            'permissions' => Permission::get(),
-        ], 200);
+        $this->authorize('edit', Role::class);
+        $permissions = Permission::get();
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role,
+                'permission' => $permissions,
+                'rolePermissions' => $role->permissions,
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -116,16 +158,20 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
+        $this->authorize('edit', Role::class);
 
-        $data = $request->validated();
+        $data = $request->all();
 
         $role->name = $data['name'];
         $role->save();
 
         $role->syncPermissions($data['permission']);
 
-        return fractal($role->with('permissions')->get(), new RoleTransformer())->parseIncludes('permissions');
+        $output = [
+            'status' => 200,
+            'message' => 'Role updated successfully',
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -138,8 +184,12 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
-        $role->delete();
-        return response()->json(['success' =>'Role deleted successfully' ], 200);
+        $this->authorize('destroy', Role::class);
+        DB::table("roles")->where('id',$role->id)->delete();
+        $output = [
+            'status' => 200,
+            'message' => 'Role deleted successfully',
+        ];
+        return response()->json($output,200);
     }
 }
