@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="can('role-create')">
     <vx-card title='Create New Role'>
       <form>
         <div class="vx-row">
@@ -66,10 +66,10 @@ export default {
     {
       let fire = this;
       axios.get('/api/roles/create', store.state.config).then(function(response){
-        fire.permissions = response.data.data.permission;
-      }).catch(function(error){
-        console.log(error);
-      });
+      fire.permissions = response.data.data.permission;
+    }).catch(function(error){
+      console.log(error);
+    });
     },
 
     //Create Role Submission

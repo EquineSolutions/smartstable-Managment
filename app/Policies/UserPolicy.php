@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\User;
+use http\Env\Request;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -26,6 +27,11 @@ class UserPolicy
 
     public function edit(User $user, User $requestedUser)
     {
-        return $user->hasRole('super-admin') || $user->id == $requestedUser->id;
+        return $user->hasPermissionTo('edit') || $user->id == $requestedUser->id;
+    }
+
+    public function permission(User $user)
+    {
+        return !request()->permissions || $user->hasAllPermissions(\request()->permissions);
     }
 }

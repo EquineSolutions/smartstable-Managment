@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div v-if="can('role-list')">
 		<!-- Roles Table -->
 		<vx-card title="Roles List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
+			<vs-button v-if="can('role-create')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
 
 			<vs-table search :data="roles">
 		      	<template slot="thead">
@@ -23,13 +23,13 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									  <div class="w-1/3">
+									  <div class="w-1/3" v-if="can('role-list')">
 											<vs-button @click="hideTooltip" :to="`/role/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
-									  <div class="w-1/3" style="margin: 0 10px;">
+									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('role-edit')">
 											<vs-button @click="hideTooltip" :to="`/role/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
-									  <div class="w-1/3">
+									  <div class="w-1/3" v-if="can('role-delete')">
 											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRole(data[indextr])"></vs-button>
 									  </div>
 								</div>

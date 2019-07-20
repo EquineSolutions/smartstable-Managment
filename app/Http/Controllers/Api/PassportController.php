@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Laravel\Passport\HasApiTokens;
+use Lcobucci\JWT\Parser;
 
 class PassportController extends Controller
 {
@@ -60,7 +61,7 @@ class PassportController extends Controller
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'user name and password doesn\'t match'
             ], 401);
         $user = $request->user();
         $userRole = $user->roles->pluck('name')->first();
@@ -87,13 +88,22 @@ class PassportController extends Controller
             'user_id' => $user->id
         ]);
     }
-    public function logout(Request $request)
+
+    public function logout(Request $request) {
+        $value = $request->bearerToken();
+        $id = (new Parser())->parse($value)->getHeader('jti');
+        $token = $request->user()->tokens->find($id);
+        $token->revoke();
+        return Response(['status' => 200, 'message' => 'You are successfully logged out'], 200);
+    }
+
+    public function authorizeUserPermission(Request $request)
     {
-        var_dump($request->user()); die;
-        Auth::user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        $this->authorize('permission', User::class);
+        return [
+            'status' => 200,
+            'message' => 'User has permission',
+        ];
     }
 
 }

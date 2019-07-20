@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-if="can('role-edit')">
     <vx-card title='Update Role'>
       <form>
         <div class="vx-row">

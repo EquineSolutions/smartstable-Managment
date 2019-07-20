@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Validator;
@@ -13,9 +14,7 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
-use League\Fractal;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
@@ -211,6 +210,30 @@ class UserController extends Controller
         $user->update($data);
 
         $user->save();
+        $output = [
+            'status' => 200,
+            'message' => 'User updated successfully',
+        ];
         return response()->json(['success' =>'User updated successfully','User' => fractal($user, new UserTransformer()) ], 200);
     }
+
+
+
+    public function all_user_info(Request $request) {
+        $role_id = $request->user()->roles->pluck('id')->first();
+        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+            ->where("role_has_permissions.role_id",$role_id)
+            ->get();
+        $output = [
+            'status' => 200,
+            'message' => 'User loaded successfully',
+            'data' => [
+                'user' => $request->user(),
+                'role' => $request->user()->roles->pluck('name','id')->first(),
+                'rolePermissions' => $rolePermissions
+            ]
+        ];
+        return response()->json($output);
+    }
+
 }
