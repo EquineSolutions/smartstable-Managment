@@ -7,6 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+import router from '../router';
 
 const mutations = {
 
@@ -100,22 +101,43 @@ const mutations = {
 
     updateUser(state, data)
     {
-        return new Promise((resolve, reject) => {
-            state.currentUser.id = data.user_id;
-            state.config = {
-                headers: {'Authorization': "Bearer " + state.tokens.access_token}
-            };
-            axios.get(`/api/users/${data.user_id}`, state.config).then(response => {
-                state.currentUser = response.data.data;
-                resolve(response);
-            }).catch(response => {
-                reject(response);
-            })
-        });
+        state.config = {
+            headers: {'Authorization': "Bearer " + state.tokens.access_token}
+        };
+
+        state.currentUser = data.user;
+
+        state.userRole = data.role;
+
+        state.userPermissions = data.rolePermissions;
+
+        router.push({ path: `/` });
     },
 
     updateUserInfo(state, data) {
         state.currentUser = data;
+    },
+
+    resetUser(state, data) {
+        state.tokens= {
+            access_token: null,
+            expires_at: null,
+            token_type: null,
+            user_id: null
+        };
+
+        state.userRole = null;
+
+        state.currentUser = {
+            id: null,
+            first_name: null,
+            last_name: null,
+            email: null,
+            mobile: null,
+            image: null,
+        };
+
+        state.config = null;
     }
 
 

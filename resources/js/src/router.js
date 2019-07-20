@@ -19,6 +19,7 @@
 
 import Vue from 'vue';
 import Router from 'vue-router';
+window.axios = require('axios');
 
 Vue.use(Router);
 
@@ -45,7 +46,7 @@ const router = new Router({
               breadcrumb: [
                 { title: 'Home', active: true}
               ],
-              pageTitle: "Home"
+              pageTitle: "Home",
             }
           },
           {
@@ -66,7 +67,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'User', active: true}
               ],
-              pageTitle: "Users"
+              pageTitle: "Users",
+              permission: 'user-list'
             }
           },
           {
@@ -80,13 +82,13 @@ const router = new Router({
                 { title: 'User', url: '/user'},
                 { title: 'Create User', active: true}
               ],
-              pageTitle: "Create User"
+              pageTitle: "Create User",
+              permission: 'user-create'
             }
           },
           {
             path: '/user/:id',
             name: 'view-user',
-            props: true,
             beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/View.vue'),
             meta: {
@@ -95,13 +97,13 @@ const router = new Router({
                 { title: 'User', url: '/user'},
                 { title: 'User Information', active: true}
               ],
-              pageTitle: "User Information"
+              pageTitle: "User Information",
+              permission: 'user-list'
             }
           },
           {
             path: '/user/edit/:id',
             name: 'edit-user',
-            props: true,
             beforeEnter: guard, // Using guard before entering the route
             component: () => import('./views/User/Edit.vue'),
             meta: {
@@ -110,7 +112,8 @@ const router = new Router({
                 { title: 'Users', url: '/user'},
                 { title: 'Edit User', active: true}
               ],
-              pageTitle: "Edit User"
+              pageTitle: "Edit User",
+              permission: 'user-edit'
             }
           },
 
@@ -128,7 +131,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'Roles', active: true}
               ],
-              pageTitle: "Roles"
+              pageTitle: "Roles",
+              permission: 'role-list'
             }
           },
           {
@@ -142,7 +146,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Create Role', active: true}
               ],
-              pageTitle: "Create Role"
+              pageTitle: "Create Role",
+              permission: 'role-create'
             }
           },
           {
@@ -156,7 +161,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Role Information', active: true}
               ],
-              pageTitle: "Role Information"
+              pageTitle: "Role Information",
+              permission: 'role-list'
             }
           },
           {
@@ -170,7 +176,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Edit Role', active: true}
               ],
-              pageTitle: "Edit Role"
+              pageTitle: "Edit Role",
+              permission: 'role-edit'
             }
           },
 
@@ -212,13 +219,18 @@ const router = new Router({
             name: 'pageError404',
             component: () => import('@/views/auth/Error404.vue')
           },
+          {
+            path: '/error-403',
+            name: 'pageError403',
+            component: () => import('@/views/auth/NotAuthorized.vue')
+          },
         ]
       },
       // Redirect to 404 page, if no match found
       {
         path: '*',
         redirect: '/error-404'
-      }
+      },
     ],
 });
 
@@ -233,16 +245,38 @@ router.afterEach(() => {
 });
 
 
+/**
+ * Check if the authenticated user can perform an action.
+ *
+ * @param permission
+ * @returns {boolean}
+ */
+function can(permission) {
+  let hasPermission = false;
+  store.state.userPermissions.forEach((userPermission) => {
+    if(userPermission.name == permission){
+      hasPermission = true;
+    }
+  });
 
-function guard(to, from, next){
-  let now = Date.now();
-  // console.log(store.state.currentUser);
-  if(store.state.tokens.access_token != null || now >= store.state.tokens.expires_in ) {
-    // or however you store your logged in state
-    next(); // allow to enter route
-  } else{
-    next('/login'); // go to '/login';
+  return hasPermission;
+}
+
+
+function guard(to, from, next) {
+  const formData = new FormData();
+  if (to.meta.permission != undefined){
+    formData.append('permissions', to.meta.permission);
   }
+  axios.post('/api/authorize', formData, store.state.config).then(function(response){
+    next();
+  }).catch(error=>{
+    if (error.response.status == 403){ // unauthorized
+      next('/error-403');
+    }else if (error.response.status == 401){ // unauthenticated
+      next('/login');
+    }
+  });
 }
 
 

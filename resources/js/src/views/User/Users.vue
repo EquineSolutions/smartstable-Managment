@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div v-if="can('user-list')">
 		<!-- Users Table -->
 		<vx-card title="Users List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
+			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" v-if="can('user-create')" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
 
 			<vs-table search :data="users">
 		      	<template slot="thead">
@@ -33,14 +33,14 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									<div class="w-1/3">
+									<div class="w-1/3" v-if="can('user-list')">
 											<vs-button @click="redirect('view-user', data[indextr].id)" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
 
-									  <div class="w-1/3" style="margin: 0 10px;">
+									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('user-edit')">
 											<vs-button @click="redirect('edit-user', data[indextr].id)" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
-									  <div class="w-1/3">
+									  <div class="w-1/3" v-if="can('user-delete')">
 											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteUser(data[indextr])"></vs-button>
 									  </div>
 								</div>
@@ -76,7 +76,12 @@ export default {
 			axios.get('/api/users', store.state.config).then(function(response){
 	  			fire.users = response.data.data;
 	  		}).catch(function(error){
-	            console.log(error);
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        });
   		},
 
@@ -106,7 +111,12 @@ export default {
 	              	fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	            }
 	  		}).catch(function(error){
-				fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        }); 
   		},
 
