@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-if="can('role-edit')">
     <vx-card title='Update Role'>
       <form>
         <div class="vx-row">
@@ -60,71 +60,69 @@
       }
     },
     methods: {
+        //Get All Roles
       getRole()
       {
         let fire = this;
-        let config = {
-          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-        };
-
-        axios.get(`/api/roles/${this.$route.params.id}/edit`, config).then(function(response){
-          console.log(response);
-          fire.permissions = response.data.permission;
-          fire.role_name = response.data.role.name;
-          fire.rolePermissions = response.data.rolePermissions;
+        axios.get(`/api/roles/${this.$route.params.id}/edit`, store.state.config).then(function(response){
+          fire.permissions = response.data.data.permission;
+          fire.role_name = response.data.data.role.name;
+          for (let i =0; i<response.data.data.rolePermissions.length; i++){
+            fire.rolePermissions.push(response.data.data.rolePermissions[i].name)
+          }
         }).catch(function(error){
-          console.log(error);
+          if(error.response.status == 403) { // Un-Authorized
+            fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+            router.push({ name: "pageError403"});
+          } else if (error.response.status == 401){ // Un-Authenticated
+            router.push({ name: "pageLogin"})
+          }
         });
       },
 
+        //Update Role Submission
       submitForm()
       {
         let fire = this;
         this.$validator.validateAll().then(result => {
           if(result) {
-            let config = {
-              headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
+            let data = {
+              name: this.role_name,
+              permission: this.rolePermissions,
             };
-            // if form have no errors
-            const formData = new FormData();
-            formData.append('role_name', this.role_name);
-            formData.append('permissions', this.rolePermissions);
-
-            axios.put(`/api/roles/${this.$route.params.id}`, formData, config).then(function(response){
-              console.log(response);
-              if(response.data.success) {
-                fire.$vs.notify({
-                  title:'Success',
-                  text:'Role Successfully Updated',
-                  color:'success',
-                  iconPack: 'feather',
-                  icon:'icon-check'
-                });
-                router.push({ name: "role"})
+            axios.put(`/api/roles/${this.$route.params.id}`, data, store.state.config).then(function(response){
+              if(response.data.status == 200) {
+                  fire.vs_alert ('Success', 'Role Successfully Updated', 'success');
+                  router.push({ name: "role"});
               } else {
-                fire.$vs.notify({
-                  title:'Oops!',
-                  text: response.data,
-                  color:'danger'
-                });
-
+                  fire.vs_alert ('Oops!', response.data, 'danger');
               }
             }).catch(function(error){
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+              if (error.response.status == 422){ // Validation Error
+                let errors = error.response.data.errors;
+                fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+              } else if(error.response.status == 403) { // Un-Authorized
+                fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                router.push({ name: "pageError403"});
+              } else if (error.response.status == 401){ // Un-Authenticated
+                router.push({ name: "pageLogin"})
+              }
             });
-          }else{
-            fire.$vs.notify({
-              title:'Oops!',
-              text:'Please, solve all issues before submitting.',
-              color:'danger'
-            });
+          } else {
+              this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
         })
-      }
+      },
+
+        //Vuesax alert
+        vs_alert (title, text, color)
+        {
+            this.$vs.notify({
+                title: title,
+                text: text,
+                color: color
+            });
+        }
     },
   }
 </script>

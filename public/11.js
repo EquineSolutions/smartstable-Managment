@@ -25,6 +25,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getUserData();
@@ -38,15 +49,21 @@ __webpack_require__.r(__webpack_exports__);
     //Display User Data.
     getUserData: function getUserData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/users/".concat(this.$route.params.id), config).then(function (response) {
+      axios.get("/api/users/".concat(this.$route.params.id), store.state.config).then(function (response) {
         fire.user = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+        }
       });
     }
   }
@@ -69,37 +86,94 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "vx-card",
-        { attrs: { title: "User Information" } },
+  return _vm.can("user-list")
+    ? _c(
+        "div",
         [
-          _c("b", [_vm._v("ID: ")]),
-          _vm._v("  " + _vm._s(_vm.user.id) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Name: ")]),
-          _vm._v(
-            " " +
-              _vm._s(_vm.user.first_name + " " + _vm.user.last_name) +
-              "\n\t\t\t"
-          ),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Email: ")]),
-          _vm._v(" " + _vm._s(_vm.user.email) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Mobile: ")]),
-          _vm._v(" " + _vm._s(_vm.user.mobile) + "\n\n    \t")
+          _c(
+            "vx-card",
+            { attrs: { title: "User Information" } },
+            [
+              _vm.user.length > 0
+                ? [
+                    _c("b", [_vm._v("ID: ")]),
+                    _vm._v("  " + _vm._s(_vm.user.id) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Name: ")]),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.user.first_name + " " + _vm.user.last_name) +
+                        "\n\t\t\t\t"
+                    ),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Email: ")]),
+                    _vm._v(" " + _vm._s(_vm.user.email) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Mobile: ")]),
+                    _vm._v(" " + _vm._s(_vm.user.mobile) + "\n\t\t\t")
+                  ]
+                : [
+                    _c(
+                      "vs-row",
+                      [
+                        _c(
+                          "vs-col",
+                          {
+                            attrs: {
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
+                            }
+                          },
+                          [_c("b", [_vm._v("User Is Not Available!")])]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "vs-col",
+                          {
+                            attrs: {
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
+                            }
+                          },
+                          [
+                            _c(
+                              "vs-button",
+                              {
+                                attrs: {
+                                  size: "small",
+                                  type: "gradient",
+                                  "icon-pack": "feather",
+                                  icon: "icon-arrow-left"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.$router.go(-1)
+                                  }
+                                }
+                              },
+                              [_vm._v("Go Back")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+            ],
+            2
+          )
         ],
         1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
