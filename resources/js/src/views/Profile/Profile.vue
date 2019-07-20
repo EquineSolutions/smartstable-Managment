@@ -154,8 +154,6 @@
                             formData.append('image', this.form.imageFile);
                         }
 
-
-
                         store.dispatch('updateProfile', formData).then(response => {
                             fire.user = response.data.User.data;
                             fire.vs_alert('Success', 'Data Successfully Updated', 'success');

@@ -68,7 +68,12 @@ export default {
       axios.get('/api/roles/create', store.state.config).then(function(response){
       fire.permissions = response.data.data.permission;
     }).catch(function(error){
-      console.log(error);
+        if(error.response.status == 403) { // Un-Authorized
+          fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+          router.push({ name: "pageError403"});
+        } else if (error.response.status == 401){ // Un-Authenticated
+          router.push({ name: "pageLogin"})
+        }
     });
     },
 
@@ -93,7 +98,15 @@ export default {
               fire.vs_alert ('Oops!', response.data, 'danger');
             }
           }).catch(function(error){
-            fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+            if (error.response.status == 422){ // Validation Error
+              let errors = error.response.data.errors;
+              fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if(error.response.status == 403) { // Un-Authorized
+              fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+              router.push({ name: "pageError403"});
+            } else if (error.response.status == 401){ // Un-Authenticated
+              router.push({ name: "pageLogin"})
+            }
           });
         } else {
           this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');

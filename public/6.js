@@ -106,7 +106,18 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         fire.userRoles = response.data.data.roles;
         fire.user_role = fire.userRoles[0];
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     submitForm: function submitForm() {
@@ -133,7 +144,22 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
               fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
+            if (error.response.status == 422) {
+              // Validation Error
+              var errors = error.response.data.errors;
+              fire.vs_alert('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if (error.response.status == 403) {
+              // Un-Authorized
+              fire.vs_alert('Oops!', error.response.data.message, 'danger');
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageError403"
+              });
+            } else if (error.response.status == 401) {
+              // Un-Authenticated
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageLogin"
+              });
+            }
           });
         } else {
           _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
@@ -217,393 +243,395 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("vx-card", { attrs: { title: "Create New User" } }, [
-        _c("form", [
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-user",
-                    "icon-no-border": "",
-                    "label-placeholder": "First Name",
-                    name: "first_name"
-                  },
-                  model: {
-                    value: _vm.first_name,
-                    callback: function($$v) {
-                      _vm.first_name = $$v
-                    },
-                    expression: "first_name"
-                  }
-                }),
-                _vm._v(" "),
+  return _vm.can("user-create")
+    ? _c(
+        "div",
+        [
+          _c("vx-card", { attrs: { title: "Create New User" } }, [
+            _c("form", [
+              _c("div", { staticClass: "vx-row" }, [
                 _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("first_name"),
-                        expression: "errors.has('first_name')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("first_name")))]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-user",
-                    "icon-no-border": "",
-                    "label-placeholder": "Last Name",
-                    name: "last_name"
-                  },
-                  model: {
-                    value: _vm.last_name,
-                    callback: function($$v) {
-                      _vm.last_name = $$v
-                    },
-                    expression: "last_name"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("last_name"),
-                        expression: "errors.has('last_name')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("last_name")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|email",
-                      expression: "'required|email'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    type: "email",
-                    "icon-pack": "feather",
-                    icon: "icon-mail",
-                    "icon-no-border": "",
-                    "label-placeholder": "Email",
-                    name: "email"
-                  },
-                  model: {
-                    value: _vm.email,
-                    callback: function($$v) {
-                      _vm.email = $$v
-                    },
-                    expression: "email"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("email"),
-                        expression: "errors.has('email')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("email")))]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "decimal:11",
-                      expression: "'decimal:11'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-phone",
-                    "icon-no-border": "",
-                    "label-placeholder": "Mobile",
-                    name: "mobile"
-                  },
-                  model: {
-                    value: _vm.mobile,
-                    callback: function($$v) {
-                      _vm.mobile = $$v
-                    },
-                    expression: "mobile"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("mobile"),
-                        expression: "errors.has('mobile')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("mobile")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required",
-                      expression: "'required'"
-                    }
-                  ],
-                  ref: "password",
-                  staticClass: "w-full",
-                  attrs: {
-                    type: "password",
-                    "icon-pack": "feather",
-                    icon: "icon-lock",
-                    "icon-no-border": "",
-                    "label-placeholder": "Password",
-                    name: "password"
-                  },
-                  model: {
-                    value: _vm.password,
-                    callback: function($$v) {
-                      _vm.password = $$v
-                    },
-                    expression: "password"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("password"),
-                        expression: "errors.has('password')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("password")))]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|confirmed:password",
-                      expression: "'required|confirmed:password'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    type: "password",
-                    "icon-pack": "feather",
-                    icon: "icon-lock",
-                    "icon-no-border": "",
-                    "label-placeholder": "Confirm Password",
-                    name: "confirm_password",
-                    "data-vv-as": "password"
-                  },
-                  model: {
-                    value: _vm.confirm_password,
-                    callback: function($$v) {
-                      _vm.confirm_password = $$v
-                    },
-                    expression: "confirm_password"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("confirm_password"),
-                        expression: "errors.has('confirm_password')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("confirm_password")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-5" }, [
-            _c("div", { staticClass: "vx-col w-full" }, [
-              _c("b", [_vm._v("User Role:")]),
-              _vm._v(" "),
-              _c(
-                "ul",
-                { staticClass: "centerx" },
-                _vm._l(_vm.userRoles, function(role) {
-                  return _c(
-                    "li",
-                    [
-                      _c(
-                        "vs-radio",
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                  [
+                    _c("vs-input", {
+                      directives: [
                         {
-                          attrs: { "vs-value": role },
-                          model: {
-                            value: _vm.user_role,
-                            callback: function($$v) {
-                              _vm.user_role = $$v
-                            },
-                            expression: "user_role"
-                          }
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required|alpha",
+                          expression: "'required|alpha'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-user",
+                        "icon-no-border": "",
+                        "label-placeholder": "First Name",
+                        name: "first_name"
+                      },
+                      model: {
+                        value: _vm.first_name,
+                        callback: function($$v) {
+                          _vm.first_name = $$v
                         },
-                        [_vm._v(_vm._s(role))]
-                      )
-                    ],
-                    1
-                  )
-                }),
-                0
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-10" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col w-full" },
-              [
-                _c(
-                  "vs-button",
-                  {
-                    staticClass: "mr-3 mb-2",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.submitForm($event)
+                        expression: "first_name"
                       }
-                    }
-                  },
-                  [_vm._v("Submit")]
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("first_name"),
+                            expression: "errors.has('first_name')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("first_name")))]
+                    )
+                  ],
+                  1
                 ),
                 _vm._v(" "),
                 _c(
-                  "vs-button",
-                  {
-                    staticClass: "mb-2",
-                    attrs: { color: "warning", type: "border" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.fname = _vm.lname = _vm.email = _vm.mobile = _vm.password = _vm.confirm_password =
-                          ""
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                  [
+                    _c("vs-input", {
+                      directives: [
+                        {
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required|alpha",
+                          expression: "'required|alpha'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-user",
+                        "icon-no-border": "",
+                        "label-placeholder": "Last Name",
+                        name: "last_name"
+                      },
+                      model: {
+                        value: _vm.last_name,
+                        callback: function($$v) {
+                          _vm.last_name = $$v
+                        },
+                        expression: "last_name"
                       }
-                    }
-                  },
-                  [_vm._v("Reset")]
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("last_name"),
+                            expression: "errors.has('last_name')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("last_name")))]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row" }, [
+                _c(
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                  [
+                    _c("vs-input", {
+                      directives: [
+                        {
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required|email",
+                          expression: "'required|email'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        type: "email",
+                        "icon-pack": "feather",
+                        icon: "icon-mail",
+                        "icon-no-border": "",
+                        "label-placeholder": "Email",
+                        name: "email"
+                      },
+                      model: {
+                        value: _vm.email,
+                        callback: function($$v) {
+                          _vm.email = $$v
+                        },
+                        expression: "email"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("email"),
+                            expression: "errors.has('email')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("email")))]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                  [
+                    _c("vs-input", {
+                      directives: [
+                        {
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "decimal:11",
+                          expression: "'decimal:11'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-phone",
+                        "icon-no-border": "",
+                        "label-placeholder": "Mobile",
+                        name: "mobile"
+                      },
+                      model: {
+                        value: _vm.mobile,
+                        callback: function($$v) {
+                          _vm.mobile = $$v
+                        },
+                        expression: "mobile"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("mobile"),
+                            expression: "errors.has('mobile')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("mobile")))]
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row" }, [
+                _c(
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
+                  [
+                    _c("vs-input", {
+                      directives: [
+                        {
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required",
+                          expression: "'required'"
+                        }
+                      ],
+                      ref: "password",
+                      staticClass: "w-full",
+                      attrs: {
+                        type: "password",
+                        "icon-pack": "feather",
+                        icon: "icon-lock",
+                        "icon-no-border": "",
+                        "label-placeholder": "Password",
+                        name: "password"
+                      },
+                      model: {
+                        value: _vm.password,
+                        callback: function($$v) {
+                          _vm.password = $$v
+                        },
+                        expression: "password"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("password"),
+                            expression: "errors.has('password')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("password")))]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                  [
+                    _c("vs-input", {
+                      directives: [
+                        {
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required|confirmed:password",
+                          expression: "'required|confirmed:password'"
+                        }
+                      ],
+                      staticClass: "w-full",
+                      attrs: {
+                        type: "password",
+                        "icon-pack": "feather",
+                        icon: "icon-lock",
+                        "icon-no-border": "",
+                        "label-placeholder": "Confirm Password",
+                        name: "confirm_password",
+                        "data-vv-as": "password"
+                      },
+                      model: {
+                        value: _vm.confirm_password,
+                        callback: function($$v) {
+                          _vm.confirm_password = $$v
+                        },
+                        expression: "confirm_password"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("confirm_password"),
+                            expression: "errors.has('confirm_password')"
+                          }
+                        ],
+                        staticClass: "text-danger text-sm"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("confirm_password")))]
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row mt-5" }, [
+                _c("div", { staticClass: "vx-col w-full" }, [
+                  _c("b", [_vm._v("User Role:")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticClass: "centerx" },
+                    _vm._l(_vm.userRoles, function(role) {
+                      return _c(
+                        "li",
+                        [
+                          _c(
+                            "vs-radio",
+                            {
+                              attrs: { "vs-value": role },
+                              model: {
+                                value: _vm.user_role,
+                                callback: function($$v) {
+                                  _vm.user_role = $$v
+                                },
+                                expression: "user_role"
+                              }
+                            },
+                            [_vm._v(_vm._s(role))]
+                          )
+                        ],
+                        1
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vx-row mt-10" }, [
+                _c(
+                  "div",
+                  { staticClass: "vx-col w-full" },
+                  [
+                    _c(
+                      "vs-button",
+                      {
+                        staticClass: "mr-3 mb-2",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.submitForm($event)
+                          }
+                        }
+                      },
+                      [_vm._v("Submit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "vs-button",
+                      {
+                        staticClass: "mb-2",
+                        attrs: { color: "warning", type: "border" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.fname = _vm.lname = _vm.email = _vm.mobile = _vm.password = _vm.confirm_password =
+                              ""
+                          }
+                        }
+                      },
+                      [_vm._v("Reset")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ])
           ])
-        ])
-      ])
-    ],
-    1
-  )
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

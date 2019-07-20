@@ -83,7 +83,18 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/users', store.state.config).then(function (response) {
         fire.users = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     // Confirm Dialog To Delete The User
@@ -111,7 +122,18 @@ __webpack_require__.r(__webpack_exports__);
           fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
         }
       })["catch"](function (error) {
-        fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     //Navigate To A New Page With Route Name And UserID
@@ -209,219 +231,242 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "vx-card",
-        { attrs: { title: "Users List" } },
+  return _vm.can("user-list")
+    ? _c(
+        "div",
         [
           _c(
-            "vs-button",
-            {
-              staticClass: "mb-4 md:mb-0",
-              staticStyle: {
-                float: "right",
-                "border-radius": "55px",
-                "margin-left": "20px"
-              },
-              attrs: {
-                "icon-pack": "feather",
-                icon: "icon-plus",
-                to: "/user/create"
-              }
-            },
-            [_vm._v("Create User")]
-          ),
-          _vm._v(" "),
-          _c(
-            "vs-table",
-            {
-              attrs: { search: "", data: _vm.users },
-              scopedSlots: _vm._u([
-                {
-                  key: "default",
-                  fn: function(ref) {
-                    var data = ref.data
-                    return _vm._l(data, function(tr, indextr) {
-                      return _c(
-                        "vs-tr",
-                        { key: indextr },
-                        [
-                          _c("vs-td", { attrs: { data: data[indextr].id } }, [
-                            _vm._v(
-                              "\n\t\t\t            \t" +
-                                _vm._s(data[indextr].id) +
-                                "\n\t\t\t          \t"
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "vs-td",
-                            { attrs: { data: data[indextr].first_name } },
-                            [
-                              _vm._v(
-                                "\n\t\t\t            \t" +
-                                  _vm._s(
-                                    data[indextr].first_name +
-                                      " " +
-                                      data[indextr].last_name
-                                  ) +
-                                  "\n\t\t\t          \t"
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "vs-td",
-                            { attrs: { data: data[indextr].email } },
-                            [
-                              _vm._v(
-                                "\n\t\t\t            \t" +
-                                  _vm._s(data[indextr].email) +
-                                  "\n\t\t\t          \t"
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "vs-td",
-                            { attrs: { data: data[indextr].mobile } },
-                            [
-                              _vm._v(
-                                "\n\t\t\t            \t" +
-                                  _vm._s(data[indextr].mobile) +
-                                  "\n\t\t\t          \t"
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "vs-td",
-                            [
-                              _c("vs-row", [
-                                _c("div", { staticClass: "flex mb-4" }, [
-                                  _c(
-                                    "div",
-                                    { staticClass: "w-1/3" },
-                                    [
-                                      _c("vs-button", {
-                                        attrs: {
-                                          radius: "",
-                                          color: "primary",
-                                          type: "border",
-                                          "icon-pack": "feather",
-                                          icon: "icon-eye"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.redirect(
-                                              "view-user",
-                                              data[indextr].id
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "w-1/3",
-                                      staticStyle: { margin: "0 10px" }
-                                    },
-                                    [
-                                      _c("vs-button", {
-                                        attrs: {
-                                          radius: "",
-                                          color: "warning",
-                                          type: "border",
-                                          "icon-pack": "feather",
-                                          icon: "icon-edit"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.redirect(
-                                              "edit-user",
-                                              data[indextr].id
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "w-1/3" },
-                                    [
-                                      _c("vs-button", {
-                                        attrs: {
-                                          radius: "",
-                                          color: "danger",
-                                          type: "border",
-                                          "icon-pack": "feather",
-                                          icon: "icon-trash"
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.confirmDeleteUser(
-                                              data[indextr]
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ])
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    })
-                  }
-                }
-              ])
-            },
+            "vx-card",
+            { attrs: { title: "Users List" } },
             [
+              _vm.can("user-create")
+                ? _c(
+                    "vs-button",
+                    {
+                      staticClass: "mb-4 md:mb-0",
+                      staticStyle: {
+                        float: "right",
+                        "border-radius": "55px",
+                        "margin-left": "20px"
+                      },
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-plus",
+                        to: "/user/create"
+                      }
+                    },
+                    [_vm._v("Create User")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c(
-                "template",
-                { slot: "thead" },
+                "vs-table",
+                {
+                  attrs: { search: "", data: _vm.users },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var data = ref.data
+                          return _vm._l(data, function(tr, indextr) {
+                            return _c(
+                              "vs-tr",
+                              { key: indextr },
+                              [
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].id } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(data[indextr].id) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].first_name } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(
+                                          data[indextr].first_name +
+                                            " " +
+                                            data[indextr].last_name
+                                        ) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].email } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(data[indextr].email) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  { attrs: { data: data[indextr].mobile } },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t            \t" +
+                                        _vm._s(data[indextr].mobile) +
+                                        "\n\t\t\t          \t"
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "vs-td",
+                                  [
+                                    _c("vs-row", [
+                                      _c("div", { staticClass: "flex mb-4" }, [
+                                        _vm.can("user-list")
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "w-1/3" },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    radius: "",
+                                                    color: "primary",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-eye"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.redirect(
+                                                        "view-user",
+                                                        data[indextr].id
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.can("user-edit")
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass: "w-1/3",
+                                                staticStyle: {
+                                                  margin: "0 10px"
+                                                }
+                                              },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    radius: "",
+                                                    color: "warning",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-edit"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.redirect(
+                                                        "edit-user",
+                                                        data[indextr].id
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.can("user-delete")
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "w-1/3" },
+                                              [
+                                                _c("vs-button", {
+                                                  attrs: {
+                                                    radius: "",
+                                                    color: "danger",
+                                                    type: "border",
+                                                    "icon-pack": "feather",
+                                                    icon: "icon-trash"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.confirmDeleteUser(
+                                                        data[indextr]
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e()
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          })
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    3962588089
+                  )
+                },
                 [
-                  _c("vs-th", { attrs: { "sort-key": "id" } }, [_vm._v("ID")]),
-                  _vm._v(" "),
-                  _c("vs-th", { attrs: { "sort-key": "first_name" } }, [
-                    _vm._v("Name")
-                  ]),
-                  _vm._v(" "),
-                  _c("vs-th", { attrs: { "sort-key": "email" } }, [
-                    _vm._v("Email")
-                  ]),
-                  _vm._v(" "),
-                  _c("vs-th", { attrs: { "sort-key": "mobile" } }, [
-                    _vm._v("Mobile")
-                  ]),
-                  _vm._v(" "),
-                  _c("vs-th", [_vm._v("Action")])
+                  _c(
+                    "template",
+                    { slot: "thead" },
+                    [
+                      _c("vs-th", { attrs: { "sort-key": "id" } }, [
+                        _vm._v("ID")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", { attrs: { "sort-key": "first_name" } }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", { attrs: { "sort-key": "email" } }, [
+                        _vm._v("Email")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", { attrs: { "sort-key": "mobile" } }, [
+                        _vm._v("Mobile")
+                      ]),
+                      _vm._v(" "),
+                      _c("vs-th", [_vm._v("Action")])
+                    ],
+                    1
+                  )
                 ],
-                1
+                2
               )
             ],
-            2
+            1
           )
         ],
         1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

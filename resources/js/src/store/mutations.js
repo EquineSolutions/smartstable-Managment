@@ -7,6 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+import router from '../router';
 
 const mutations = {
 
@@ -109,6 +110,8 @@ const mutations = {
         state.userRole = data.role;
 
         state.userPermissions = data.rolePermissions;
+
+        router.push({ path: `/` });
     },
 
     updateUserInfo(state, data) {
