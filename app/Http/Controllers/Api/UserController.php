@@ -14,6 +14,9 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
+use League\Fractal;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
 use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
@@ -33,7 +36,7 @@ class UserController extends Controller
             'message' => 'User loaded successfully',
             'data' => $user
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
     public function index()
@@ -45,7 +48,7 @@ class UserController extends Controller
             'message' => 'User loaded successfully',
             'data' => $data
         ];
-        return response()->json($output);
+        return response()->json($output,200);
 
     }
 
@@ -77,7 +80,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         $data = $request->validated();
-       // dd($data);
+
         $data['password'] = bcrypt($data['password']); //Hash password
         $user = User::create($data);
         $user->assignRole($request->input('roles'));
@@ -113,7 +116,7 @@ class UserController extends Controller
                 'user' => $user
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
     /**
@@ -154,14 +157,16 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'User updated successfully',
             ];
+            $status = 200;
         } catch (\Exception $e) {
             DB::rollback();
             $output = [
                 'status' => 500,
                 'error' => $e->getMessage(),
             ];
+            $status = 500;
         }
-        return response()->json($output);
+        return response()->json($output,$status);
 
     }
 
@@ -181,7 +186,7 @@ class UserController extends Controller
             'status' => 200,
             'message' => 'User deleted successfully',
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 

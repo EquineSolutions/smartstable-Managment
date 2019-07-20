@@ -13,7 +13,6 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
 
-
 class RoleController extends Controller
 {
 
@@ -34,7 +33,7 @@ class RoleController extends Controller
                 'roles' =>$roles
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 
@@ -54,7 +53,7 @@ class RoleController extends Controller
                 'permission' =>$permission
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 
@@ -79,16 +78,17 @@ class RoleController extends Controller
                 'status' => 200,
                 'message' => 'Role created successfully',
             ];
-
+            $status =200;
         } catch (\Exception $e) {
             DB::rollback();
             $output = [
                 'status' => 500,
                 'error' => $e->getMessage(),
             ];
+            $status =500;
         }
 
-        return response()->json($output);
+        return response()->json($output,$status);
 
     }
 
@@ -114,7 +114,7 @@ class RoleController extends Controller
                 'rolePermissions' => $rolePermissions
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 
@@ -138,7 +138,7 @@ class RoleController extends Controller
                 'rolePermissions' => $role->permissions,
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 
@@ -165,7 +165,7 @@ class RoleController extends Controller
             'status' => 200,
             'message' => 'Role updated successfully',
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
 
@@ -184,6 +184,6 @@ class RoleController extends Controller
             'status' => 200,
             'message' => 'Role deleted successfully',
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 }
