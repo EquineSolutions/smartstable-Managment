@@ -59,14 +59,11 @@ class UserController extends Controller
     {
         $this->authorize('index', User::class);
         $roles = Role::pluck('name')->all();
-        $output = [
+        return response()->json([
             'status' => 200,
             'message' => 'roles loaded successfully',
-            'data' => [
-                'roles' => $roles
-            ]
-        ];
-        return response()->json($output);
+            'data' => $roles
+        ],200);
     }
 
 
@@ -80,15 +77,15 @@ class UserController extends Controller
     {
         $this->authorize('index', User::class);
         $data = $request->validated();
-
+       // dd($data);
         $data['password'] = bcrypt($data['password']); //Hash password
         $user = User::create($data);
         $user->assignRole($request->input('roles'));
-        $output = [
+        return response()->json([
             'status' => 200,
             'message' => 'User created successfully',
-        ];
-        return response()->json($output);
+            'data' => []
+        ],200);
     }
 
 
