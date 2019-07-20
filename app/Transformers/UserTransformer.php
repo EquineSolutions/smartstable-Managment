@@ -16,13 +16,6 @@ class UserTransformer extends TransformerAbstract
     {
 
         $users = $user->toArray();
-        // var_dump($users); die;
-        return [
-            'student_id' => $user->id,
-            'student_name' => $users->name,
-        ];
-
-        $users['image'] = $users['image']? '/uploads/images/user/'.$users['image']:'';
         return $users;
     }
 

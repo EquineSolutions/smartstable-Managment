@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-if="can('role-edit')">
     <vx-card title='Update Role'>
       <form>
         <div class="vx-row">
@@ -71,7 +71,12 @@
             fire.rolePermissions.push(response.data.data.rolePermissions[i].name)
           }
         }).catch(function(error){
-          console.log(error);
+          if(error.response.status == 403) { // Un-Authorized
+            fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+            router.push({ name: "pageError403"});
+          } else if (error.response.status == 401){ // Un-Authenticated
+            router.push({ name: "pageLogin"})
+          }
         });
       },
 
@@ -85,7 +90,6 @@
               name: this.role_name,
               permission: this.rolePermissions,
             };
-
             axios.put(`/api/roles/${this.$route.params.id}`, data, store.state.config).then(function(response){
               if(response.data.status == 200) {
                   fire.vs_alert ('Success', 'Role Successfully Updated', 'success');
@@ -94,7 +98,15 @@
                   fire.vs_alert ('Oops!', response.data, 'danger');
               }
             }).catch(function(error){
-                fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
+              if (error.response.status == 422){ // Validation Error
+                let errors = error.response.data.errors;
+                fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+              } else if(error.response.status == 403) { // Un-Authorized
+                fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                router.push({ name: "pageError403"});
+              } else if (error.response.status == 401){ // Un-Authenticated
+                router.push({ name: "pageLogin"})
+              }
             });
           } else {
               this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
