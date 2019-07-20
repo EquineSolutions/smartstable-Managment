@@ -42,11 +42,15 @@ class PassportController extends Controller
         $token = $tokenResult->token;
 
         return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
+            'status' => 200,
+            'message' => 'User loaded successfully',
+                'data' => [
+                'access_token' => $tokenResult->accessToken,
+                'token_type' => 'Bearer',
+                'expires_at' => Carbon::parse(
+                    $tokenResult->token->expires_at
+                )->toDateTimeString(),
+            ],200
         ]);
     }
 
@@ -80,12 +84,16 @@ class PassportController extends Controller
         }
 
         return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString(),
-            'user_id' => $user->id
+            'status' => 200,
+            'message' => 'User loaded successfully',
+            'data' => [
+                'access_token' => $tokenResult->accessToken,
+                'token_type' => 'Bearer',
+                'expires_at' => Carbon::parse(
+                    $tokenResult->token->expires_at
+                )->toDateTimeString(),
+                'user_id' => $user->id,
+            ], 200
         ]);
     }
 
