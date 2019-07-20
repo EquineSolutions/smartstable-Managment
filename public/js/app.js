@@ -61179,7 +61179,7 @@ var actions = {
       axios.post('/api/login', data).then(function (response) {
         var responseData = response.data;
         var now = Date.now();
-        responseData.expires_at = responseData.expires_at + now;
+        responseData.data.expires_at = responseData.data.expires_at + now;
         context.commit('updateTokens', responseData);
         store.dispatch('updateUser', responseData);
         resolve(response);
@@ -61191,7 +61191,7 @@ var actions = {
   updateUser: function updateUser(context, loginData) {
     var config = {
       headers: {
-        'Authorization': "Bearer " + loginData.access_token
+        'Authorization': "Bearer " + loginData.data.access_token
       }
     };
     axios.get("/api/user_info", config).then(function (response) {
@@ -61352,7 +61352,7 @@ var mutations = {
   // LOGIN
   // ////////////////////////////////////////////
   updateTokens: function updateTokens(state, tokens) {
-    state.tokens = tokens;
+    state.tokens = tokens.data;
   },
   updateUser: function updateUser(state, data) {
     state.config = {

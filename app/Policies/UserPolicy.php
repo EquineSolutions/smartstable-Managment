@@ -42,6 +42,6 @@ class UserPolicy
 
     public function permission(User $user)
     {
-        return !request()->permissions || $user->hasAllPermissions(\request()->permissions);
+        return !request()->permissions || $user->hasAllPermissions(request()->permissions);
     }
 }
