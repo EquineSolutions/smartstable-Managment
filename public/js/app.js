@@ -61028,8 +61028,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! @/views/auth/Error404.vue */ "./resources/js/src/views/auth/Error404.vue"));
       }
     }, {
-      path: '/error-401',
-      name: 'pageError401',
+      path: '/error-403',
+      name: 'pageError403',
       component: function component() {
         return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! @/views/auth/NotAuthorized.vue */ "./resources/js/src/views/auth/NotAuthorized.vue"));
       }
@@ -61077,7 +61077,7 @@ function guard(to, from, next) {
   })["catch"](function (error) {
     if (error.response.status == 403) {
       // unauthorized
-      next('/');
+      next('/error-403');
     } else if (error.response.status == 401) {
       // unauthenticated
       next('/login');
@@ -61261,6 +61261,7 @@ var getters = {// COMPONENT
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../router */ "./resources/js/src/router.js");
 /*=========================================================================================
   File Name: mutations.js
   Description: Vuex Store - mutations
@@ -61269,6 +61270,7 @@ __webpack_require__.r(__webpack_exports__);
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
+
 var mutations = {
   // ////////////////////////////////////////////
   // SIDEBAR & UI UX
@@ -61361,6 +61363,9 @@ var mutations = {
     state.currentUser = data.user;
     state.userRole = data.role;
     state.userPermissions = data.rolePermissions;
+    _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+      path: "/"
+    });
   },
   updateUserInfo: function updateUserInfo(state, data) {
     state.currentUser = data;

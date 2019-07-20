@@ -58,9 +58,6 @@
 </template>
 
 <script>
-
-    import router from '../../router';
-
 export default {
     data() {
         return {
@@ -81,7 +78,6 @@ export default {
                     text:'We are happy to see you again.',
                     color:'success'
                 });
-                router.push({ path: `/` });
             }).catch(error => {
                 fire.$vs.notify({
                     title:'Oops!',

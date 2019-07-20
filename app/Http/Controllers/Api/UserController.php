@@ -57,7 +57,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $this->authorize('index', User::class);
+        $this->authorize('create', User::class);
         $roles = Role::pluck('name')->all();
         $output = [
             'status' => 200,
@@ -78,7 +78,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $this->authorize('index', User::class);
+        $this->authorize('create', User::class);
         $data = $request->validated();
 
         $data['password'] = bcrypt($data['password']); //Hash password
@@ -178,7 +178,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('edit', [User::class, $user]);
+        $this->authorize('destroy', User::class);
         $user->delete();
         $output = [
             'status' => 200,

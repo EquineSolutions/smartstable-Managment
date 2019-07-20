@@ -73,7 +73,18 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
       axios.get('/api/roles/create', store.state.config).then(function (response) {
         fire.permissions = response.data.data.permission;
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+            name: "pageLogin"
+          });
+        }
       });
     },
     //Create Role Submission
@@ -101,7 +112,22 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
               fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            fire.vs_alert('Oops!', 'An error has been occurred.', 'danger');
+            if (error.response.status == 422) {
+              // Validation Error
+              var errors = error.response.data.errors;
+              fire.vs_alert('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if (error.response.status == 403) {
+              // Un-Authorized
+              fire.vs_alert('Oops!', error.response.data.message, 'danger');
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageError403"
+              });
+            } else if (error.response.status == 401) {
+              // Un-Authenticated
+              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+                name: "pageLogin"
+              });
+            }
           });
         } else {
           _this.vs_alert('Oops!', 'Please, solve all issues before submitting.', 'danger');
