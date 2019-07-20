@@ -81,7 +81,7 @@ const actions = {
             axios.post('/api/login', data).then( response => {
                 let responseData = response.data;
                 let now = Date.now();
-                responseData.expires_at = responseData.expires_at + now;
+                responseData.data.expires_at = responseData.data.expires_at + now;
 
                 context.commit('updateTokens', responseData);
 
@@ -96,9 +96,8 @@ const actions = {
 
     updateUser(context, loginData) {
         let config = {
-            headers: {'Authorization': "Bearer " + loginData.access_token}
+            headers: {'Authorization': "Bearer " + loginData.data.access_token}
         };
-
         axios.get(`/api/user_info`, config).then(response => {
             context.commit('updateUser', response.data.data);
         }).catch(error => {

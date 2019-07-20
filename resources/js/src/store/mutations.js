@@ -96,7 +96,7 @@ const mutations = {
     // ////////////////////////////////////////////
 
     updateTokens(state, tokens) {
-        state.tokens = tokens;
+        state.tokens = tokens.data;
     },
 
     updateUser(state, data)
