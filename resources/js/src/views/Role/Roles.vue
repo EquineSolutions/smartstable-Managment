@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div v-if="can('role-list')">
 		<!-- Roles Table -->
 		<vx-card title="Roles List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
+			<vs-button v-if="can('role-create')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
 
 			<vs-table search :data="roles">
 		      	<template slot="thead">
@@ -23,20 +23,14 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									  <div class="w-1/3">
-									  		<vx-tooltip color="primary" text="View Data">
-									  			<vs-button @click="hideTooltip" :to="`/role/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
-									  		</vx-tooltip>
+									  <div class="w-1/3" v-if="can('role-list')">
+											<vs-button @click="hideTooltip" :to="`/role/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
-									  <div class="w-1/3" style="margin: 0 10px;">
-									  		<vx-tooltip color="warning" text="Edit Role">
-									  			<vs-button @click="hideTooltip" :to="`/role/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
-									  		</vx-tooltip>
+									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('role-edit')">
+											<vs-button @click="hideTooltip" :to="`/role/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
-									  <div class="w-1/3">
-									  		<vx-tooltip color="danger" text="Delete Role">
-									  			<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRole(data[indextr])"></vs-button>
-									  		</vx-tooltip>
+									  <div class="w-1/3" v-if="can('role-delete')">
+											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteRole(data[indextr])"></vs-button>
 									  </div>
 								</div>
 							</vs-row>
@@ -66,21 +60,23 @@ export default {
   		//Get A List Of All Roles.
   		getData()
   		{
-  			let fire = this;
-			let config = {
-				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-			};
-			axios.get('/api/roles', config).then(function(response){
-	  			fire.roles = response.data.roles;
+			let fire = this;
+			axios.get('/api/roles', store.state.config).then(function(response){
+	  			fire.roles = response.data.data.roles;
 	  		}).catch(function(error){
-	            console.log(error);
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        });
   		},
 
   		// Confirm Dialog To Delete The Role
   		confirmDeleteRole(role)
   		{
-  			let fire = this;
+			let fire = this;
   			this.roleIdToDelete = role.id;
   			this.$vs.dialog({
   				type: 'confirm',
@@ -94,33 +90,21 @@ export default {
   		//Delete A Single Role By RoleID.
   		deleteRole()
   		{
-  			let fire = this;
-			let config = {
-				headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-			};
-  			axios.delete(`/api/roles/${this.roleIdToDelete}`, config).then(function(response){
-	  			if(response.data.success) {
-	              	fire.$vs.notify({
-		                title: 'Success',
-		                text: 'Role Successfully Deleted',
-		                color:'success',
-		                iconPack: 'feather',
-		                icon: 'icon-check'
-	              	});
+			let fire = this;
+  			axios.delete(`/api/roles/${this.roleIdToDelete}`, store.state.config).then(function(response){
+	  			if(response.data.status == 200) {
+					fire.vs_alert ('Success', 'Role Successfully Deleted.', 'success');
 					fire.roles = fire.roles.filter(function(value){return value.id != fire.roleIdToDelete;});
-            	    } else {
-	              	fire.$vs.notify({
-	                	title:'Oops!',
-	                	text:'An error has been occurred.',
-		                color:'danger'
-	              	});
+				} else {
+					fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
 	            }
 	  		}).catch(function(error){
-	            fire.$vs.notify({
-                	title:'Oops!',
-                	text:'An error has been occurred.',
-	                color:'danger'
-              	});
+				if(error.response.status == 403) { // Un-Authorized
+					fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+					router.push({ name: "pageError403"});
+				} else if (error.response.status == 401){ // Un-Authenticated
+					router.push({ name: "pageLogin"})
+				}
 	        }); 
   		},
 
@@ -131,6 +115,16 @@ export default {
 			while (el.length > 0) {
 				el[0].parentNode.removeChild(el[0]);
 			}
+		},
+
+		//Vuesax alert
+		vs_alert (title, text, color)
+		{
+			this.$vs.notify({
+				title: title,
+				text: text,
+				color: color
+			});
 		}
   	}
 }

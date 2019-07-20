@@ -16,11 +16,16 @@ const state = {
         access_token: null,
         expires_in: null,
         refresh_token: null,
-        token_type: null
+        token_type: null,
+        user_id: null
     },
     currentUser: {
-        name: null,
-        email: null
+        id: null,
+        first_name: null,
+        last_name: null,
+        email: null,
+        mobile: null,
+        image: null,
     },
 
     isSidebarActive: true,
@@ -43,6 +48,7 @@ const state = {
 
     starredPages: navbarSearchAndPinList.data.filter((page) => page.highlightAction),
     userRole: null,
+    userPermissions: null,
 
     // Can be used to get current window with
     // Note: Above breakpoint state is for internal use of sidebar component

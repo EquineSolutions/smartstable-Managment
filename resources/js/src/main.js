@@ -47,7 +47,17 @@ Vue.use(VueHammer);
 import 'prismjs'
 // import 'prismjs/themes/prism-tomorrow.css'
 
-Vue.config.productionTip = false
+
+// Import and use the auth mixin in all components.
+import AuthMixin from './mixins/auth.js';
+Vue.mixin(AuthMixin);
+
+
+// Clipboard
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard);
+
+Vue.config.productionTip = false;
 
 new Vue({
     router,

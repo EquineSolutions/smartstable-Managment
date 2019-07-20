@@ -60,4 +60,4 @@
         </div>
     </body>
 </html>
-<?php /**PATH /Users/mac2/Code/smartstable-managment/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/minimal.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/html/Equine/smartstable-Managment/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views/minimal.blade.php ENDPATH**/ ?>

@@ -115,17 +115,17 @@
 			<!-- USER META -->
 			<div class="the-navbar__user-meta flex items-center">
 				<div class="text-right leading-tight hidden sm:block">
-					<p class="font-semibold">John Doe</p>
-					<small>Available</small>
+					<p class="font-semibold">{{$store.state.currentUser.first_name + " " + $store.state.currentUser.last_name}}</p>
+					<small>{{$store.state.currentUser.email}}</small>
 				</div>
 				<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-					<div class="con-img ml-3"><img src="../../../../assets/images/portrait/small/avatar-s-11.png" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block"></div>
+					<div class="con-img ml-3"><img :src="$store.state.currentUser.image" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block image-fit"></div>
 					<vs-dropdown-menu class="vx-navbar-dropdown">
 						<ul style="min-width: 9rem">
 							<li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/profile')"><feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Profile</span></li>
 
 							<vs-divider class="m-1"></vs-divider>
-							<li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/login')"><feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Logout</span></li>
+							<li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="logout"><feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Logout</span></li>
 						</ul>
 					</vs-dropdown-menu>
 				</vs-dropdown>
@@ -140,6 +140,8 @@
 import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import draggable from 'vuedraggable'
+import router from '../../router';
+
 
 export default {
     name: "the-navbar",
@@ -215,6 +217,23 @@ export default {
         },
     },
     methods: {
+    	logout() {
+			let fire = this;
+			store.dispatch('logout').then(response => {
+				fire.$vs.notify({
+					title:'Good Bye!',
+					text:'We were happy to see you.',
+					color:'success'
+				});
+				router.push({ path: `/login` });
+			}).catch(response => {
+				fire.$vs.notify({
+					title:'Oops!',
+					text:'Something went wrong!',
+					color:'danger'
+				});
+			})
+		},
         showSidebar() {
             this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true);
         },
@@ -297,3 +316,11 @@ export default {
     },
 }
 </script>
+
+
+<style>
+	.image-fit{
+		object-fit: cover;
+	}
+
+</style>

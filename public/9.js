@@ -25,31 +25,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  beforeCreate: function beforeCreate() {
+    this.$vs.loading({
+      container: '#div-with-loading',
+      scale: 0.6
+    });
+  },
   mounted: function mounted() {
     this.getRoleData();
   },
   data: function data() {
     return {
-      role: [],
-      permissions: []
+      role: null,
+      permissions: null
     };
   },
   methods: {
     //Display Role Data.
     getRoleData: function getRoleData() {
       var fire = this;
-      var config = {
-        headers: {
-          'Authorization': "Bearer " + store.state.tokens.access_token
-        }
-      };
-      axios.get("/api/roles/".concat(this.$route.params.id), config).then(function (response) {
-        console.log(response);
-        fire.role = response.data.role;
-        fire.permissions = response.data.rolePermissions;
+      axios.get("/api/roles/".concat(this.$route.params.id), store.state.config).then(function (response) {
+        fire.role = response.data.data.role;
+        fire.permissions = response.data.data.rolePermissions;
       })["catch"](function (error) {
-        console.log(error);
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          router.push({
+            name: "pageLogin"
+          });
+        }
       });
     }
   }
@@ -72,35 +96,94 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "vx-card",
-        { attrs: { title: "Role Information" } },
+  return _vm.can("role-list")
+    ? _c(
+        "div",
         [
-          _c("b", [_vm._v("ID: ")]),
-          _vm._v("  " + _vm._s(_vm.role.id) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Name: ")]),
-          _vm._v(" " + _vm._s(_vm.role.name) + "\n\t\t\t"),
-          _c("vs-divider"),
-          _vm._v(" "),
-          _c("b", [_vm._v("Permissions: ")]),
-          _vm._v(" "),
-          _vm._l(_vm.permissions, function(permission, index) {
-            return [
-              _vm._v("\n\t\t\t\t" + _vm._s(permission.name)),
-              index != _vm.permissions.length - 1 ? [_vm._v(" // ")] : _vm._e()
-            ]
-          })
+          _c(
+            "vx-card",
+            { attrs: { title: "Role Information" } },
+            [
+              _vm.role
+                ? [
+                    _c("b", [_vm._v("ID: ")]),
+                    _vm._v("  " + _vm._s(_vm.role.id) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Name: ")]),
+                    _vm._v(" " + _vm._s(_vm.role.name) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Permissions: ")]),
+                    _vm._v(" "),
+                    _vm._l(_vm.permissions, function(permission, index) {
+                      return [
+                        _vm._v("\n\t\t\t\t\t" + _vm._s(permission.name)),
+                        index != _vm.permissions.length - 1
+                          ? [_vm._v(" // ")]
+                          : _vm._e()
+                      ]
+                    })
+                  ]
+                : [
+                    _c(
+                      "vs-row",
+                      [
+                        _c(
+                          "vs-col",
+                          {
+                            attrs: {
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
+                            }
+                          },
+                          [_c("b", [_vm._v("Role Is Not Available!")])]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "vs-col",
+                          {
+                            attrs: {
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
+                            }
+                          },
+                          [
+                            _c(
+                              "vs-button",
+                              {
+                                attrs: {
+                                  size: "small",
+                                  type: "gradient",
+                                  "icon-pack": "feather",
+                                  icon: "icon-arrow-left"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.$router.go(-1)
+                                  }
+                                }
+                              },
+                              [_vm._v("Go Back")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+            ],
+            2
+          )
         ],
-        2
+        1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
