@@ -47,8 +47,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-
-        $permission = Permission::get();
+        $permission = Permission::get()->groupBy('group');
         $this->authorize('create', Role::class);
         $output = [
             'status' => 200,
@@ -134,7 +133,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $this->authorize('edit', Role::class);
-        $permissions = Permission::get();
+        $permissions = Permission::get()->groupBy('group');
         $output = [
             'status' => 200,
             'message' => 'Permissions loaded successfully',
