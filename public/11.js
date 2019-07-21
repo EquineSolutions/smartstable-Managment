@@ -42,7 +42,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      user: []
+      user: null
     };
   },
   methods: {
@@ -86,7 +86,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("user-list")
+  return _vm.can("view-users")
     ? _c(
         "div",
         [
@@ -94,7 +94,7 @@ var render = function() {
             "vx-card",
             { attrs: { title: "User Information" } },
             [
-              _vm.user.length > 0
+              _vm.user != null
                 ? [
                     _c("b", [_vm._v("ID: ")]),
                     _vm._v("  " + _vm._s(_vm.user.id) + "\n\t\t\t\t"),

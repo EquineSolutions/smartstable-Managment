@@ -1,7 +1,7 @@
 <template>
-	<div v-if="can('user-list')">
+	<div v-if="can('view-users')">
 		<vx-card title="User Information">
-			<template v-if="user.length > 0">
+			<template v-if="user != null">
 				<b>ID: </b>  {{user.id}}
 				<vs-divider/>
 				<b>Name: </b> {{user.first_name + ' ' + user.last_name}}
@@ -33,7 +33,7 @@ export default {
   	},
   	data() {
 	    return {
-	      	user: [],
+	      	user: null,
 	    }
   	},
   	methods: {

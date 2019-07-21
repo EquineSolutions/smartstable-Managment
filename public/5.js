@@ -158,7 +158,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\r\n", ""]);
+exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -210,7 +210,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("role-list")
+  return _vm.can("browse-roles")
     ? _c(
         "div",
         [
@@ -218,7 +218,7 @@ var render = function() {
             "vx-card",
             { attrs: { title: "Roles List" } },
             [
-              _vm.can("role-create")
+              _vm.can("add-roles")
                 ? _c(
                     "vs-button",
                     {
@@ -282,7 +282,7 @@ var render = function() {
                                   [
                                     _c("vs-row", [
                                       _c("div", { staticClass: "flex mb-4" }, [
-                                        _vm.can("role-list")
+                                        _vm.can("view-roles")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -305,7 +305,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("role-edit")
+                                        _vm.can("edit-roles")
                                           ? _c(
                                               "div",
                                               {
@@ -333,7 +333,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("role-delete")
+                                        _vm.can("delete-roles")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -372,7 +372,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    4199215497
+                    1006496149
                   )
                 },
                 [

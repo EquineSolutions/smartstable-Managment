@@ -16,40 +16,48 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'role' => [
+            'Roles' => [
                 [
-                    'name' => 'role-list',
-                    'good_name' => 'view all roles',
+                    'name' => 'browse-roles',
+                    'display_name' => 'Browse Roles',
                 ],
                 [
-                    'name' => 'role-create',
-                    'good_name' => 'create new role',
+                    'name' => 'view-roles',
+                    'display_name' => 'View Roles',
                 ],
                 [
-                    'name' => 'role-edit',
-                    'good_name' => 'edit certain role',
+                    'name' => 'add-roles',
+                    'display_name' => 'Add Roles',
                 ],
                 [
-                    'name' => 'role-delete',
-                    'good_name' => 'delete certain role',
+                    'name' => 'edit-roles',
+                    'display_name' => 'Edit Roles',
+                ],
+                [
+                    'name' => 'delete-roles',
+                    'display_name' => 'Delete Roles',
                 ],
             ],
-            'user' =>[
+            'Users' =>[
                 [
-                    'name' => 'user-list',
-                    'good_name' => 'view all users',
+                    'name' => 'browse-users',
+                    'display_name' => 'Browse Users',
                 ],
                 [
-                    'name' => 'user-create',
-                    'good_name' => 'create new user',
+                    'name' => 'view-users',
+                    'display_name' => 'View Users',
                 ],
                 [
-                    'name' => 'user-edit',
-                    'good_name' => 'edit certain user',
+                    'name' => 'add-users',
+                    'display_name' => 'Add Users',
                 ],
                 [
-                    'name' => 'user-delete',
-                    'good_name' => 'delete certain user',
+                    'name' => 'edit-users',
+                    'display_name' => 'Edit Users',
+                ],
+                [
+                    'name' => 'delete-users',
+                    'display_name' => 'Delete Users',
                 ],
             ]
         ];
@@ -70,7 +78,7 @@ class PermissionTableSeeder extends Seeder
             foreach ($value as $permission) {
                 Permission::create([
                     'name' => $permission['name'],
-                    'good_name' => $permission['good_name'],
+                    'display_name' => $permission['display_name'],
                     'group' => $key,
                     'guard_name' => 'api'
                 ]);

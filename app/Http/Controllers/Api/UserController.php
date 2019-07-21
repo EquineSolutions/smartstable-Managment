@@ -31,8 +31,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('index', User::class);
-
+        $this->authorize('view', User::class);
         $output = [
             'status' => 200,
             'message' => 'User loaded successfully',
@@ -43,8 +42,8 @@ class UserController extends Controller
 
     public function index()
     {
-        $this->authorize('index', User::class);
-        $data = User::orderBy('id','DESC')->get();
+        $this->authorize('browse', User::class);
+        $data = User::orderBy('id','ASC')->get();
         $output = [
             'status' => 200,
             'message' => 'User loaded successfully',
@@ -181,7 +180,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('destroy', User::class);
+        $this->authorize('delete', User::class);
         $user->delete();
         $output = [
             'status' => 200,

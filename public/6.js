@@ -103,7 +103,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
     getUserRoles: function getUserRoles() {
       var fire = this;
       axios.get('/api/users/create', store.state.config).then(function (response) {
-        fire.userRoles = response.data.data.roles;
+        fire.userRoles = response.data.data;
         fire.user_role = fire.userRoles[0];
       })["catch"](function (error) {
         if (error.response.status == 403) {
@@ -243,7 +243,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("user-create")
+  return _vm.can("add-users")
     ? _c(
         "div",
         [

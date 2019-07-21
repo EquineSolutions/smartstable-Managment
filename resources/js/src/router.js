@@ -63,7 +63,7 @@ const router = new Router({
                 { title: 'User', active: true}
               ],
               pageTitle: "Users",
-              permission: 'user-list'
+              permission: 'browse-users'
             }
           },
           {
@@ -78,7 +78,7 @@ const router = new Router({
                 { title: 'Create User', active: true}
               ],
               pageTitle: "Create User",
-              permission: 'user-create'
+              permission: 'add-users'
             }
           },
           {
@@ -93,7 +93,7 @@ const router = new Router({
                 { title: 'User Information', active: true}
               ],
               pageTitle: "User Information",
-              permission: 'user-list'
+              permission: 'view-users'
             }
           },
           {
@@ -108,7 +108,7 @@ const router = new Router({
                 { title: 'Edit User', active: true}
               ],
               pageTitle: "Edit User",
-              permission: 'user-edit'
+              permission: 'edit-users'
             }
           },
 
@@ -127,7 +127,7 @@ const router = new Router({
                 { title: 'Roles', active: true}
               ],
               pageTitle: "Roles",
-              permission: 'role-list'
+              permission: 'browse-roles'
             }
           },
           {
@@ -142,7 +142,7 @@ const router = new Router({
                 { title: 'Create Role', active: true}
               ],
               pageTitle: "Create Role",
-              permission: 'role-create'
+              permission: 'add-roles'
             }
           },
           {
@@ -157,7 +157,7 @@ const router = new Router({
                 { title: 'Role Information', active: true}
               ],
               pageTitle: "Role Information",
-              permission: 'role-list'
+              permission: 'view-roles'
             }
           },
           {
@@ -172,7 +172,7 @@ const router = new Router({
                 { title: 'Edit Role', active: true}
               ],
               pageTitle: "Edit Role",
-              permission: 'role-edit'
+              permission: 'edit-roles'
             }
           },
 
@@ -238,25 +238,6 @@ router.afterEach(() => {
     appLoading.style.display = "none";
   }
 });
-
-
-/**
- * Check if the authenticated user can perform an action.
- *
- * @param permission
- * @returns {boolean}
- */
-function can(permission) {
-  let hasPermission = false;
-  store.state.userPermissions.forEach((userPermission) => {
-    if(userPermission.name == permission){
-      hasPermission = true;
-    }
-  });
-
-  return hasPermission;
-}
-
 
 function guard(to, from, next) {
   const formData = new FormData();

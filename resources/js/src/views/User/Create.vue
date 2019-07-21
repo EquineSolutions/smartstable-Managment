@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can('user-create')">
+  <div v-if="can('add-users')">
     <vx-card title='Create New User'>
       <form>
         <div class="vx-row">
@@ -98,7 +98,7 @@ export default {
     {
       let fire = this;
       axios.get('/api/users/create', store.state.config).then(function(response){
-        fire.userRoles = response.data.data.roles;
+        fire.userRoles = response.data.data;
         fire.user_role = fire.userRoles[0];
       }).catch(function(error){
         if(error.response.status == 403) { // Un-Authorized

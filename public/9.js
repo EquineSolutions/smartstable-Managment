@@ -38,6 +38,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   beforeCreate: function beforeCreate() {
     this.$vs.loading({
@@ -96,7 +98,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("role-list")
+  return _vm.can("view-roles")
     ? _c(
         "div",
         [
@@ -116,14 +118,15 @@ var render = function() {
                     _vm._v(" "),
                     _c("b", [_vm._v("Permissions: ")]),
                     _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
                     _vm._l(_vm.permissions, function(permission, index) {
                       return [
-                        _vm._v("\n\t\t\t\t\t" + _vm._s(permission.name)),
-                        index != _vm.permissions.length - 1
-                          ? [_vm._v(" // ")]
-                          : _vm._e()
+                        _c("vs-chip", [_vm._v(_vm._s(permission.display_name))])
                       ]
-                    })
+                    }),
+                    _vm._v(" "),
+                    _c("br")
                   ]
                 : [
                     _c(

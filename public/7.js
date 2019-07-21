@@ -179,7 +179,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\r\n", ""]);
+exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -231,7 +231,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("user-list")
+  return _vm.can("browse-users")
     ? _c(
         "div",
         [
@@ -239,7 +239,7 @@ var render = function() {
             "vx-card",
             { attrs: { title: "Users List" } },
             [
-              _vm.can("user-create")
+              _vm.can("add-users")
                 ? _c(
                     "vs-button",
                     {
@@ -331,7 +331,7 @@ var render = function() {
                                   [
                                     _c("vs-row", [
                                       _c("div", { staticClass: "flex mb-4" }, [
-                                        _vm.can("user-list")
+                                        _vm.can("view-users")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -358,7 +358,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("user-edit")
+                                        _vm.can("edit-users")
                                           ? _c(
                                               "div",
                                               {
@@ -390,7 +390,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("user-delete")
+                                        _vm.can("delete-users")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -429,7 +429,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    3962588089
+                    3418905285
                   )
                 },
                 [

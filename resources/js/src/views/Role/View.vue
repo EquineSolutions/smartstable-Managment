@@ -1,5 +1,5 @@
 <template>
-	<div v-if="can('role-list')">
+	<div v-if="can('view-roles')">
 		<vx-card title="Role Information">
 			<template v-if="role">
 				<b>ID: </b>  {{role.id}}
@@ -7,9 +7,11 @@
 				<b>Name: </b> {{role.name}}
 				<vs-divider/>
 				<b>Permissions: </b>
+                <br>
 				<template v-for="(permission, index) in permissions">
-					{{permission.name}}<template v-if="index != permissions.length-1"> // </template>
+                    <vs-chip>{{permission.display_name}}</vs-chip>
 				</template>
+                <br>
 			</template>
 
 			<template v-else>

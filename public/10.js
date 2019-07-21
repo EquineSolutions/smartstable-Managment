@@ -70,6 +70,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
  // For custom error message
 
 
@@ -212,7 +214,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("user-edit")
+  return _vm.can("edit-users")
     ? _c("div", [
         _c(
           "div",

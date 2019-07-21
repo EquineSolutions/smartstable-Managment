@@ -20,24 +20,29 @@ class UserPolicy
         //
     }
 
-    public function index(User $user)
+    public function browse(User $user)
     {
-        return $user->hasPermissionTo('user-list');
+        return $user->hasPermissionTo('browse-users');
+    }
+
+    public function view(User $user)
+    {
+        return $user->hasPermissionTo('view-users');
     }
 
     public function create(User $user)
     {
-        return $user->hasPermissionTo('user-create');
+        return $user->hasPermissionTo('add-users');
     }
 
     public function edit(User $user, User $requestedUser)
     {
-        return $user->hasPermissionTo('user-edit') || $user->id == $requestedUser->id;
+        return $user->hasPermissionTo('edit-users') || $user->id == $requestedUser->id;
     }
 
-    public function destroy(User $user)
+    public function delete(User $user)
     {
-        return $user->hasPermissionTo('user-delete');
+        return $user->hasPermissionTo('delete-users');
     }
 
     public function permission(User $user)

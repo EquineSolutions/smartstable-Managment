@@ -25,7 +25,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('index', Role::class);
+        $this->authorize('browse', Role::class);
 
         $roles = Role::orderBy('id','DESC')->get();
         $output = [
@@ -106,7 +106,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $this->authorize('index', Role::class);
+        $this->authorize('view', Role::class);
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$role->id)
             ->get();
