@@ -119,11 +119,7 @@
 					<small>{{$store.state.currentUser.email}}</small>
 				</div>
 				<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-<<<<<<< HEAD
-					<div class="con-img ml-3"><img :src="$store.state.currentUser.image" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block profile-image"></div>
-=======
 					<div class="con-img ml-3"><img :src="$store.state.currentUser.image" alt="" width="40" height="40" class="rounded-full shadow-md cursor-pointer block image-fit"></div>
->>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 					<vs-dropdown-menu class="vx-navbar-dropdown">
 						<ul style="min-width: 9rem">
 							<li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/profile')"><feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Profile</span></li>
@@ -134,7 +130,6 @@
 					</vs-dropdown-menu>
 				</vs-dropdown>
 			</div>
-
 		</vs-navbar>
 	</div>
 </div>
@@ -149,6 +144,9 @@ import router from '../../router';
 
 export default {
     name: "the-navbar",
+    mounted() {
+        console.log(this.$store.state.navbarSearchAndPinList);
+    },
     props: {
         navbarColor: {
             type: String,
@@ -198,6 +196,7 @@ export default {
 
         // BOOKMARK & SEARCH
         data() {
+            console.log(this.$store.state.navbarSearchAndPinList);
             return this.$store.state.navbarSearchAndPinList;
         },
         starredPages() {
@@ -321,19 +320,8 @@ export default {
 }
 </script>
 
-<<<<<<< HEAD
-<style>
-	.profile-image{
-		object-fit: cover;
-	}
-
-
-=======
-
 <style>
 	.image-fit{
 		object-fit: cover;
 	}
-
->>>>>>> 072a3fae3086365cb891f511c2373f00e16293b2
 </style>

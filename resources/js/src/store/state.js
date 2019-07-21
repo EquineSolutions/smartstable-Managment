@@ -11,6 +11,8 @@ import navbarSearchAndPinList from '@/layouts/components/navbarSearchAndPinList'
 import themeConfig from '@/../themeConfig.js'
 import colors from '@/../themeConfig.js'
 
+console.log("nn", navbarSearchAndPinList);
+
 const state = {
     tokens: {
         access_token: null,

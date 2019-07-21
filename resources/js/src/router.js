@@ -49,11 +49,6 @@ const router = new Router({
               pageTitle: "Home",
             }
           },
-          {
-            path: '/page2',
-            name: 'page2',
-            component: () => import('./views/Page2.vue'),
-          },
 
 
           // USER CRUD PAGES
