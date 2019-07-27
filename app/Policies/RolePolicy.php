@@ -21,23 +21,28 @@ class RolePolicy
         //
     }
 
-    public function index(User $user)
+    public function browse(User $user)
     {
-        return $user->hasPermissionTo('role-list');
+        return $user->hasPermissionTo('browse-roles');
+    }
+
+    public function view(User $user)
+    {
+        return $user->hasPermissionTo('view-roles');
     }
 
     public function create(User $user)
     {
-        return $user->hasPermissionTo('role-create');
+        return $user->hasPermissionTo('add-roles');
     }
 
     public function edit(User $user)
     {
-        return $user->hasPermissionTo('role-edit');
+        return $user->hasPermissionTo('edit-roles');
     }
 
-    public function destroy(User $user)
+    public function delete(User $user)
     {
-        return $user->hasPermissionTo('role-delete');
+        return $user->hasPermissionTo('delete-roles');
     }
 }

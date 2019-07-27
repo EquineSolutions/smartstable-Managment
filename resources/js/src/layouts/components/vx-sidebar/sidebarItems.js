@@ -31,13 +31,13 @@ export default [
     name: "User",
     slug: "user",
     icon: "UserIcon",
-    permission: 'user-list'
+    permission: 'browse-users'
   },
   {
     url: "/role",
     name: "Role",
     slug: "role",
     icon: "ShieldIcon",
-    permission: 'role-list'
+    permission: 'browse-roles'
   }
 ]

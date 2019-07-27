@@ -42,3 +42,9 @@ export default {
     },
 }
 </script>
+
+<style>
+    .material-icons {
+        font-size: 17px;
+    }
+</style>

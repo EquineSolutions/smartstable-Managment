@@ -1,8 +1,8 @@
 <template>
-	<div v-if="can('user-list')">
+	<div v-if="can('browse-users')">
 		<!-- Users Table -->
 		<vx-card title="Users List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" v-if="can('user-create')" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
+			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" v-if="can('add-users')" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
 
 			<vs-table search :data="users">
 		      	<template slot="thead">
@@ -33,14 +33,14 @@
 			          	<vs-td>
 			          		<vs-row>
 			          			<div class="flex mb-4">
-									<div class="w-1/3" v-if="can('user-list')">
+									<div class="w-1/3" v-if="can('view-users')">
 											<vs-button @click="redirect('view-user', data[indextr].id)" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
 									  </div>
 
-									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('user-edit')">
+									  <div class="w-1/3" style="margin: 0 10px;" v-if="can('edit-users')">
 											<vs-button @click="redirect('edit-user', data[indextr].id)" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
 									  </div>
-									  <div class="w-1/3" v-if="can('user-delete')">
+									  <div class="w-1/3" v-if="can('delete-users')">
 											<vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteUser(data[indextr])"></vs-button>
 									  </div>
 								</div>
