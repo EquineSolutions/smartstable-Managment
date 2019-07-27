@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function getImageAttribute($image)
     {
-        return $image? '/uploads/images/user/'.$image:'/uploads/images/user/default.png';
+        return $image? '/uploads/images/user/'.$image : '/avatar.png';
     }
 }

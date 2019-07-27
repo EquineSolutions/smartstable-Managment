@@ -1,5 +1,5 @@
 <template>
-  <div  v-if="can('role-edit')">
+  <div  v-if="can('edit-roles')">
     <vx-card title='Update Role'>
       <form>
         <div class="vx-row">
@@ -9,16 +9,20 @@
           </div>
         </div>
 
-        <div class="vx-row mt-5">
-          <div class="vx-col w-full">
-            <b>Role Permissions:</b>
-            <ul class="centerx">
-              <li v-for="(permission, index) in permissions" :key="index">
-                <vs-checkbox v-model="rolePermissions" :vs-value="permission.name">{{permission.name}}</vs-checkbox>
-              </li>
-            </ul>
+          <div class="vx-row mt-5">
+              <div class="vx-col w-full">
+                  <b>Role Permissions:</b>
+                  <ul v-for="(group, groupName) in permissions">
+                      <br>
+                      <vs-checkbox v-model="groupPermissions" :vs-value="groupName" @change="groupPressed(group)"><b>{{groupName}}</b></vs-checkbox>
+                      <li class="ml-8" v-for="(permission, index) in group" :key="index">
+                          <vs-checkbox v-model="rolePermissions" :vs-value="permission.name">{{permission.display_name}}</vs-checkbox>
+                      </li>
+                  </ul>
+              </div>
           </div>
-        </div>
+
+
         <div class="vx-row mt-10">
           <div class="vx-col w-full">
             <vs-button icon-pack="feather" icon="icon-save" class="mr-3 mb-2" @click.prevent="submitForm">Save Role</vs-button>
@@ -56,7 +60,8 @@
         permissions: [],
 
         role_name: "",
-        rolePermissions: []
+        rolePermissions: [],
+          groupPermissions:[]
       }
     },
     methods: {
@@ -113,6 +118,24 @@
           }
         })
       },
+
+        //Check and Un-Check by group
+        groupPressed(group)
+        {
+            if (this.groupPermissions.includes(group[0].group)) {
+                for(var i = 0; i< group.length; i++)
+                {
+                    if (!this.rolePermissions.includes(group[i].name))
+                        this.rolePermissions.push(group[i].name)
+                }
+            } else {
+                for(var i = 0; i< group.length; i++)
+                {
+                    if (this.rolePermissions.includes(group[i].name))
+                        this.rolePermissions.splice(this.rolePermissions.indexOf(group[i].name), 1);
+                }
+            }
+        },
 
         //Vuesax alert
         vs_alert (title, text, color)

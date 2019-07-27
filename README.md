@@ -1,26 +1,38 @@
 # modern
 
 ## Project setup
+
+### Install Composer
+```
+composer install
+```
+
+### Setup .env file and database
+```
+php artisan migrate:fresh
+```
+
+### Install Passport
+```
+php artisan passport:install
+```
+
+### Seed Data
+```
+php artisan db:seed
+```
+
+### Install NPM
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compile and minifies for development
 ```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
+npm run dev
 ```
 
-### Run your tests
+### Compile and minifies for production
 ```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
+npm run production
 ```
