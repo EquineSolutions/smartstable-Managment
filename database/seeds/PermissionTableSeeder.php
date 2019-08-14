@@ -15,15 +15,51 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-       $permissions = [
-           'role-list',
-           'role-create',
-           'role-edit',
-           'role-delete',
-           'user-list',
-           'user-create',
-           'user-edit',
-           'user-delete',
+        $permissions = [
+            'Roles' => [
+                [
+                    'name' => 'browse-roles',
+                    'display_name' => 'Browse Roles',
+                ],
+                [
+                    'name' => 'view-roles',
+                    'display_name' => 'View Roles',
+                ],
+                [
+                    'name' => 'add-roles',
+                    'display_name' => 'Add Roles',
+                ],
+                [
+                    'name' => 'edit-roles',
+                    'display_name' => 'Edit Roles',
+                ],
+                [
+                    'name' => 'delete-roles',
+                    'display_name' => 'Delete Roles',
+                ],
+            ],
+            'Users' =>[
+                [
+                    'name' => 'browse-users',
+                    'display_name' => 'Browse Users',
+                ],
+                [
+                    'name' => 'view-users',
+                    'display_name' => 'View Users',
+                ],
+                [
+                    'name' => 'add-users',
+                    'display_name' => 'Add Users',
+                ],
+                [
+                    'name' => 'edit-users',
+                    'display_name' => 'Edit Users',
+                ],
+                [
+                    'name' => 'delete-users',
+                    'display_name' => 'Delete Users',
+                ],
+            ]
         ];
         \Illuminate\Database\Eloquent\Model::unguard();
 
@@ -38,8 +74,15 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->truncate();
 
 
-        foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission, 'guard_name' => 'api']);
+        foreach ($permissions as $key => $value) {
+            foreach ($value as $permission) {
+                Permission::create([
+                    'name' => $permission['name'],
+                    'display_name' => $permission['display_name'],
+                    'group' => $key,
+                    'guard_name' => 'api'
+                ]);
+            }
         }
 
         $role = Role::create(['name' => 'super-admin', 'guard_name' => 'api']);
