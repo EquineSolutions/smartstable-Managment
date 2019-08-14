@@ -24,6 +24,14 @@ class PermissionTableSeeder extends Seeder
            'user-create',
            'user-edit',
            'user-delete',
+           'package-list',
+           'package-create',
+           'package-edit',
+           'package-delete',
+           'feature-list',
+           'feature-create',
+           'feature-edit',
+           'feature-delete',
         ];
         \Illuminate\Database\Eloquent\Model::unguard();
 

@@ -21,9 +21,11 @@ Route::middleware('auth:api')->post('authorize', 'Api\PassportController@authori
 Route::middleware('auth:api')->group(function () {
     Route::resource('roles','Api\RoleController');
     Route::resource('users','Api\UserController');
-    Route::get('user_info','Api\UserController@all_user_info');
     Route::resource('features','Api\FeatureController');
+    Route::resource('packages','Api\PackageController');
+    Route::get('user_info','Api\UserController@all_user_info');
     Route::get('logout', 'Api\PassportController@logout');
+
 });
 
 Route::middleware('auth:api')->post('profile/{id}', 'Api\UserController@updateProfileData');

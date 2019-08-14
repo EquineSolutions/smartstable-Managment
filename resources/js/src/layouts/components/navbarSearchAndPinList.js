@@ -6,5 +6,7 @@ export default {
     {index: 1, label: 'User', url: '/user', labelIcon: 'UsersIcon', highlightAction: true},
     {index: 2, label: 'Roles', url: '/role', labelIcon: 'ShieldIcon', highlightAction: true},
     {index: 3, label: 'Profile', url: '/profile', labelIcon: 'UserIcon', highlightAction: true},
+    {index: 4, label: 'Package', url: '/package', labelIcon: 'ShieldIcon', highlightAction: true},
+
   ]
 }
