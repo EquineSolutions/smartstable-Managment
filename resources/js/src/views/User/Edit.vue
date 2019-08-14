@@ -1,5 +1,5 @@
 <template>
-  <div v-if="can('user-edit')">
+  <div v-if="can('edit-users')">
     <div>
       <vx-card title='Update User'>
         <form>
@@ -45,6 +45,8 @@
               </ul>
             </div>
           </div>
+
+
 
           <div class="vx-row">
             <div class="vx-col w-full">
