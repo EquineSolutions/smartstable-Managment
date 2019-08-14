@@ -39,5 +39,20 @@ export default [
     slug: "role",
     icon: "ShieldIcon",
     permission: 'role-list'
-  }
+  },
+    {
+        url: "/package",
+        name: "Package",
+        slug: "Package",
+        icon: "ShieldIcon",
+        permission: 'package-list'
+    },
+    {
+        url: "/feature",
+        name: "Feature",
+        slug: "Feature",
+        icon: "ShieldIcon",
+        permission: 'feature-list'
+    }
+
 ]

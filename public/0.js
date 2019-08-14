@@ -2487,7 +2487,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c(
-                    "div",
+                    "dhoiv",
                     [
                       _vm.showCloseButton
                         ? [
@@ -2554,7 +2554,8 @@ var render = function() {
                     ],
                     2
                   )
-                ]
+                ],
+                1
               ),
               _vm._v(" "),
               _c("div", {
@@ -3682,6 +3683,18 @@ __webpack_require__.r(__webpack_exports__);
   slug: "role",
   icon: "ShieldIcon",
   permission: 'role-list'
+}, {
+  url: "/package",
+  name: "Package",
+  slug: "Package",
+  icon: "ShieldIcon",
+  permission: 'package-list'
+}, {
+  url: "/feature",
+  name: "Feature",
+  slug: "Feature",
+  icon: "ShieldIcon",
+  permission: 'feature-list'
 }]);
 
 /***/ }),
