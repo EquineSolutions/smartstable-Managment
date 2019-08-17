@@ -193,6 +193,127 @@ const router = new Router({
             }
           },
 
+          // PACKAGES CRUD PAGES
+          {
+            path: '/package',
+            name: 'package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Packages.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', active: true}
+              ],
+              pageTitle: "Packages",
+              permission: 'package-list'
+            }
+          },
+          {
+            path: '/package/create',
+            name: 'create-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Create.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Create Package', active: true}
+              ],
+              pageTitle: "Create Packages",
+              permission: 'package-create'
+            }
+          },
+          {
+            path: '/package/:id',
+            name: 'view-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/View.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Package Information', active: true}
+              ],
+              pageTitle: "Package Information",
+              permission: 'package-list'
+            }
+          },
+          {
+            path: '/package/edit/:id',
+            name: 'edit-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Edit.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Edit Package', active: true}
+              ],
+              pageTitle: "Edit Package",
+              permission: 'package-edit'
+            }
+          },
+
+            // FEATURE CRUD PAGES
+            {
+                path: '/feature',
+                name: 'feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Features.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', active: true}
+                    ],
+                    pageTitle: "Feature",
+                    permission: 'feature-list'
+                }
+            },
+            {
+                path: '/feature/create',
+                name: 'create-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Create Feature', active: true}
+                    ],
+                    pageTitle: "Create Features",
+                    permission: 'feature-create'
+                }
+            },
+            {
+                path: '/feature/:id',
+                name: 'view-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/View.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Feature Information', active: true}
+                    ],
+                    pageTitle: "Feature Information",
+                    permission: 'feature-list'
+                }
+            },
+            {
+                path: '/feature/edit/:id',
+                name: 'edit-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Edit.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Edit Feature', active: true}
+                    ],
+                    pageTitle: "Edit Feature",
+                    permission: 'feature-edit'
+                }
+            },
             {
                 path: '/club',
                 name: 'club',
@@ -252,6 +373,25 @@ router.afterEach(() => {
     appLoading.style.display = "none";
   }
 });
+
+
+/**
+ * Check if the authenticated user can perform an action.
+ *
+ * @param permission
+ * @returns {boolean}
+ */
+function can(permission) {
+  let hasPermission = false;
+  store.state.userPermissions.forEach((userPermission) => {
+    if(userPermission.name == permission){
+      hasPermission = true;
+    }
+  });
+
+  return hasPermission;
+}
+
 
 function guard(to, from, next) {
   const formData = new FormData();

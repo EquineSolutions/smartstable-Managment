@@ -7,6 +7,7 @@ use App\Http\Requests\FeatureRequest;
 use App\Feature;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Input;
 
 class FeatureController extends Controller
 {
@@ -25,7 +26,7 @@ class FeatureController extends Controller
                 'features' =>$features
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
     /**
@@ -46,13 +47,23 @@ class FeatureController extends Controller
      */
     public function store(FeatureRequest $request)
     {
-        $data = $request->validated();
+
+        $enable =Input::get('enable') ;
+        $enable = ($enable  === 0 ||$enable  ===  false||$enable  === 'no') ? 0:1 ;
+
         try{
-            Feature::create($data);
+            Feature::create([
+                'name' => Input::get('name'),
+                'description' => Input::get('description'),
+                'key' => Input::get('key'),
+                'enable' => $enable,
+                'priority' => Input::get('priority'),
+                ]);
             $output = [
                 'status' => 200,
                 'message' => 'feature created successfully',
             ];
+            $status =200;
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -60,9 +71,10 @@ class FeatureController extends Controller
                 'status' => 500,
                 'error' => $e->getMessage(),
             ];
+            $status =500;
         }
 
-        return response()->json($output);
+        return response()->json($output,$status);
     }
 
     /**
@@ -80,7 +92,7 @@ class FeatureController extends Controller
                 'feature' => $feature
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
     /**
@@ -98,7 +110,7 @@ class FeatureController extends Controller
                 'feature' => $feature
             ]
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 
     /**
@@ -116,7 +128,7 @@ class FeatureController extends Controller
             'status' => 200,
             'message' => 'feature updated successfully',
         ];
-        return response()->json($output);
+        return response()->json($output,200);
 
     }
 
@@ -133,6 +145,6 @@ class FeatureController extends Controller
             'status' => 200,
             'message' => 'User deleted successfully',
         ];
-        return response()->json($output);
+        return response()->json($output,200);
     }
 }
