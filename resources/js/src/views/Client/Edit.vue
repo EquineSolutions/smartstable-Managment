@@ -112,11 +112,9 @@
                         // if form have no errors
 
                         const formData = new FormData();
-                        formData.append('first_name', this.first_name);
-                        formData.append('middle_name', this.middle_name);
-                        formData.append('last_name', this.last_name);
-                        formData.append('email', this.email);
-                        formData.append('mobile', this.mobile);
+                        for (let key in fire.clientFormData ) {
+                            form_data.append(key, this.formData[key]);
+                        }
 
                         axios.post('/api/users', formData, store.state.config).then(function(response){
                             if(response.data.status == 200) {

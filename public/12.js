@@ -122,11 +122,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
         if (result) {
           // if form have no errors
           var formData = new FormData();
-          formData.append('first_name', _this.first_name);
-          formData.append('middle_name', _this.middle_name);
-          formData.append('last_name', _this.last_name);
-          formData.append('email', _this.email);
-          formData.append('mobile', _this.mobile);
+
+          for (var key in fire.clientFormData) {
+            form_data.append(key, _this.formData[key]);
+          }
+
           axios.post('/api/users', formData, store.state.config).then(function (response) {
             if (response.data.status == 200) {
               fire.vs_alert('Success', 'Client Successfully Added', 'success');

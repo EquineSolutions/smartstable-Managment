@@ -115,14 +115,8 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
       this.$validator.validateAll().then(function (result) {
         if (result) {
           // if form have no errors
-          for (var key in _this.formData) {
-            if (key == 'national_id') {
-              for (var i = 0; i < _this.formData[key].length; i++) {
-                form_data.append(key + '[]', _this.formData[key][i]);
-              }
-            } else {
-              form_data.append(key, _this.formData[key]);
-            }
+          for (var key in fire.clientFormData) {
+            form_data.append(key, _this.formData[key]);
           }
 
           axios.post('/api/users', formData, store.state.config).then(function (response) {

@@ -103,15 +103,8 @@
                 this.$validator.validateAll().then(result => {
                     if(result) {
                         // if form have no errors
-                        for (let key in this.formData ) {
-                            if (key == 'national_id'){
-                                for (let i=0; i<this.formData[key].length; i++){
-                                    form_data.append(key+'[]', this.formData[key][i]);
-                                }
-                            }
-                            else {
-                                form_data.append(key, this.formData[key]);
-                            }
+                        for (let key in fire.clientFormData ) {
+                            form_data.append(key, this.formData[key]);
                         }
 
                         axios.post('/api/users', formData, store.state.config).then(function(response){
