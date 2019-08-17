@@ -192,6 +192,20 @@ const router = new Router({
               pageTitle: "Profile"
             }
           },
+
+            {
+                path: '/club',
+                name: 'club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clubs', active: true}
+                    ],
+                    pageTitle: "Clubs"
+                }
+            },
         ],
       },
     // =============================================================================
