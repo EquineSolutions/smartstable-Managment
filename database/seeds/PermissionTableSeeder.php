@@ -59,7 +59,52 @@ class PermissionTableSeeder extends Seeder
                     'name' => 'delete-users',
                     'display_name' => 'Delete Users',
                 ],
-            ]
+            ],
+            'Features' =>[
+                [
+                    'name' => 'browse-features',
+                    'display_name' => 'Browse Features',
+                ],
+                [
+                    'name' => 'view-features',
+                    'display_name' => 'View Features',
+                ],
+                [
+                    'name' => 'add-features',
+                    'display_name' => 'Add Features',
+                ],
+                [
+                    'name' => 'edit-features',
+                    'display_name' => 'Edit Features',
+                ],
+                [
+                    'name' => 'delete-features',
+                    'display_name' => 'Delete Features',
+                ],
+            ],
+            'Packages' =>[
+                [
+                    'name' => 'browse-packages',
+                    'display_name' => 'Browse Packages',
+                ],
+                [
+                    'name' => 'view-packages',
+                    'display_name' => 'View Packages',
+                ],
+                [
+                    'name' => 'add-packages',
+                    'display_name' => 'Add Packages',
+                ],
+                [
+                    'name' => 'edit-packages',
+                    'display_name' => 'Edit Packages',
+                ],
+                [
+                    'name' => 'delete-packages',
+                    'display_name' => 'Delete Packages',
+                ],
+            ],
+
         ];
         \Illuminate\Database\Eloquent\Model::unguard();
 
