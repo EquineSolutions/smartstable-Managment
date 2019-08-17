@@ -177,6 +177,67 @@ const router = new Router({
           },
 
 
+            // =============================================================================
+            // Clients Routes
+            // =============================================================================
+
+            {
+                path: '/client',
+                name: 'client',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Client/Clients.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clients', url: '/client', active: true},
+                    ],
+                    pageTitle: "Clients"
+                }
+            },
+            {
+                path: '/client/create',
+                name: 'create-client',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Client/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clients', url: '/client'},
+                        { title: 'Create Client', active: true}
+                    ],
+                    pageTitle: "Create Client"
+                }
+            },
+            {
+                path: '/client/edit/:id',
+                name: 'edit-client',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Client/Edit.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clients', url: '/client'},
+                        { title: 'Edit Client', active: true}
+                    ],
+                    pageTitle: "Edit Client"
+                }
+            },
+            {
+                path: '/client/:id',
+                name: 'view-client',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Client/View.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clients', url: '/client'},
+                        { title: 'Client Information', active: true}
+                    ],
+                    pageTitle: "Client Information"
+                }
+            },
+
+
 
           // PROFILE PAGE
           {

@@ -66,6 +66,10 @@
             </div>
             <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4"></feather-icon>
 
+            <vx-tooltip text="Clients" position="bottom">
+                <feather-icon icon="SmileIcon" @click="$router.push('/client')" class="cursor-pointer ml-4 mt-1"></feather-icon>
+            </vx-tooltip>
+
 			<!-- NOTIFICATIONS -->
 			<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
 				<feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length"></feather-icon>
@@ -144,9 +148,6 @@ import router from '../../router';
 
 export default {
     name: "the-navbar",
-    mounted() {
-        console.log(this.$store.state.navbarSearchAndPinList);
-    },
     props: {
         navbarColor: {
             type: String,
@@ -196,7 +197,6 @@ export default {
 
         // BOOKMARK & SEARCH
         data() {
-            console.log(this.$store.state.navbarSearchAndPinList);
             return this.$store.state.navbarSearchAndPinList;
         },
         starredPages() {
