@@ -3682,6 +3682,12 @@ __webpack_require__.r(__webpack_exports__);
   slug: "role",
   icon: "ShieldIcon",
   permission: 'browse-roles'
+}, {
+  url: "/club",
+  name: "Club",
+  slug: "club",
+  icon: "ShieldIcon" // permission: 'browse-clubs'
+
 }]);
 
 /***/ }),

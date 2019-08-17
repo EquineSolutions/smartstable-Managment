@@ -39,5 +39,12 @@ export default [
     slug: "role",
     icon: "ShieldIcon",
     permission: 'browse-roles'
-  }
+  },
+ {
+    url: "/club",
+    name: "Club",
+    slug: "club",
+    icon: "ShieldIcon",
+    // permission: 'browse-clubs'
+ }
 ]
