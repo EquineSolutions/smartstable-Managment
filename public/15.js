@@ -9,7 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
 //
 //
 //
@@ -76,10 +75,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-// For custom error message
- // register custom messages
-
-vee_validate__WEBPACK_IMPORTED_MODULE_0__["Validator"].localize('en', dict);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();

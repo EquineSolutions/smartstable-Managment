@@ -65,10 +65,7 @@
 </template>
 
 <script>
-    // For custom error message
-    import { Validator } from 'vee-validate';
-        // register custom messages
-        Validator.localize('en', dict);
+
    export default {
         mounted() {
             this.getData();
@@ -81,7 +78,6 @@
                 checked: "",
                 selected: "",
                 packageFeatures:[]
-
             }
         },
         methods: {

@@ -9,8 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../router.js */ "./resources/js/src/router.js");
-/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
+/* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
 //
 //
 //
@@ -64,14 +63,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // For custom error message
-
+// import router from '../../router.js'
+// For custom error message
 
 var dict = {
   custom: {}
 }; // register custom messages
 
-vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
+vee_validate__WEBPACK_IMPORTED_MODULE_0__["Validator"].localize('en', dict);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getFeatures();
@@ -92,12 +91,12 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
         if (error.response.status == 403) {
           // Un-Authorized
           fire.vs_alert('Oops!', error.response.data.message, 'danger');
-          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+          fire.$router.push({
             name: "pageError403"
           });
         } else if (error.response.status == 401) {
           // Un-Authenticated
-          _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+          fire.$router.push({
             name: "pageLogin"
           });
         }
@@ -120,7 +119,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
           axios.post('/api/features', formData, store.state.config).then(function (response) {
             if (response.data.status == 200) {
               fire.vs_alert('Success', 'Feature Successfully Added', 'success');
-              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+              fire.$router.push({
                 name: "feature"
               });
             } else {
@@ -134,12 +133,12 @@ vee_validate__WEBPACK_IMPORTED_MODULE_1__["Validator"].localize('en', dict);
             } else if (error.response.status == 403) {
               // Un-Authorized
               fire.vs_alert('Oops!', error.response.data.message, 'danger');
-              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+              fire.$router.push({
                 name: "pageError403"
               });
             } else if (error.response.status == 401) {
               // Un-Authenticated
-              _router_js__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+              fire.$router.push({
                 name: "pageLogin"
               });
             }
