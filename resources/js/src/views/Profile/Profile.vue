@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <vx-card title='Personal Information'>
             <vs-row>
                 <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">

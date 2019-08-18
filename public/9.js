@@ -66,6 +66,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -179,7 +185,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\r\n", ""]);
+exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -237,28 +243,17 @@ var render = function() {
         [
           _c(
             "vx-card",
-            { attrs: { title: "Users List" } },
+            {
+              attrs: {
+                title: "Users List",
+                hasNavigationButton: true,
+                buttonURL: "/user/create",
+                buttonText: "Create User",
+                buttonIcon: "icon-plus",
+                buttonPermission: "add-users"
+              }
+            },
             [
-              _vm.can("add-users")
-                ? _c(
-                    "vs-button",
-                    {
-                      staticClass: "mb-4 md:mb-0",
-                      staticStyle: {
-                        float: "right",
-                        "border-radius": "55px",
-                        "margin-left": "20px"
-                      },
-                      attrs: {
-                        "icon-pack": "feather",
-                        icon: "icon-plus",
-                        to: "/user/create"
-                      }
-                    },
-                    [_vm._v("Create User")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
               _c(
                 "vs-table",
                 {

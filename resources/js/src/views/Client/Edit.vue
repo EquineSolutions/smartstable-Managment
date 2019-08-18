@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('add-users')">
+    <div v-if="can('edit-clients')">
         <vx-card title='Edit Client Information'>
             <form>
                 <div class="vx-row">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="vx-row">
                     <div class="vx-col sm:w-1/2 w-full mb-2">
-                        <vs-input type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email" v-model="clientFormData.email" name='email' />
+                        <vs-input disabled type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email" v-model="clientFormData.email" name='email' />
                         <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
                     </div>
                     <div class="vx-col sm:w-1/2 w-full mb-2">
@@ -30,9 +30,9 @@
                     <div class="vx-col md:w-1/2 w-full mt-2">
                         <label>Birth Date</label>
                         <br>
-                        <flat-pickr v-validate="'required|date_format:yyyy-MM-dd'" v-model="clientFormData.birth_year" name="date_of_birth" placeholder="Select Birth Date"/>
+                        <flat-pickr v-validate="'required|date_format:yyyy-MM-dd'" v-model="clientFormData.date_of_birth" name="date_of_birth" placeholder="Select Birth Date"/>
                         <br>
-                        <span v-if="clientFormData.birth_year!=null"><b>Age: </b>{{GetAge(clientFormData.birth_year)}} Year(s)</span>
+                        <span v-if="clientFormData.date_of_birth!=null"><b>Age: </b>{{GetAge(clientFormData.date_of_birth)}} Year(s)</span>
                         <br>
                         <span class="text-danger" v-show="errors.has('date_of_birth')">{{ errors.first('date_of_birth') }}</span>
                     </div>
@@ -78,7 +78,7 @@
     export default {
         name: 'Edit',
         mounted() {
-            this.getClientsData();
+            this.getClientData();
         },
         data() {
             return {
@@ -88,49 +88,48 @@
                     last_name: "",
                     email: "",
                     mobile: "",
-                    birth_year: ''
+                    date_of_birth: ''
                 }
             }
         },
         methods: {
-            getClientsData()
-            {
-                this.clientFormData = {
-                    first_name: "Mohamed",
-                    middle_name: "Ehab",
-                    last_name: "Swilam",
-                    email: "mohamed_swilam@hotmail.com",
-                    mobile: "01096436702",
-                    birth_year: '1997-10-18'
-                }
-            },
-            submitForm()
+            //Display Client Data.
+            getClientData()
             {
                 let fire = this;
+                axios.get(`/api/clients/${this.$route.params.id}`, store.state.config).then(function(response){
+                    fire.clientFormData = response.data.data;
+                }).catch(function(error){
+                    if(error.response.status == 403) { // Un-Authorized
+                        fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                        fire.$router.push({ name: "pageError403"});
+                    } else if (error.response.status == 401){ // Un-Authenticated
+                        fire.$router.push({ name: "pageLogin"})
+                    }
+                });
+            },
+
+            submitForm()
+            {
+                let fire = this,
+                    form_data = new FormData();
                 this.$validator.validateAll().then(result => {
                     if(result) {
-                        // if form have no errors
-
-                        const formData = new FormData();
-                        for (let key in fire.clientFormData ) {
-                            form_data.append(key, this.formData[key]);
-                        }
-
-                        axios.post('/api/users', formData, store.state.config).then(function(response){
-                            if(response.data.status == 200) {
-                                fire.vs_alert ('Success', 'Client Successfully Added', 'success');
-                                fire.$router.push({ name: "user"})
+                        axios.put(`/api/clients/${this.$route.params.id}`, fire.clientFormData, store.state.config).then(function(response){
+                            if(response.data.status === 200) {
+                                fire.vs_alert ('Success', 'Client Successfully Updated', 'success');
+                                fire.$router.push({ name: "client"})
                             } else {
                                 fire.vs_alert ('Oops!', response.data, 'danger');
                             }
                         }).catch(function(error){
-                            if (error.response.status == 422){ // Validation Error
+                            if (error.response.status === 422){ // Validation Error
                                 let errors = error.response.data.errors;
                                 fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
-                            } else if(error.response.status == 403) { // Un-Authorized
+                            } else if(error.response.status === 403) { // Un-Authorized
                                 fire.vs_alert ('Oops!', error.response.data.message, 'danger');
                                 fire.$router.push({ name: "pageError403"});
-                            } else if (error.response.status == 401){ // Un-Authenticated
+                            } else if (error.response.status === 401){ // Un-Authenticated
                                 fire.$router.push({ name: "pageLogin"})
                             }
                         });

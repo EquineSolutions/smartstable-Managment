@@ -1,10 +1,10 @@
 <template>
-    <div v-if="can('view-users')">
+    <div v-if="can('view-clients')">
         <vx-card title="Client Information">
             <template v-if="client != null">
                 <b>ID: </b>  {{client.id}}
                 <vs-divider/>
-                <b>Name: </b> {{client.first_name + ' ' + client.last_name}}
+                <b>Name: </b> {{client.first_name + client.middle_name + ' ' + client.last_name}}
                 <vs-divider/>
                 <b>Email: </b> {{client.email}}
                 <vs-divider/>
@@ -12,7 +12,7 @@
                 <vs-divider/>
                 <b>Birth Date: </b> 18-10-1997
                 <vs-divider/>
-                <vs-chip color="success" v-if="client.email_verified_at!=null">Verified</vs-chip>
+                <vs-chip color="success" v-if="client.verified_at!=null">Verified</vs-chip>
                 <vs-chip color="danger" v-else>Not Verified</vs-chip>
                 <br>
             </template>
@@ -48,7 +48,7 @@
             getClientData()
             {
                 let fire = this;
-                axios.get(`/api/users/${this.$route.params.id}`, store.state.config).then(function(response){
+                axios.get(`/api/clients/${this.$route.params.id}`, store.state.config).then(function(response){
                     fire.client = response.data.data;
                 }).catch(function(error){
                     if(error.response.status == 403) { // Un-Authorized

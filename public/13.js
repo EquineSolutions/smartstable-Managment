@@ -55,7 +55,7 @@ __webpack_require__.r(__webpack_exports__);
     //Display Client Data.
     getClientData: function getClientData() {
       var fire = this;
-      axios.get("/api/users/".concat(this.$route.params.id), store.state.config).then(function (response) {
+      axios.get("/api/clients/".concat(this.$route.params.id), store.state.config).then(function (response) {
         fire.client = response.data.data;
       })["catch"](function (error) {
         if (error.response.status == 403) {
@@ -92,7 +92,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("view-users")
+  return _vm.can("view-clients")
     ? _c(
         "div",
         [
@@ -110,7 +110,10 @@ var render = function() {
                     _vm._v(
                       " " +
                         _vm._s(
-                          _vm.client.first_name + " " + _vm.client.last_name
+                          _vm.client.first_name +
+                            _vm.client.middle_name +
+                            " " +
+                            _vm.client.last_name
                         ) +
                         "\n            "
                     ),
@@ -128,7 +131,7 @@ var render = function() {
                     _vm._v(" 18-10-1997\n            "),
                     _c("vs-divider"),
                     _vm._v(" "),
-                    _vm.client.email_verified_at != null
+                    _vm.client.verified_at != null
                       ? _c("vs-chip", { attrs: { color: "success" } }, [
                           _vm._v("Verified")
                         ])

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('browse-users')">
+    <div v-if="can('browse-clients')">
         <!-- Clients Table -->
         <vx-card
             title="Clients List"
@@ -37,22 +37,22 @@
                         </vs-td>
 
                         <vs-td>
-                            <vs-chip color="success" v-if="data[indextr].email_verified_at!=null">Verified</vs-chip>
+                            <vs-chip color="success" v-if="data[indextr].verified_at!=null">Verified</vs-chip>
                             <vs-chip color="danger" v-else>Not Verified</vs-chip>
                         </vs-td>
 
                         <vs-td>
                             <vs-row>
                                 <div class="flex mb-4">
-                                    <div class="w-1/3" v-if="can('view-users')">
+                                    <div class="w-1/3" v-if="can('view-clients')">
                                         <vs-button @click="redirect('view-client', data[indextr].id)" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
                                     </div>
 
-                                    <div class="w-1/3" style="margin: 0 10px;" v-if="can('edit-users')">
+                                    <div class="w-1/3" style="margin: 0 10px;" v-if="can('edit-clients')">
                                         <vs-button @click="redirect('edit-client', data[indextr].id)" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
                                     </div>
 
-                                    <div class="w-1/3" v-if="can('delete-users')">
+                                    <div class="w-1/3" v-if="can('delete-clients')">
                                         <vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteClient(data[indextr])"></vs-button>
                                     </div>
                                 </div>
@@ -85,14 +85,14 @@
             getData()
             {
                 let fire = this;
-                axios.get('/api/users', store.state.config).then(function(response){
+                axios.get('/api/clients', store.state.config).then(function(response){
                     fire.clients = response.data.data;
                 }).catch(function(error){
                     if(error.response.status == 403) { // Un-Authorized
                         fire.vs_alert ('Oops!', error.response.data.message, 'danger');
-                        router.push({ name: "pageError403"});
+                        fire.$router.push({ name: "pageError403"});
                     } else if (error.response.status == 401){ // Un-Authenticated
-                        router.push({ name: "pageLogin"})
+                        fire.$router.push({ name: "pageLogin"})
                     }
                 });
             },
@@ -125,9 +125,9 @@
                 }).catch(function(error){
                     if(error.response.status == 403) { // Un-Authorized
                         fire.vs_alert ('Oops!', error.response.data.message, 'danger');
-                        router.push({ name: "pageError403"});
+                        fire.$router.push({ name: "pageError403"});
                     } else if (error.response.status == 401){ // Un-Authenticated
-                        router.push({ name: "pageLogin"})
+                        fire.$router.push({ name: "pageLogin"})
                     }
                 });
             },

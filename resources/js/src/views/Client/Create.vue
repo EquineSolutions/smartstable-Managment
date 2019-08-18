@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('add-users')">
+    <div v-if="can('add-clients')">
         <vx-card title='Create New Client'>
             <form>
                 <div class="vx-row">
@@ -30,16 +30,11 @@
                     <div class="vx-col md:w-1/2 w-full mt-2">
                         <label>Birth Date</label>
                         <br>
-                        <flat-pickr v-validate="'required|date_format:yyyy-MM-dd'" v-model="clientFormData.birth_year" name="date_of_birth" placeholder="Select Birth Date"/>
+                        <flat-pickr v-validate="'required|date_format:yyyy-MM-dd'" v-model="clientFormData.date_of_birth" name="date_of_birth" placeholder="Select Birth Date"/>
                         <br>
-                        <span v-if="clientFormData.birth_year!=null"><b>Age: </b>{{GetAge(clientFormData.birth_year)}} Year(s)</span>
+                        <span v-if="clientFormData.date_of_birth!=null"><b>Age: </b>{{GetAge(clientFormData.date_of_birth)}} Year(s)</span>
                         <br>
                         <span class="text-danger" v-show="errors.has('date_of_birth')">{{ errors.first('date_of_birth') }}</span>
-                    </div>
-                    <div class="vx-col md:w-1/2 w-full mt-2">
-                        <label>Upload National ID Photo</label>
-                        <br>
-                        <input type="file" class="form-control" @change="uploadID">
                     </div>
                 </div>
 
@@ -92,25 +87,27 @@
                     middle_name: "",
                     email: "",
                     mobile: "",
-                    birth_year: null
+                    date_of_birth: null,
+                    password: 'password'
                 }
             }
         },
         methods: {
             submitForm()
             {
-                let fire = this;
+                let fire = this,
+                    form_data = new FormData();
                 this.$validator.validateAll().then(result => {
                     if(result) {
                         // if form have no errors
-                        for (let key in fire.clientFormData ) {
-                            form_data.append(key, this.formData[key]);
+                        for (let key in fire.clientFormData) {
+                            form_data.append(key, fire.clientFormData[key]);
                         }
 
-                        axios.post('/api/users', formData, store.state.config).then(function(response){
+                        axios.post('/api/clients', form_data, store.state.config).then(function(response){
                             if(response.data.status == 200) {
-                                fire.vs_alert ('Success', 'Client Successfully Added', 'success');
-                                fire.$router.push({ name: "user"})
+                                fire.vs_alert ('Success', 'Client Successfully Created', 'success');
+                                fire.$router.push({ name: "client"})
                             } else {
                                 fire.vs_alert ('Oops!', response.data, 'danger');
                             }

@@ -93,18 +93,18 @@ __webpack_require__.r(__webpack_exports__);
     //Get A List Of All Clients.
     getData: function getData() {
       var fire = this;
-      axios.get('/api/users', store.state.config).then(function (response) {
+      axios.get('/api/clients', store.state.config).then(function (response) {
         fire.clients = response.data.data;
       })["catch"](function (error) {
         if (error.response.status == 403) {
           // Un-Authorized
           fire.vs_alert('Oops!', error.response.data.message, 'danger');
-          router.push({
+          fire.$router.push({
             name: "pageError403"
           });
         } else if (error.response.status == 401) {
           // Un-Authenticated
-          router.push({
+          fire.$router.push({
             name: "pageLogin"
           });
         }
@@ -138,12 +138,12 @@ __webpack_require__.r(__webpack_exports__);
         if (error.response.status == 403) {
           // Un-Authorized
           fire.vs_alert('Oops!', error.response.data.message, 'danger');
-          router.push({
+          fire.$router.push({
             name: "pageError403"
           });
         } else if (error.response.status == 401) {
           // Un-Authenticated
-          router.push({
+          fire.$router.push({
             name: "pageLogin"
           });
         }
@@ -243,7 +243,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("browse-users")
+  return _vm.can("browse-clients")
     ? _c(
         "div",
         [
@@ -330,7 +330,7 @@ var render = function() {
                                 _c(
                                   "vs-td",
                                   [
-                                    data[indextr].email_verified_at != null
+                                    data[indextr].verified_at != null
                                       ? _c(
                                           "vs-chip",
                                           { attrs: { color: "success" } },
@@ -350,7 +350,7 @@ var render = function() {
                                   [
                                     _c("vs-row", [
                                       _c("div", { staticClass: "flex mb-4" }, [
-                                        _vm.can("view-users")
+                                        _vm.can("view-clients")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -377,7 +377,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("edit-users")
+                                        _vm.can("edit-clients")
                                           ? _c(
                                               "div",
                                               {
@@ -409,7 +409,7 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        _vm.can("delete-users")
+                                        _vm.can("delete-clients")
                                           ? _c(
                                               "div",
                                               { staticClass: "w-1/3" },
@@ -448,7 +448,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    1927276230
+                    430362493
                   )
                 },
                 [

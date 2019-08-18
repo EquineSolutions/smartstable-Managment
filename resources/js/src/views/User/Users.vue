@@ -1,8 +1,14 @@
 <template>
 	<div v-if="can('browse-users')">
 		<!-- Users Table -->
-		<vx-card title="Users List">
-			<vs-button style="float: right;border-radius: 55px;margin-left: 20px;" v-if="can('add-users')" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/user/create'>Create User</vs-button>
+        <vx-card
+            title="Users List"
+            :hasNavigationButton="true"
+            buttonURL="/user/create"
+            buttonText="Create User"
+            buttonIcon="icon-plus"
+            buttonPermission="add-users"
+        >
 
 			<vs-table search :data="users">
 		      	<template slot="thead">

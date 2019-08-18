@@ -1998,6 +1998,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_prism_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-prism-component */ "./node_modules/vue-prism-component/dist/vue-prism-component.common.js");
 /* harmony import */ var vue_prism_component__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_prism_component__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @assets/utils/color.js */ "./resources/assets/utils/color.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2066,6 +2072,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'vx-card',
   props: {
@@ -2110,6 +2117,54 @@ __webpack_require__.r(__webpack_exports__);
     removeCardAction: {
       "default": false,
       type: Boolean
+    },
+    headerBackground: {
+      "default": '',
+      type: String
+    },
+    // bodyBackground: {
+    //   default: '',
+    //   type: String
+    // },
+    // headerbackground: {
+    //   default: '',
+    //   type: String
+    // },
+    cardBackground: {
+      "default": '',
+      type: String
+    },
+    contentColor: {
+      "default": '',
+      type: String
+    },
+    titleColor: {
+      "default": '',
+      type: String
+    },
+    subtitleColor: {
+      "default": '#b8c2cc',
+      type: String
+    },
+    hasNavigationButton: {
+      "default": false,
+      type: Boolean
+    },
+    buttonURL: {
+      "default": null,
+      type: String
+    },
+    buttonText: {
+      "default": null,
+      type: String
+    },
+    buttonIcon: {
+      "default": null,
+      type: String
+    },
+    buttonPermission: {
+      "default": null,
+      type: String
     }
   },
   data: function data() {
@@ -2135,14 +2190,59 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     cardStyles: function cardStyles() {
-      return {
+      var obj = {
         maxHeight: this.cardMaxHeight
       };
+      if (!_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.cardBackground)) obj.background = _assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].getColor(this.cardBackground);
+      if (!_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.contentColor)) obj.color = _assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].getColor(this.contentColor);
+      return obj;
     },
     codeContainerStyles: function codeContainerStyles() {
       return {
         maxHeight: this.codeContainerMaxHeight
       };
+    },
+    cardClasses: function cardClasses() {
+      var str = ''; // Add bg class
+
+      if (_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.cardBackground)) {
+        str += " bg-".concat(this.cardBackground);
+      } // add content color
+
+
+      if (_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.contentColor)) {
+        str += " text-".concat(this.contentColor);
+      }
+
+      return str.trim();
+    },
+    titleStyles: function titleStyles() {
+      return {
+        color: _assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].getColor(this.titleColor)
+      };
+    },
+    titleClasses: function titleClasses() {
+      var str = ''; // add content color
+
+      if (_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.titleColor)) {
+        str += " text-".concat(this.titleColor);
+      }
+
+      return str.trim();
+    },
+    subtitleStyles: function subtitleStyles() {
+      var obj = {};
+      if (!_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.subtitleColor)) obj.color = _assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].getColor(this.subtitleColor);
+      return obj;
+    },
+    subtitleClasses: function subtitleClasses() {
+      var str = ''; // add content color
+
+      if (_assets_utils_color_js__WEBPACK_IMPORTED_MODULE_1__["default"].isColor(this.subtitleColor)) {
+        str += " text-".concat(this.subtitleColor);
+      }
+
+      return str.trim();
     }
   },
   methods: {
@@ -30062,7 +30162,8 @@ var render = function() {
         { "overflow-hidden": _vm.tempHidden },
         { "no-shadow": _vm.noShadow },
         { "rounded-none": _vm.noRadius },
-        { "card-border": _vm.cardBorder }
+        { "card-border": _vm.cardBorder },
+        _vm.cardClasses
       ],
       style: _vm.cardStyles
     },
@@ -30071,13 +30172,19 @@ var render = function() {
         ? _c("div", { staticClass: "vx-card__header" }, [
             _c("div", { staticClass: "vx-card__title" }, [
               this.$props.title
-                ? _c("h4", [_vm._v(_vm._s(_vm.title))])
+                ? _c(
+                    "h4",
+                    { class: _vm.titleClasses, style: _vm.titleStyles },
+                    [_vm._v(_vm._s(_vm.title))]
+                  )
                 : _vm._e(),
               _vm._v(" "),
               this.$props.subtitle
-                ? _c("h6", { staticClass: "text-grey" }, [
-                    _vm._v(_vm._s(_vm.subtitle))
-                  ])
+                ? _c(
+                    "h6",
+                    { class: _vm.subtitleClasses, style: _vm.subtitleStyles },
+                    [_vm._v(_vm._s(_vm.subtitle))]
+                  )
                 : _vm._e()
             ]),
             _vm._v(" "),
@@ -30150,6 +30257,31 @@ var render = function() {
                     ])
                   ],
                   2
+                )
+              : _vm.hasNavigationButton
+              ? _c(
+                  "div",
+                  { staticClass: "vx-card__actions" },
+                  [
+                    (_vm.buttonPermission != null
+                    ? _vm.can(_vm.buttonPermission)
+                    : true)
+                      ? _c(
+                          "vs-button",
+                          {
+                            staticClass: "mb-4 md:mb-0",
+                            attrs: {
+                              size: "small",
+                              "icon-pack": "feather",
+                              icon: _vm.buttonIcon,
+                              to: _vm.buttonURL
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.buttonText))]
+                        )
+                      : _vm._e()
+                  ],
+                  1
                 )
               : _vm._e()
           ])

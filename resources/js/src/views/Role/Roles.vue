@@ -1,9 +1,14 @@
 <template>
 	<div v-if="can('browse-roles')">
 		<!-- Roles Table -->
-		<vx-card title="Roles List">
-			<vs-button v-if="can('add-roles')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/role/create'>Create Role</vs-button>
-
+        <vx-card
+            title="Roles List"
+            :hasNavigationButton="true"
+            buttonURL="/role/create"
+            buttonText="Create Role"
+            buttonIcon="icon-plus"
+            buttonPermission="add-roles"
+        >
 			<vs-table search :data="roles">
 		      	<template slot="thead">
 			        <vs-th sort-key="id">ID</vs-th>

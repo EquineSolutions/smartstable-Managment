@@ -59,6 +59,28 @@ class PermissionTableSeeder extends Seeder
                     'name' => 'delete-users',
                     'display_name' => 'Delete Users',
                 ],
+            ],
+            'Clients' => [
+                [
+                    'name' => 'browse-clients',
+                    'display_name' => 'Browse Clients',
+                ],
+                [
+                    'name' => 'view-clients',
+                    'display_name' => 'View Clients',
+                ],
+                [
+                    'name' => 'add-clients',
+                    'display_name' => 'Add Clients',
+                ],
+                [
+                    'name' => 'edit-clients',
+                    'display_name' => 'Edit Clients',
+                ],
+                [
+                    'name' => 'delete-clients',
+                    'display_name' => 'Delete Clients',
+                ],
             ]
         ];
         \Illuminate\Database\Eloquent\Model::unguard();

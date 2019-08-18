@@ -55,6 +55,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -158,7 +163,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\r\n", ""]);
+exports.push([module.i, ".vs-con-table .vs-table--header .vs-table--search {\n  padding: 0px;\n}\n.vs-table--content {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -216,28 +221,17 @@ var render = function() {
         [
           _c(
             "vx-card",
-            { attrs: { title: "Roles List" } },
+            {
+              attrs: {
+                title: "Roles List",
+                hasNavigationButton: true,
+                buttonURL: "/role/create",
+                buttonText: "Create Role",
+                buttonIcon: "icon-plus",
+                buttonPermission: "add-roles"
+              }
+            },
             [
-              _vm.can("add-roles")
-                ? _c(
-                    "vs-button",
-                    {
-                      staticClass: "mb-4 md:mb-0",
-                      staticStyle: {
-                        float: "right",
-                        "border-radius": "55px",
-                        "margin-left": "20px"
-                      },
-                      attrs: {
-                        "icon-pack": "feather",
-                        icon: "icon-plus",
-                        to: "/role/create"
-                      }
-                    },
-                    [_vm._v("Create Role")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
               _c(
                 "vs-table",
                 {

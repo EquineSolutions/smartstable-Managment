@@ -89,7 +89,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Edit',
   mounted: function mounted() {
-    this.getClientsData();
+    this.getClientData();
   },
   data: function data() {
     return {
@@ -99,55 +99,59 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
         last_name: "",
         email: "",
         mobile: "",
-        birth_year: ''
+        date_of_birth: ''
       }
     };
   },
   methods: {
-    getClientsData: function getClientsData() {
-      this.clientFormData = {
-        first_name: "Mohamed",
-        middle_name: "Ehab",
-        last_name: "Swilam",
-        email: "mohamed_swilam@hotmail.com",
-        mobile: "01096436702",
-        birth_year: '1997-10-18'
-      };
+    //Display Client Data.
+    getClientData: function getClientData() {
+      var fire = this;
+      axios.get("/api/clients/".concat(this.$route.params.id), store.state.config).then(function (response) {
+        fire.clientFormData = response.data.data;
+      })["catch"](function (error) {
+        if (error.response.status == 403) {
+          // Un-Authorized
+          fire.vs_alert('Oops!', error.response.data.message, 'danger');
+          fire.$router.push({
+            name: "pageError403"
+          });
+        } else if (error.response.status == 401) {
+          // Un-Authenticated
+          fire.$router.push({
+            name: "pageLogin"
+          });
+        }
+      });
     },
     submitForm: function submitForm() {
       var _this = this;
 
-      var fire = this;
+      var fire = this,
+          form_data = new FormData();
       this.$validator.validateAll().then(function (result) {
         if (result) {
-          // if form have no errors
-          var formData = new FormData();
-
-          for (var key in fire.clientFormData) {
-            form_data.append(key, _this.formData[key]);
-          }
-
-          axios.post('/api/users', formData, store.state.config).then(function (response) {
-            if (response.data.status == 200) {
-              fire.vs_alert('Success', 'Client Successfully Added', 'success');
+          axios.put("/api/clients/".concat(_this.$route.params.id), fire.clientFormData, store.state.config).then(function (response) {
+            if (response.data.status === 200) {
+              fire.vs_alert('Success', 'Client Successfully Updated', 'success');
               fire.$router.push({
-                name: "user"
+                name: "client"
               });
             } else {
               fire.vs_alert('Oops!', response.data, 'danger');
             }
           })["catch"](function (error) {
-            if (error.response.status == 422) {
+            if (error.response.status === 422) {
               // Validation Error
               var errors = error.response.data.errors;
               fire.vs_alert('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
-            } else if (error.response.status == 403) {
+            } else if (error.response.status === 403) {
               // Un-Authorized
               fire.vs_alert('Oops!', error.response.data.message, 'danger');
               fire.$router.push({
                 name: "pageError403"
               });
-            } else if (error.response.status == 401) {
+            } else if (error.response.status === 401) {
               // Un-Authenticated
               fire.$router.push({
                 name: "pageLogin"
@@ -203,7 +207,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("add-users")
+  return _vm.can("edit-clients")
     ? _c(
         "div",
         [
@@ -374,6 +378,7 @@ var render = function() {
                       ],
                       staticClass: "w-full",
                       attrs: {
+                        disabled: "",
                         type: "email",
                         "icon-pack": "feather",
                         icon: "icon-mail",
@@ -482,22 +487,23 @@ var render = function() {
                         placeholder: "Select Birth Date"
                       },
                       model: {
-                        value: _vm.clientFormData.birth_year,
+                        value: _vm.clientFormData.date_of_birth,
                         callback: function($$v) {
-                          _vm.$set(_vm.clientFormData, "birth_year", $$v)
+                          _vm.$set(_vm.clientFormData, "date_of_birth", $$v)
                         },
-                        expression: "clientFormData.birth_year"
+                        expression: "clientFormData.date_of_birth"
                       }
                     }),
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
-                    _vm.clientFormData.birth_year != null
+                    _vm.clientFormData.date_of_birth != null
                       ? _c("span", [
                           _c("b", [_vm._v("Age: ")]),
                           _vm._v(
-                            _vm._s(_vm.GetAge(_vm.clientFormData.birth_year)) +
-                              " Year(s)"
+                            _vm._s(
+                              _vm.GetAge(_vm.clientFormData.date_of_birth)
+                            ) + " Year(s)"
                           )
                         ])
                       : _vm._e(),

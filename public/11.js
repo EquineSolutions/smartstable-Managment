@@ -65,11 +65,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 //For Date Picker
 
  // For custom error message
@@ -103,7 +98,8 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
         middle_name: "",
         email: "",
         mobile: "",
-        birth_year: null
+        date_of_birth: null,
+        password: 'password'
       }
     };
   },
@@ -111,19 +107,20 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].localize('en', dict);
     submitForm: function submitForm() {
       var _this = this;
 
-      var fire = this;
+      var fire = this,
+          form_data = new FormData();
       this.$validator.validateAll().then(function (result) {
         if (result) {
           // if form have no errors
           for (var key in fire.clientFormData) {
-            form_data.append(key, _this.formData[key]);
+            form_data.append(key, fire.clientFormData[key]);
           }
 
-          axios.post('/api/users', formData, store.state.config).then(function (response) {
+          axios.post('/api/clients', form_data, store.state.config).then(function (response) {
             if (response.data.status == 200) {
-              fire.vs_alert('Success', 'Client Successfully Added', 'success');
+              fire.vs_alert('Success', 'Client Successfully Created', 'success');
               fire.$router.push({
-                name: "user"
+                name: "client"
               });
             } else {
               fire.vs_alert('Oops!', response.data, 'danger');
@@ -195,7 +192,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.can("add-users")
+  return _vm.can("add-clients")
     ? _c(
         "div",
         [
@@ -474,22 +471,23 @@ var render = function() {
                         placeholder: "Select Birth Date"
                       },
                       model: {
-                        value: _vm.clientFormData.birth_year,
+                        value: _vm.clientFormData.date_of_birth,
                         callback: function($$v) {
-                          _vm.$set(_vm.clientFormData, "birth_year", $$v)
+                          _vm.$set(_vm.clientFormData, "date_of_birth", $$v)
                         },
-                        expression: "clientFormData.birth_year"
+                        expression: "clientFormData.date_of_birth"
                       }
                     }),
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
-                    _vm.clientFormData.birth_year != null
+                    _vm.clientFormData.date_of_birth != null
                       ? _c("span", [
                           _c("b", [_vm._v("Age: ")]),
                           _vm._v(
-                            _vm._s(_vm.GetAge(_vm.clientFormData.birth_year)) +
-                              " Year(s)"
+                            _vm._s(
+                              _vm.GetAge(_vm.clientFormData.date_of_birth)
+                            ) + " Year(s)"
                           )
                         ])
                       : _vm._e(),
@@ -513,19 +511,7 @@ var render = function() {
                     )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "vx-col md:w-1/2 w-full mt-2" }, [
-                  _c("label", [_vm._v("Upload National ID Photo")]),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "file" },
-                    on: { change: _vm.uploadID }
-                  })
-                ])
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "vx-row mt-10" }, [
