@@ -34,9 +34,6 @@
 </template>
 
 <script>
-
-  import router from '../../router.js'
-
   // For custom error message
 import { Validator } from 'vee-validate';
 const dict = {
@@ -74,9 +71,9 @@ export default {
     }).catch(function(error){
         if(error.response.status == 403) { // Un-Authorized
           fire.vs_alert ('Oops!', error.response.data.message, 'danger');
-          router.push({ name: "pageError403"});
+            fire.$router.push({ name: "pageError403"});
         } else if (error.response.status == 401){ // Un-Authenticated
-          router.push({ name: "pageLogin"})
+            fire.$router.push({ name: "pageLogin"})
         }
     });
     },
@@ -97,7 +94,7 @@ export default {
           axios.post('/api/roles', formData, store.state.config).then(function(response){
             if(response.data.status == 200) {
               fire.vs_alert ('Success', 'Role Successfully Added', 'success');
-              router.push({ name: "role"})
+                fire.$router.push({ name: "role"})
             } else {
               fire.vs_alert ('Oops!', response.data, 'danger');
             }
@@ -107,9 +104,9 @@ export default {
               fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
             } else if(error.response.status == 403) { // Un-Authorized
               fire.vs_alert ('Oops!', error.response.data.message, 'danger');
-              router.push({ name: "pageError403"});
+                fire.$router.push({ name: "pageError403"});
             } else if (error.response.status == 401){ // Un-Authenticated
-              router.push({ name: "pageLogin"})
+                fire.$router.push({ name: "pageLogin"})
             }
           });
         } else {

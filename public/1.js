@@ -3699,6 +3699,18 @@ __webpack_require__.r(__webpack_exports__);
   slug: "role",
   icon: "ShieldIcon",
   permission: 'browse-roles'
+}, {
+  url: "/package",
+  name: "Package",
+  slug: "Package",
+  icon: "ShieldIcon",
+  permission: 'package-list'
+}, {
+  url: "/feature",
+  name: "Feature",
+  slug: "Feature",
+  icon: "ShieldIcon",
+  permission: 'feature-list'
 }]);
 
 /***/ }),

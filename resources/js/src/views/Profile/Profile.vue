@@ -78,7 +78,6 @@
 </template>
 
 <script>
-    import router from './../../router'
     export default {
         mounted() {
             this.getUserData();
@@ -123,9 +122,9 @@
                 }).catch(error => {
                     console.log(error.response.data.code);
                     if (error.response.data.code == 403){ // unauthorized
-                        router.push('home');
+                        fire.$router.push('home');
                     }else if (error.response.data.code == 401){ // unauthenticated
-                        router.push('login');
+                        fire.$router.push('login');
                     }
                 });
             },
