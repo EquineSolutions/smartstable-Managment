@@ -30,8 +30,7 @@ class ClientRequest extends FormRequest
             'email' => "required |unique:clients",
             'mobile' => 'required | min:10',
             'date_of_birth' => 'required | date_format:Y-m-d',
-            'password' => 'required | min:6',
-            'national_id_photo_url' => 'required | mimes:jpeg,jpg,png,gif'
+            'password' => 'required | min:6'
         ];
     }
 }

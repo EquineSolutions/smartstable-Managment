@@ -31,11 +31,4 @@ Route::middleware('auth:api')->post('profile/{id}', 'Api\UserController@updatePr
 
 Route::put('user/role/{user_id}', 'Api\UserRoleController@update');
 
-//Route::group(['prefix' => 'user'], function () {
-//    Route::get('', 'Api\UserController@index');
-//    Route::get('{id}', 'Api\UserController@show');
-//    Route::post('', 'Api\UserController@store');
-//    Route::delete('{id}', 'Api\UserController@destroy');
-//    Route::patch('{id}', 'Api\UserController@edit');
-//    Route::put('{id}', 'Api\UserController@update');
-//});
+Route::get('client_info/{user_email}','Api\ClientController@get_client_info');

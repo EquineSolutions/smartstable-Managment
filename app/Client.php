@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Client extends Model
 {
-    protected $fillable = ['first_name', 'middle_name', 'last_name', 'email', 'password', 'mobile', 'date_of_birth', 'verified_at', 'national_id_photo_url'];
+    protected $fillable = ['first_name', 'middle_name', 'last_name', 'email', 'password', 'mobile', 'date_of_birth', 'verified_at'];
 
     public function setPasswordAttribute($value)
     {

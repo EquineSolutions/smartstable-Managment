@@ -23,7 +23,6 @@ class CreateClientsTable extends Migration
             $table->string('password');
             $table->string('mobile');
             $table->dateTime('date_of_birth');
-            $table->string('national_id_photo_url');
             $table->timestamps();
         });
     }

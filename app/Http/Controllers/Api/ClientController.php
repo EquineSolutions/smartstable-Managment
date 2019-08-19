@@ -48,9 +48,6 @@ class ClientController extends Controller
     {
         $this->authorize('create', Client::class);
         $data = $request->validated();
-        if (!$request->hasFile('national_id_photo_url'))
-            return response(['message'=>'National ID Photo is required'], Response::HTTP_UNPROCESSABLE_ENTITY);
-        $data['national_id_photo_url'] = downloadFile($request->national_id_photo_url, "/uploads/images/clients/");
         Client::create($data);
         return [
             'message' =>  'Client Created Successfully.',
@@ -98,9 +95,6 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $this->authorize('edit', Client::class);
-        $request->hasFile('national_id_photo_url')?
-            $request['national_id_photo_url'] = downloadFile($request->national_id_photo_url, "/uploads/images/clients/")
-            :$request['national_id_photo_url'] = $client->national_id_photo_url;
         $request['email'] = $client->email;
         $client->update($request->all());
         return [
@@ -121,5 +115,17 @@ class ClientController extends Controller
         $this->authorize('delete', Client::class);
         $client->delete();
         return response(['message' => 'Client Deleted Successfully.', 'status'=> Response::HTTP_OK], Response::HTTP_OK);
+    }
+
+    /**
+     * @param $client_email
+     * @return array
+     */
+    public function get_client_info($client_email)
+    {
+        $client = Client::where('email', '=', $client_email)->first();
+        if ($client==null)
+            return ['data' =>  [], 'status' => Response::HTTP_OK];
+        return ['data' =>  new ClientResource($client), 'status' => Response::HTTP_OK];
     }
 }
