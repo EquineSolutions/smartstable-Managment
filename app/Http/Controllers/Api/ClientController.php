@@ -123,9 +123,15 @@ class ClientController extends Controller
      */
     public function get_client_info($client_email)
     {
-        $client = Client::where('email', '=', $client_email)->first();
+        $client = Client::where('email', $client_email)->first();
         if ($client==null)
-            return ['data' =>  [], 'status' => Response::HTTP_OK];
-        return ['data' =>  new ClientResource($client), 'status' => Response::HTTP_OK];
+            return [
+                'data' =>  [],
+                'status' => Response::HTTP_NOT_FOUND
+            ];
+        return [
+            'data' =>  new ClientResource($client),
+            'status' => Response::HTTP_OK
+        ];
     }
 }
