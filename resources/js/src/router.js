@@ -427,9 +427,7 @@ function guard(to, from, next) {
   if (to.meta.permission != undefined){
     formData.append('permissions', to.meta.permission);
   }
-  console.log("aa", to.meta.permission);
   axios.post('/api/authorize', formData, store.state.config).then(function(response){
-      console.log("bb", response);
     next();
   }).catch(error=>{
       console.log("cc", error.response.status);

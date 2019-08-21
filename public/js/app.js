@@ -60773,10 +60773,16 @@ __webpack_require__.r(__webpack_exports__);
     highlightAction: false
   }, {
     index: 5,
-    label: 'Package',
+    label: 'Packages',
     url: '/package',
-    labelIcon: 'ShieldIcon',
+    labelIcon: 'BoxIcon',
     highlightAction: true
+  }, {
+    index: 6,
+    label: 'Features ',
+    url: '/feature',
+    labelIcon: 'StarIcon',
+    highlightAction: false
   }]
 });
 
@@ -61524,9 +61530,7 @@ function guard(to, from, next) {
     formData.append('permissions', to.meta.permission);
   }
 
-  console.log("aa", to.meta.permission);
   axios.post('/api/authorize', formData, store.state.config).then(function (response) {
-    console.log("bb", response);
     next();
   })["catch"](function (error) {
     console.log("cc", error.response.status);

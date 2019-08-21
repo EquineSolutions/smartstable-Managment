@@ -26,13 +26,13 @@
 
 
     <div id="loading-bg">
-      <div class="loading-logo">
-        <img src="/images/logo.png" alt="Logo">
+        <div class="loading-logo" style="margin-bottom: 20px !important;">
+            <img style="width: 70px;height: 70px;" src="/images/smartstable-logo.jpg" alt="Logo">
         </div>
         <div class="loading">
-          <div class="effect-1 effects"></div>
-          <div class="effect-2 effects"></div>
-          <div class="effect-3 effects"></div>
+              <div class="effect-1 effects"></div>
+              <div class="effect-2 effects"></div>
+              <div class="effect-3 effects"></div>
         </div>
       </div>
 
@@ -40,8 +40,6 @@
     <div id="app">
     </div>
 
-    <!-- <script src="js/app.js"></script> -->
     <script src="{{ asset(mix('js/app.js')) }}"></script>
-
   </body>
 </html>

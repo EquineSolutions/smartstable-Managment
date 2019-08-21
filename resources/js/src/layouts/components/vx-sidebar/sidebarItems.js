@@ -44,14 +44,14 @@ export default [
         url: "/package",
         name: "Package",
         slug: "Package",
-        icon: "ShieldIcon",
+        icon: "BoxIcon",
         permission: 'package-list'
     },
     {
         url: "/feature",
         name: "Feature",
         slug: "Feature",
-        icon: "ShieldIcon",
+        icon: "StarIcon",
         permission: 'feature-list'
     }
 ]
