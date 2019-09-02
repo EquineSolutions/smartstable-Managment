@@ -1,5 +1,5 @@
 <template>
-	<div v-if="can('feature-list')">
+	<div v-if="can('view-features')">
 		<vx-card title="Feature Information">
 			<template v-if="feature">
 				<b>ID: </b>  {{feature.id}}

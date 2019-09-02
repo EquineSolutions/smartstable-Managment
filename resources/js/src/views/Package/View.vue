@@ -1,5 +1,5 @@
 <template>
-	<div v-if="can('package-list')">
+	<div v-if="can('view-packages')">
 		<vx-card title="Package Information">
 			<template v-if="package">
                 <img :src='package.logo' />

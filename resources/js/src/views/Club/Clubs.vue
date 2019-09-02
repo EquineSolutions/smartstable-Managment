@@ -1,100 +1,69 @@
 <template>
     <div>
-        <vx-card title='Create New Club'>
-            <form>
-                <div class="vx-row">
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                        <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="First Name" v-model="first_name" name='first_name' />
-                        <span class="text-danger text-sm"  v-show="errors.has('first_name')">{{ errors.first('first_name') }}</span>
-                    </div>
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                        <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="Last Name" v-model="last_name" name='last_name' />
-                        <span class="text-danger text-sm"  v-show="errors.has('last_name')">{{ errors.first('last_name') }}</span>
-                    </div>
-                </div>
-                <div class="vx-row">
-                    <div class="vx-col sm:w-1/2 w-full mb-6">
-                        <vs-input type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email" v-model="email" name='email' />
-                        <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
-                    </div>
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                        <vs-input class="w-full" v-validate="'decimal:11'" icon-pack="feather" icon="icon-phone" icon-no-border label-placeholder="Phone" v-model="phone" name='phone' />
-                        <span class="text-danger text-sm"  v-show="errors.has('mobile')">{{ errors.first('mobile') }}</span>
-                    </div>
-                </div>
-                <div class="vx-row">
-                    <div class="vx-col sm:w-1/2 w-full mb-2">
-                        <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="Business Name" v-model="business_name" name='business_name' />
-                    </div>
-                </div>
-                <div class="vx-row mt-5">
-                    <div class="vx-col w-full">
-                        <b>User Role:</b>
-                        <ul class="centerx">
-                            <li v-for="role in userRoles">
-                                <vs-radio v-model="user_role" :vs-value="role">{{role}}</vs-radio>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="vx-row mt-10">
-                    <div class="vx-col w-full">
-                        <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
-                        <vs-button color="warning" type="border" class="mb-2" @click.prevent="fname = lname = email = mobile = password = confirm_password = '';">Reset</vs-button>
-                    </div>
-                </div>
-            </form>
+        <vx-card title="Club List">
+            <vs-button  style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/club/create'>Create Club</vs-button>
+
+            <vs-table search :data="clubs">
+                <template slot="thead">
+                    <vs-th sort-key="id">ID</vs-th>
+                    <vs-th sort-key="first_name">Club</vs-th>
+                    <vs-th>Action</vs-th>
+                </template>
+                <template slot-scope="{data}">
+                    <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                        <vs-td :data="data[indextr].id">
+                            {{ data[indextr].id }}
+                        </vs-td>
+
+                        <vs-td :data="data[indextr].first_name">
+                            {{ data[indextr].first_name + ' ' + data[indextr].last_name}}
+                        </vs-td>
+                        <vs-td>
+                            <vs-row>
+                                <div class="flex mb-4">
+
+                                    <div class="w-1/3">
+                                        <vs-button @click="hideTooltip" :to="`/club/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
+                                    </div>
+                                    <div class="w-1/3" style="margin: 0 10px;">
+                                        <vs-button @click="hideTooltip" :to="`/club/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeleteFeature(data[indextr])"></vs-button>
+                                    </div>
+                                    <div class="w-1/3">
+                                        <vs-button @click="hideTooltip" :to="`/club/assign/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-build"></vs-button>
+                                    </div>
+                                </div>
+                            </vs-row>
+                        </vs-td>
+                    </vs-tr>
+                </template>
+            </vs-table>
+
         </vx-card>
     </div>
 </template>
 
+
 <script>
-
-    // import router from '../../router.js'
-
-    // For custom error message
-    import { Validator } from 'vee-validate';
-    const dict = {
-        custom: {
-            first_name: {
-                required: 'Please enter your first name',
-                alpha: "Your first name may only contain alphabetic characters"
-            },
-            last_name: {
-                required: 'Please enter your last name',
-                alpha: "Your last name may only contain alphabetic characters"
-            },
-        }
-    };
-
-    // register custom messages
-    Validator.localize('en', dict);
-
 
     export default {
         mounted() {
-            this.getUserRoles();
+            this.getData();
         },
         data() {
             return {
-                userRoles: [],
-
-                first_name: "",
-                last_name: "",
-                email: "",
-                mobile: "",
-                password: "",
-                confirm_password: "",
-                user_role: ""
+                clubs: [],
             }
         },
         methods: {
-            getUserRoles()
+            //Get A List Of All Features.
+            getData()
             {
                 let fire = this;
-                axios.get('/api/users/create', store.state.config).then(function(response){
-                    fire.userRoles = response.data.data;
-                    fire.user_role = fire.userRoles[0];
+                axios.get('/api/clubs', store.state.config).then(function(response){
+                    fire.clubs = response.data.data.clubs;
                 }).catch(function(error){
                     if(error.response.status == 403) { // Un-Authorized
                         fire.vs_alert ('Oops!', error.response.data.message, 'danger');
@@ -105,43 +74,48 @@
                 });
             },
 
-            submitForm()
+            // Confirm Dialog To Delete The Feature
+            confirmDeleteFeature(feature)
             {
                 let fire = this;
-                this.$validator.validateAll().then(result => {
-                    if(result) {
-                        // if form have no errors
+                this.featureIdToDelete = feature.id;
+                this.$vs.dialog({
+                    type: 'confirm',
+                    color: 'danger',
+                    title: `Are you sure!`,
+                    text: 'This data can not be retrieved again.',
+                    accept: fire.deleteFeature
+                });
+            },
 
-                        const formData = new FormData();
-                        formData.append('first_name', this.first_name);
-                        formData.append('last_name', this.last_name);
-                        formData.append('email', this.email);
-                        formData.append('mobile', this.mobile);
-                        formData.append('password', this.password);
-                        formData.append('roles', this.user_role);
-
-                        axios.post('/api/users', formData, store.state.config).then(function(response){
-                            if(response.data.status == 200) {
-                                fire.vs_alert ('Success', 'User Successfully Added', 'success');
-                                router.push({ name: "user"})
-                            } else {
-                                fire.vs_alert ('Oops!', response.data, 'danger');
-                            }
-                        }).catch(function(error){
-                            if (error.response.status == 422){ // Validation Error
-                                let errors = error.response.data.errors;
-                                fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
-                            } else if(error.response.status == 403) { // Un-Authorized
-                                fire.vs_alert ('Oops!', error.response.data.message, 'danger');
-                                router.push({ name: "pageError403"});
-                            } else if (error.response.status == 401){ // Un-Authenticated
-                                router.push({ name: "pageLogin"})
-                            }
-                        });
+            //Delete A Single feature By FeatureID.
+            deleteFeature()
+            {
+                let fire = this;
+                axios.delete(`/api/features/${this.featureIdToDelete}`, store.state.config).then(function(response){
+                    if(response.data.status == 200) {
+                        fire.vs_alert ('Success', 'Feature Successfully Deleted.', 'success');
+                        fire.features = fire.features.filter(function(value){return value.id != fire.featureIdToDelete;});
                     } else {
-                        this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
+                        fire.vs_alert ('Oops!', 'An error has been occurred.', 'danger');
                     }
-                })
+                }).catch(function(error){
+                    if(error.response.status == 403) { // Un-Authorized
+                        fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                        router.push({ name: "pageError403"});
+                    } else if (error.response.status == 401){ // Un-Authenticated
+                        router.push({ name: "pageLogin"})
+                    }
+                });
+            },
+
+            //Hide Tool Tip After Navigation
+            hideTooltip()
+            {
+                let el = document.getElementsByClassName('vs-tooltip');
+                while (el.length > 0) {
+                    el[0].parentNode.removeChild(el[0]);
+                }
             },
 
             //Vuesax alert
@@ -153,14 +127,17 @@
                     color: color
                 });
             }
-
-        },
+        }
     }
 </script>
 
+
 <style>
-    .centerx li {
-        display: inline-flex;
-        margin: 10px;
+    .vs-con-table .vs-table--header .vs-table--search {
+        padding: 0px;
+    }
+
+    .vs-table--content {
+        margin-top: 20px;
     }
 </style>

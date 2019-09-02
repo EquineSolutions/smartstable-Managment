@@ -33,7 +33,7 @@
                   <b>Business Type:</b>
                   <ul class="centerx">
                       <li v-for="(feature, index) in businessTypes" :key="index">
-                          <vs-checkbox v-model="packageFeatures"  :vs-value="feature.id">{{feature.name}}</vs-checkbox>
+                          <vs-checkbox v-model="typeSelected"  :vs-value="feature.id">{{feature.name}}</vs-checkbox>
                       </li>
                   </ul>
               </div>
@@ -81,12 +81,10 @@ export default {
             { "id": "veterinary", "name": "Veterinary" },
             { "id": "farrier", "name": "Farrier" }
         ],
-        packageFeatures:[],
+        typeSelected:[],
     }
   },
   methods: {
-
-
 
     //Create Role Submission
     submitForm()
@@ -96,16 +94,16 @@ export default {
         if(result) {
           // if form have no errors
           const formData = new FormData();
+            formData.append("first_name" ,this.first_name);
+            formData.append("email",this.email);
+            formData.append("last_name" , this.last_name);
+            formData.append("phone" , this.phone);
+            formData.append("business_name",this.business_name);
+            formData.append("business_type" , this.typeSelected);
           axios.post('/api/clubs', formData, store.state.config).then(function(response){
             if(response.data.status == 200) {
-
-                fire.$router.push({ name: "first_name"})
-                fire.$router.push({ name: "last_name"})
-                fire.$router.push({ name: "email"})
-                fire.$router.push({ name: "phone"})
-                fire.$router.push({ name: "business_name"})
-                fire.$router.push({ name: "business_type"})
-                fire.vs_alert ('Success', 'Role Successfully Added', 'success');
+                fire.vs_alert ('Success', 'Club Successfully Added', 'success');
+                fire.$router.push({ name: "club"})
             } else {
               fire.vs_alert ('Oops!', response.data, 'danger');
             }

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
-use phpDocumentor\Reflection\Types\Null_;
 
 class PackageController extends Controller
 {
