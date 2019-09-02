@@ -31,7 +31,7 @@ export default [
     name: "User",
     slug: "user",
     icon: "UserIcon",
-    permission: 'user-list'
+    permission: 'browse-users'
   },
   {
     url: "/role",
@@ -43,23 +43,17 @@ export default [
     {
         url: "/package",
         name: "Package",
-        slug: "Package",
+        slug: "package",
         icon: "ShieldIcon",
-        permission: 'package-list'
+        permission: 'browse-packages'
     },
     {
         url: "/feature",
         name: "Feature",
-        slug: "Feature",
+        slug: "feature",
         icon: "ShieldIcon",
-        permission: 'feature-list'
-    }{
-    url: "/club",
-    name: "Club",
-    slug: "club",
-    icon: "ShieldIcon",
-    // permission: 'browse-clubs'
- },
+        permission: 'browse-features'
+    },
     {
         url: "/club",
         name: "Club",

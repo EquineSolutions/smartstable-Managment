@@ -1,8 +1,8 @@
 <template>
-    <div v-if="can('package-list')">
+    <div v-if="can('browse-packages')">
         <!-- Packages Table -->
         <vx-card title="Packages List">
-            <vs-button v-if="can('package-create')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/package/create'>Create Package</vs-button>
+            <vs-button v-if="can('add-packages')" style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/package/create'>Create Package</vs-button>
 
             <vs-table search :data="packages">
                 <template slot="thead">
@@ -23,13 +23,13 @@
                         <vs-td>
                             <vs-row>
                                 <div class="flex mb-4">
-                                    <div class="w-1/3" v-if="can('package-list')">
+                                    <div class="w-1/3" v-if="can('browse-packages')">
                                         <vs-button @click="hideTooltip" :to="`/package/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
                                     </div>
-                                    <div class="w-1/3" style="margin: 0 10px;" v-if="can('package-edit')">
+                                    <div class="w-1/3" style="margin: 0 10px;" v-if="can('edit-packages')">
                                         <vs-button @click="hideTooltip" :to="`/package/edit/${data[indextr].id}`" radius color="warning" type="border" icon-pack="feather" icon="icon-edit"></vs-button>
                                     </div>
-                                    <div class="w-1/3" v-if="can('package-delete')">
+                                    <div class="w-1/3" v-if="can('delete-packages')">
                                         <vs-button radius color="danger" type="border" icon-pack="feather" icon="icon-trash" @click="confirmDeletePackage(data[indextr])"></vs-button>
                                     </div>
                                 </div>

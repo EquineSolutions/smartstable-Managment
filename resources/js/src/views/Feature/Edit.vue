@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('feature-edit')">
+    <div v-if="can('edit-features')">
         <div>
             <vx-card title='Update feature'>
                 <form>

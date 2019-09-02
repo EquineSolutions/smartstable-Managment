@@ -205,7 +205,7 @@ const router = new Router({
                 { title: 'Package', active: true}
               ],
               pageTitle: "Packages",
-              permission: 'package-list'
+              permission: 'browse-packages'
             }
           },
           {
@@ -220,7 +220,7 @@ const router = new Router({
                 { title: 'Create Package', active: true}
               ],
               pageTitle: "Create Packages",
-              permission: 'package-create'
+              permission: 'add-packages'
             }
           },
           {
@@ -235,7 +235,7 @@ const router = new Router({
                 { title: 'Package Information', active: true}
               ],
               pageTitle: "Package Information",
-              permission: 'package-list'
+              permission: 'browse-packages'
             }
           },
           {
@@ -250,7 +250,7 @@ const router = new Router({
                 { title: 'Edit Package', active: true}
               ],
               pageTitle: "Edit Package",
-              permission: 'package-edit'
+              permission: 'edit-packages'
             }
           },
 
@@ -266,7 +266,7 @@ const router = new Router({
                         { title: 'Feature', active: true}
                     ],
                     pageTitle: "Feature",
-                    permission: 'feature-list'
+                    permission: 'browse-features'
                 }
             },
             {
@@ -281,7 +281,7 @@ const router = new Router({
                         { title: 'Create Feature', active: true}
                     ],
                     pageTitle: "Create Features",
-                    permission: 'feature-create'
+                    permission: 'add-features'
                 }
             },
             {
@@ -296,7 +296,7 @@ const router = new Router({
                         { title: 'Feature Information', active: true}
                     ],
                     pageTitle: "Feature Information",
-                    permission: 'feature-list'
+                    permission: 'browse-features'
                 }
             },
             {
@@ -311,20 +311,77 @@ const router = new Router({
                         { title: 'Edit Feature', active: true}
                     ],
                     pageTitle: "Edit Feature",
-                    permission: 'feature-edit'
+                    permission: 'edit-features'
                 }
             },
             {
                 path: '/club',
-                name: 'club',
+                name: 'Club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Clubs.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', active: true}
+                    ],
+                    pageTitle: "Clubs",
+                    // permission: 'browse-clubs'
+                }
+            },
+            {
+                path: '/club/create',
+                name: 'create-club',
                 // beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Create Clubs', active: true}
+                    ],
+                    pageTitle: "Create Clubs",
+                    // permission: 'add-clubs'
+                }
+            },
+            {
+                path: '/club/:id',
+                name: 'view-club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/View.vue'),
                 meta: {
                     breadcrumb: [
                         { title: 'Home', url: '/'},
                         { title: 'Clubs', active: true}
                     ],
                     pageTitle: "Clubs"
+                }
+            },
+            {
+                path: '/club/edit/:id',
+                name: 'edit-club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Edit.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Edit Club', active: true}
+                    ],
+                    pageTitle: "Edit Club",
+                }
+            },
+            {
+                path: '/club/assign/:id',
+                name: 'assign-package',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/ClubPackages.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Assign package', active: true}
+                    ],
+                    pageTitle: "Assign packages",
                 }
             },
         ],

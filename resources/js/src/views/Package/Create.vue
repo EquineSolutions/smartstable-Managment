@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('package-create')">
+    <div v-if="can('add-packages')">
         <vx-card title='Create New Package'>
             <form>
                 <div class="vx-row">

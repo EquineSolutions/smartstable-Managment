@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 
 Route::post('login', 'Api\PassportController@login');
+Route::get('copy', 'Api\ClubController@club_settings');
 Route::middleware('auth:api')->post('authorize', 'Api\PassportController@authorizeUserPermission');
 // Route::post('register', 'Api\PassportController@register');
 
@@ -23,8 +24,11 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('users','Api\UserController');
     Route::resource('features','Api\FeatureController');
     Route::resource('packages','Api\PackageController');
+    Route::resource('clubs','Api\ClubController');
+    Route::post('assign_packages','Api\ClubController@assign_packages_to_club');
     Route::get('user_info','Api\UserController@all_user_info');
     Route::get('logout', 'Api\PassportController@logout');
+
 
 });
 
@@ -32,11 +36,3 @@ Route::middleware('auth:api')->post('profile/{id}', 'Api\UserController@updatePr
 
 Route::put('user/role/{user_id}', 'Api\UserRoleController@update');
 
-//Route::group(['prefix' => 'user'], function () {
-//    Route::get('', 'Api\UserController@index');
-//    Route::get('{id}', 'Api\UserController@show');
-//    Route::post('', 'Api\UserController@store');
-//    Route::delete('{id}', 'Api\UserController@destroy');
-//    Route::patch('{id}', 'Api\UserController@edit');
-//    Route::put('{id}', 'Api\UserController@update');
-//});

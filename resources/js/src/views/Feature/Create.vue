@@ -1,5 +1,5 @@
 <template>
-    <div v-if="can('feature-create')">
+    <div v-if="can('add-features')">
         <vx-card title='Create New Feature'>
             <form>
                 <div class="vx-row">

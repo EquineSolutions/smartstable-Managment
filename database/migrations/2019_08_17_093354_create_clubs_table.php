@@ -20,7 +20,7 @@ class CreateClubsTable extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('business_name');
-            $table->enum('business_type', array('stable_center', 'stable' , 'ridding_school' , 'veterinary' , 'farrier'));
+            $table->text('business_type');
             $table->timestamps();
         });
     }
