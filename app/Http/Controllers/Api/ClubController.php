@@ -63,6 +63,7 @@ class ClubController extends Controller
             ]);
             $this->create_club_folder($business_name);
             $this->create_club_DB($business_name);
+            $this->create_club_user($business_name);
 
             DB::commit();
             $output = [
@@ -184,7 +185,9 @@ class ClubController extends Controller
         if (file_exists($zipfile)) {
             $zip = new ZipArchive;
             $res = $zip->open($zipfile);
+
             if ($res === TRUE) {
+
                 $zip->extractTo( "./../../");
                 $zip->close();
 
@@ -196,7 +199,7 @@ class ClubController extends Controller
 
     private function create_club_DB($club) {
         DB::statement("CREATE DATABASE $club");
-//        /// Create connection
+        /// Create connection
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
@@ -251,8 +254,8 @@ class ClubController extends Controller
         copy( $old_file, $new_file);
         $str=file_get_contents($new_file);
         $str=str_replace("DB_DATABASE=homestead", "DB_DATABASE=$club",$str);
-        $str=str_replace("DB_USERNAME=homestead", "DB_DATABASE=root",$str);
-        $str=str_replace("DB_PASSWORD=secret", "DB_DATABASE=iti",$str);
+        $str=str_replace("DB_USERNAME=homestead", "DB_USERNAME=root",$str);
+        $str=str_replace("DB_PASSWORD=secret", "DB_PASSWORD=iti",$str);
         file_put_contents($new_file, $str);
 
         echo "config";
@@ -276,14 +279,14 @@ class ClubController extends Controller
 
 
 
-    public function create_club_user($club , $user_data)
+    public function create_club_user($club)
     {
-        $state = array("first_name"=>"maram", "last_name"=>"ramadan", "email"=>"zzz","password"=>"mkm" , "mobile"=>"267267");
-        extract($user_data);
-        $sql = "insert into users(first_name,last_name,email,password,mobile) values ($first_name,$last_name,$email,$password,$mobile)";
+
+        $name = $club."_admin";
+        $state = array("first_name"=>"$name", "last_name"=>"ramadan", "email"=>"admin@gmail.com","password"=>"password" , "mobile"=>"267267");
+        extract($state);
+        $sql = "insert into users(first_name,last_name,email,password,mobile) values ('".$first_name."','".$last_name."','".$email."','".bcrypt($password)."','".$mobile."')";
         $this->open_connection_for_club($club , $sql);
-
-
     }
 
 
