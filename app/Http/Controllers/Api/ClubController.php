@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use ZipArchive;
 use mysqli;
+<<<<<<< HEAD
 use Illuminate\Console\Command;
 use Illuminate\Redis\Events\CommandExecuted;
+=======
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
 
 class ClubController extends Controller
 {
@@ -55,6 +58,7 @@ class ClubController extends Controller
         DB::beginTransaction();
         try{
             $business_name =Input::get('business_name');
+<<<<<<< HEAD
             // Club::create([
             //     'first_name' => Input::get('first_name'),
             //     'last_name' => Input::get('last_name'),
@@ -75,6 +79,18 @@ class ClubController extends Controller
             // $this->create_club_DB($business_name);
             $this->club_settings($club);
             $this->create_club_user($admin_info);
+=======
+            Club::create([
+                'first_name' => Input::get('first_name'),
+                'last_name' => Input::get('last_name'),
+                'email' => Input::get('email'),
+                'phone' => Input::get('phone'),
+                'business_name' => $business_name,
+                'business_type' => Input::get('business_type')
+            ]);
+            $this->create_club_folder($business_name);
+            $this->create_club_DB($business_name);
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
 
             DB::commit();
             $output = [
@@ -150,7 +166,11 @@ class ClubController extends Controller
     /**
      * @param  \App\Club  $club
      * @return \Illuminate\Http\Response
+<<<<<<< HEAD
     */
+=======
+     */
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
     public function assign_packages_to_club(Request $request ,Club $club){
         $club = Club::find( $request->input('club_id'));
         $conn = new mysqli(
@@ -167,15 +187,25 @@ class ClubController extends Controller
         foreach($packages as $package){
            $features =  $package->features;
            foreach($features as $feature){
+<<<<<<< HEAD
                 foreach($permissions as $permission ){
+=======
+               foreach($permissions as $permission ){
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
                     $name = $permission."-".$feature->name;
                     $display_name = ucwords($permission." ".$feature->name);
                     $sql = "insert into permissions(name,display_name,`group`,guard_name) values ('".$name."','".$display_name."','".$feature->name."','api')";
                     $last_permission_id = $conn->insert_id;
                     mysqli_query($conn, $sql);
+<<<<<<< HEAD
                     $sql = "insert into role_has_permissions values ($last_permission_id , 1)";
                     mysqli_query($conn, $sql);
                     $sql = "insert into model_has_roles values (1 , 'App\\\User',1)";
+=======
+                    $sql = "insert into role_has_permissions values ($last_permission_id , $last_role_id)";
+                    mysqli_query($conn, $sql);
+                    $sql = "insert into model_has_roles values ($last_role_id , 'App\User',".$request->user()->id.")";
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
                     mysqli_query($conn, $sql);
                 }
 
@@ -208,7 +238,11 @@ class ClubController extends Controller
 
     private function create_club_DB($club) {
         DB::statement("CREATE DATABASE $club");
+<<<<<<< HEAD
         /// Create connection
+=======
+//        /// Create connection
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
@@ -258,18 +292,26 @@ class ClubController extends Controller
 
     private function club_settings($club){
         $path = "./../../$club";
+<<<<<<< HEAD
         $output = shell_exec("cd ../../$club;
                 npm install;composer install;
                 php artisan passport:install;
         ");
         echo "<pre>$output</pre>";
+=======
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         $old_file = $path."/.env.example";
         $new_file = $path."/.env";
         copy( $old_file, $new_file);
         $str=file_get_contents($new_file);
         $str=str_replace("DB_DATABASE=homestead", "DB_DATABASE=$club",$str);
+<<<<<<< HEAD
         $str=str_replace("DB_USERNAME=homestead", "DB_USERNAME=root",$str);
         $str=str_replace("DB_PASSWORD=secret", "DB_PASSWORD=iti",$str);
+=======
+        $str=str_replace("DB_USERNAME=homestead", "DB_DATABASE=root",$str);
+        $str=str_replace("DB_PASSWORD=secret", "DB_DATABASE=iti",$str);
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         file_put_contents($new_file, $str);
 
         echo "config";
@@ -293,11 +335,22 @@ class ClubController extends Controller
 
 
 
+<<<<<<< HEAD
     public function create_club_user($info)
     {
         extract($info);
         $sql = "insert into users(first_name,last_name,email,password,mobile) values ('".$first_name."','".$last_name."','".$email."','".bcrypt($password)."','".$mobile."')";
         $this->open_connection_for_club($business_name , $sql);
+=======
+    public function create_club_user($club , $user_data)
+    {
+        $state = array("first_name"=>"maram", "last_name"=>"ramadan", "email"=>"zzz","password"=>"mkm" , "mobile"=>"267267");
+        extract($user_data);
+        $sql = "insert into users(first_name,last_name,email,password,mobile) values ($first_name,$last_name,$email,$password,$mobile)";
+        $this->open_connection_for_club($club , $sql);
+
+
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
     }
 
 

@@ -38,6 +38,7 @@
                   </ul>
               </div>
           </div>
+<<<<<<< HEAD
           <br><br><br><hr><hr><br><br><br>
         <vx-card title='Admin Info'>
 
@@ -68,6 +69,9 @@
           </div>
         </div>
         </vx-card>
+=======
+
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         <div class="vx-row mt-10">
           <div class="vx-col w-full">
             <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
@@ -129,11 +133,14 @@ export default {
             formData.append("phone" , this.phone);
             formData.append("business_name",this.business_name);
             formData.append("business_type" , this.typeSelected);
+<<<<<<< HEAD
             formData.append("admin_first_name" ,this.admin_first_name);
             formData.append("admin_email",this.admin_email);
             formData.append("admin_last_name" , this.admin_last_name);
             formData.append("admin_phone" , this.admin_phone);
             formData.append("admin_password" , this.admin_password);
+=======
+>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
           axios.post('/api/clubs', formData, store.state.config).then(function(response){
             if(response.data.status == 200) {
                 fire.vs_alert ('Success', 'Club Successfully Added', 'success');
