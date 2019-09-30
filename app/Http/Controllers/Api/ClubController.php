@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use ZipArchive;
 use mysqli;
+use Illuminate\Console\Command;
+use Illuminate\Redis\Events\CommandExecuted;
 
 class ClubController extends Controller
 {
@@ -53,17 +55,26 @@ class ClubController extends Controller
         DB::beginTransaction();
         try{
             $business_name =Input::get('business_name');
-            Club::create([
-                'first_name' => Input::get('first_name'),
-                'last_name' => Input::get('last_name'),
-                'email' => Input::get('email'),
-                'phone' => Input::get('phone'),
-                'business_name' => $business_name,
-                'business_type' => Input::get('business_type')
-            ]);
-            $this->create_club_folder($business_name);
-            $this->create_club_DB($business_name);
-            $this->create_club_user($business_name);
+            // Club::create([
+            //     'first_name' => Input::get('first_name'),
+            //     'last_name' => Input::get('last_name'),
+            //     'email' => Input::get('email'),
+            //     'phone' => Input::get('phone'),
+            //     'business_name' => $business_name,
+            //     'business_type' => Input::get('business_type')
+            // ]);
+            $admin_info=[
+                "business_name" => $business_name,
+                "email" => Input::get('admin_email'),
+                "first_name"=> Input::get('admin_first_name'),
+                "last_name"=> Input::get('admin_last_name'),
+                "password"=> Input::get('admin_password'),
+                "mobile"=> Input::get('admin_phone'),
+            ];
+            // $this->create_club_folder($business_name);
+            // $this->create_club_DB($business_name);
+            $this->club_settings($club);
+            $this->create_club_user($admin_info);
 
             DB::commit();
             $output = [
@@ -139,7 +150,7 @@ class ClubController extends Controller
     /**
      * @param  \App\Club  $club
      * @return \Illuminate\Http\Response
-     */
+    */
     public function assign_packages_to_club(Request $request ,Club $club){
         $club = Club::find( $request->input('club_id'));
         $conn = new mysqli(
@@ -156,15 +167,15 @@ class ClubController extends Controller
         foreach($packages as $package){
            $features =  $package->features;
            foreach($features as $feature){
-               foreach($permissions as $permission ){
+                foreach($permissions as $permission ){
                     $name = $permission."-".$feature->name;
                     $display_name = ucwords($permission." ".$feature->name);
                     $sql = "insert into permissions(name,display_name,`group`,guard_name) values ('".$name."','".$display_name."','".$feature->name."','api')";
                     $last_permission_id = $conn->insert_id;
                     mysqli_query($conn, $sql);
-                    $sql = "insert into role_has_permissions values ($last_permission_id , $last_role_id)";
+                    $sql = "insert into role_has_permissions values ($last_permission_id , 1)";
                     mysqli_query($conn, $sql);
-                    $sql = "insert into model_has_roles values ($last_role_id , 'App\User',".$request->user()->id.")";
+                    $sql = "insert into model_has_roles values (1 , 'App\\\User',1)";
                     mysqli_query($conn, $sql);
                 }
 
@@ -185,9 +196,7 @@ class ClubController extends Controller
         if (file_exists($zipfile)) {
             $zip = new ZipArchive;
             $res = $zip->open($zipfile);
-
             if ($res === TRUE) {
-
                 $zip->extractTo( "./../../");
                 $zip->close();
 
@@ -249,6 +258,12 @@ class ClubController extends Controller
 
     private function club_settings($club){
         $path = "./../../$club";
+        // $output = shell_exec("cd ../../$club;
+        //         npm install;composer install;
+        //         php artisan passport:install;
+        // ");
+        // echo "<pre>$output</pre>";
+        // die;
         $old_file = $path."/.env.example";
         $new_file = $path."/.env";
         copy( $old_file, $new_file);
@@ -279,14 +294,11 @@ class ClubController extends Controller
 
 
 
-    public function create_club_user($club)
+    public function create_club_user($info)
     {
-
-        $name = $club."_admin";
-        $state = array("first_name"=>"$name", "last_name"=>"ramadan", "email"=>"admin@gmail.com","password"=>"password" , "mobile"=>"267267");
-        extract($state);
+        extract($info);
         $sql = "insert into users(first_name,last_name,email,password,mobile) values ('".$first_name."','".$last_name."','".$email."','".bcrypt($password)."','".$mobile."')";
-        $this->open_connection_for_club($club , $sql);
+        $this->open_connection_for_club($business_name , $sql);
     }
 
 
