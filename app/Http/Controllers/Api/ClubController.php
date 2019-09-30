@@ -258,12 +258,11 @@ class ClubController extends Controller
 
     private function club_settings($club){
         $path = "./../../$club";
-        // $output = shell_exec("cd ../../$club;
-        //         npm install;composer install;
-        //         php artisan passport:install;
-        // ");
-        // echo "<pre>$output</pre>";
-        // die;
+        $output = shell_exec("cd ../../$club;
+                npm install;composer install;
+                php artisan passport:install;
+        ");
+        echo "<pre>$output</pre>";
         $old_file = $path."/.env.example";
         $new_file = $path."/.env";
         copy( $old_file, $new_file);
