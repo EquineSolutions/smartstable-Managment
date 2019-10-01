@@ -38,7 +38,6 @@
                   </ul>
               </div>
           </div>
-<<<<<<< HEAD
           <br><br><br><hr><hr><br><br><br>
         <vx-card title='Admin Info'>
 
