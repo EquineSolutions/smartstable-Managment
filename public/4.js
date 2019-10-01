@@ -91,9 +91,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 var dict = {
   custom: {
@@ -802,9 +799,7 @@ var render = function() {
                 )
               ])
             ]),
-            _vm._v(
-              "\n=======\n\n>>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e\n        "
-            ),
+            _vm._v(" "),
             _c("div", { staticClass: "vx-row mt-10" }, [
               _c(
                 "div",

@@ -68,9 +68,6 @@
           </div>
         </div>
         </vx-card>
-=======
-
->>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         <div class="vx-row mt-10">
           <div class="vx-col w-full">
             <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
