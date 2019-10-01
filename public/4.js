@@ -62,7 +62,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< HEAD
 //
 //
 //
@@ -92,8 +91,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-=======
->>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
 
 var dict = {
   custom: {
@@ -147,14 +144,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_0__["Validator"].localize('en', dict);
           formData.append("phone", _this.phone);
           formData.append("business_name", _this.business_name);
           formData.append("business_type", _this.typeSelected);
-<<<<<<< HEAD
           formData.append("admin_first_name", _this.admin_first_name);
           formData.append("admin_email", _this.admin_email);
           formData.append("admin_last_name", _this.admin_last_name);
           formData.append("admin_phone", _this.admin_phone);
           formData.append("admin_password", _this.admin_password);
-=======
->>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
           axios.post('/api/clubs', formData, store.state.config).then(function (response) {
             if (response.data.status == 200) {
               fire.vs_alert('Success', 'Club Successfully Added', 'success');
@@ -268,7 +262,6 @@ var render = function() {
     "div",
     [
       _c("vx-card", { attrs: { title: "Create New Club" } }, [
-<<<<<<< HEAD
         _c(
           "form",
           [
@@ -847,318 +840,6 @@ var render = function() {
           ],
           1
         )
-=======
-        _c("form", [
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-user",
-                    "icon-no-border": "",
-                    "label-placeholder": "First Name",
-                    name: "first_name"
-                  },
-                  model: {
-                    value: _vm.first_name,
-                    callback: function($$v) {
-                      _vm.first_name = $$v
-                    },
-                    expression: "first_name"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("first_name"),
-                        expression: "errors.has('first_name')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("first_name")))]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-user",
-                    "icon-no-border": "",
-                    "label-placeholder": "Last Name",
-                    name: "last_name"
-                  },
-                  model: {
-                    value: _vm.last_name,
-                    callback: function($$v) {
-                      _vm.last_name = $$v
-                    },
-                    expression: "last_name"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("last_name"),
-                        expression: "errors.has('last_name')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("last_name")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-6" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|email",
-                      expression: "'required|email'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    type: "email",
-                    "icon-pack": "feather",
-                    icon: "icon-mail",
-                    "icon-no-border": "",
-                    "label-placeholder": "Email",
-                    name: "email"
-                  },
-                  model: {
-                    value: _vm.email,
-                    callback: function($$v) {
-                      _vm.email = $$v
-                    },
-                    expression: "email"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("email"),
-                        expression: "errors.has('email')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("email")))]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "decimal:11",
-                      expression: "'decimal:11'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-phone",
-                    "icon-no-border": "",
-                    "label-placeholder": "Phone",
-                    name: "phone"
-                  },
-                  model: {
-                    value: _vm.phone,
-                    callback: function($$v) {
-                      _vm.phone = $$v
-                    },
-                    expression: "phone"
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.has("mobile"),
-                        expression: "errors.has('mobile')"
-                      }
-                    ],
-                    staticClass: "text-danger text-sm"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.first("mobile")))]
-                )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
-              [
-                _c("vs-input", {
-                  directives: [
-                    {
-                      name: "validate",
-                      rawName: "v-validate",
-                      value: "required|alpha",
-                      expression: "'required|alpha'"
-                    }
-                  ],
-                  staticClass: "w-full",
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-user",
-                    "icon-no-border": "",
-                    "label-placeholder": "Business Name",
-                    name: "business_name"
-                  },
-                  model: {
-                    value: _vm.business_name,
-                    callback: function($$v) {
-                      _vm.business_name = $$v
-                    },
-                    expression: "business_name"
-                  }
-                })
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-5" }, [
-            _c("div", { staticClass: "vx-col w-full" }, [
-              _c("b", [_vm._v("Business Type:")]),
-              _vm._v(" "),
-              _c(
-                "ul",
-                { staticClass: "centerx" },
-                _vm._l(_vm.businessTypes, function(feature, index) {
-                  return _c(
-                    "li",
-                    { key: index },
-                    [
-                      _c(
-                        "vs-checkbox",
-                        {
-                          attrs: { "vs-value": feature.id },
-                          model: {
-                            value: _vm.typeSelected,
-                            callback: function($$v) {
-                              _vm.typeSelected = $$v
-                            },
-                            expression: "typeSelected"
-                          }
-                        },
-                        [_vm._v(_vm._s(feature.name))]
-                      )
-                    ],
-                    1
-                  )
-                }),
-                0
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "vx-row mt-10" }, [
-            _c(
-              "div",
-              { staticClass: "vx-col w-full" },
-              [
-                _c(
-                  "vs-button",
-                  {
-                    staticClass: "mr-3 mb-2",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.submitForm($event)
-                      }
-                    }
-                  },
-                  [_vm._v("Submit")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "vs-button",
-                  {
-                    staticClass: "mb-2",
-                    attrs: { color: "warning", type: "border" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        _vm.role_name = ""
-                      }
-                    }
-                  },
-                  [_vm._v("Reset")]
-                )
-              ],
-              1
-            )
-          ])
-        ])
->>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
       ])
     ],
     1
@@ -1175,14 +856,15 @@ render._withStripped = true
 /*!************************************************!*\
   !*** ./resources/js/src/views/Club/Create.vue ***!
   \************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Create_vue_vue_type_template_id_5d7c824a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=5d7c824a& */ "./resources/js/src/views/Club/Create.vue?vue&type=template&id=5d7c824a&");
 /* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/src/views/Club/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _Create_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create.vue?vue&type=style&index=0&lang=css& */ "./resources/js/src/views/Club/Create.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _Create_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create.vue?vue&type=style&index=0&lang=css& */ "./resources/js/src/views/Club/Create.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1214,7 +896,7 @@ component.options.__file = "resources/js/src/views/Club/Create.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/src/views/Club/Create.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
