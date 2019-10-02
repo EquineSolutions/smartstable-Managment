@@ -52,31 +52,19 @@ class ClubController extends Controller
      */
     public function store(Request $request)
     {
+
         DB::beginTransaction();
         try{
-            $business_name =Input::get('business_name');
 
             Club::create([
                 'first_name' => Input::get('first_name'),
+                'middle_name' => Input::get('middle_name'),
                 'last_name' => Input::get('last_name'),
                 'email' => Input::get('email'),
                 'phone' => Input::get('phone'),
-                'business_name' => $business_name,
+                'business_name' => Input::get('business_name'),
                 'business_type' => Input::get('business_type')
             ]);
-            $admin_info=[
-                "business_name" => $business_name,
-                "email" => Input::get('admin_email'),
-                "first_name"=> Input::get('admin_first_name'),
-                "last_name"=> Input::get('admin_last_name'),
-                "password"=> Input::get('admin_password'),
-                "mobile"=> Input::get('admin_phone'),
-            ];
-            $this->create_club_folder($business_name);
-            $this->create_club_DB($business_name);
-            $this->club_settings($club);
-            $this->create_club_user($admin_info);
-
 
             DB::commit();
             $output = [
@@ -323,4 +311,46 @@ class ClubController extends Controller
         }
         $conn->close();
     }
+
+
+
+    public function user_club(Request $request)
+    {
+
+        DB::beginTransaction();
+        try{
+            $business_name =Input::get('business_name');
+            if(null !==Input::get('admin_email')){
+                $admin_info=[
+                    "business_name" => $business_name,
+                    "email" => Input::get('admin_email'),
+                    "first_name"=> Input::get('admin_first_name'),
+                    "last_name"=> Input::get('admin_last_name'),
+                    "password"=> Input::get('admin_password'),
+                    "mobile"=> Input::get('admin_phone'),
+                ];
+                $this->create_club_folder($business_name);
+                $this->create_club_DB($business_name);
+                $this->club_settings($club);
+                $this->create_club_user($admin_info);
+            }
+
+            DB::commit();
+            $output = [
+                'status' => 200,
+                'message' => 'club created successfully',
+            ];
+            $status =200;
+        } catch (\Exception $e) {
+            DB::rollback();
+            $output = [
+                'status' => 500,
+                'error' => $e->getMessage(),
+            ];
+            $status =500;
+        }
+        return response()->json($output,$status);
+
+    }
+
 }

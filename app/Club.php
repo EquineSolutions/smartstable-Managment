@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Club extends Model
 {
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'business_name','business_type'
+        'first_name', 'last_name', 'middle_name', 'email', 'phone', 'business_name','business_type'
     ];
 
     public function packages()

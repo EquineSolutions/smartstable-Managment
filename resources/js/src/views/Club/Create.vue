@@ -8,6 +8,10 @@
                   <span class="text-danger text-sm"  v-show="errors.has('first_name')">{{ errors.first('first_name') }}</span>
               </div>
               <div class="vx-col sm:w-1/2 w-full mb-2">
+                  <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="Middle Name" v-model="last_name" name='middle_name' />
+                  <span class="text-danger text-sm"  v-show="errors.has('middle_name')">{{ errors.first('middle_name') }}</span>
+              </div>
+              <div class="vx-col sm:w-1/2 w-full mb-2">
                   <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="Last Name" v-model="last_name" name='last_name' />
                   <span class="text-danger text-sm"  v-show="errors.has('last_name')">{{ errors.first('last_name') }}</span>
               </div>
@@ -38,7 +42,7 @@
                   </ul>
               </div>
           </div>
-<<<<<<< HEAD
+
           <br><br><br><hr><hr><br><br><br>
         <vx-card title='Admin Info'>
 
@@ -69,9 +73,6 @@
           </div>
         </div>
         </vx-card>
-=======
-
->>>>>>> 395173fd6b15045f21b3d44155c97327a3cfa53e
         <div class="vx-row mt-10">
           <div class="vx-col w-full">
             <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
@@ -128,6 +129,7 @@ export default {
           // if form have no errors
           const formData = new FormData();
             formData.append("first_name" ,this.first_name);
+            formData.append("middle_name" ,this.middle_name);
             formData.append("email",this.email);
             formData.append("last_name" , this.last_name);
             formData.append("phone" , this.phone);

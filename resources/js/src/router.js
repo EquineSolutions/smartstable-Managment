@@ -50,6 +50,12 @@ const router = new Router({
             }
           },
 
+          {
+            path: '/admin/club',
+            name: 'Admin Club',
+            component: () => import('./views/Club/ClubUser.vue'),
+          },
+
 
           // USER CRUD PAGES
           {
@@ -341,6 +347,17 @@ const router = new Router({
                     ],
                     pageTitle: "Create Clubs",
                     // permission: 'add-clubs'
+                }
+            },
+            {
+                path: '/club/create_club',
+                name: 'create-club',
+                component: () => import('./views/Club/CreateClub.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Create Clubs', active: true}
+                    ],
+                    pageTitle: "Create Clubs",
                 }
             },
             {
