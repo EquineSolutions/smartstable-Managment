@@ -92,6 +92,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 var dict = {
   custom: {
@@ -140,6 +144,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_0__["Validator"].localize('en', dict);
           // if form have no errors
           var formData = new FormData();
           formData.append("first_name", _this.first_name);
+          formData.append("middle_name", _this.middle_name);
           formData.append("email", _this.email);
           formData.append("last_name", _this.last_name);
           formData.append("phone", _this.phone);
@@ -311,6 +316,55 @@ var render = function() {
                       staticClass: "text-danger text-sm"
                     },
                     [_vm._v(_vm._s(_vm.errors.first("first_name")))]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "vx-col sm:w-1/2 w-full mb-2" },
+                [
+                  _c("vs-input", {
+                    directives: [
+                      {
+                        name: "validate",
+                        rawName: "v-validate",
+                        value: "required|alpha",
+                        expression: "'required|alpha'"
+                      }
+                    ],
+                    staticClass: "w-full",
+                    attrs: {
+                      "icon-pack": "feather",
+                      icon: "icon-user",
+                      "icon-no-border": "",
+                      "label-placeholder": "Middle Name",
+                      name: "middle_name"
+                    },
+                    model: {
+                      value: _vm.last_name,
+                      callback: function($$v) {
+                        _vm.last_name = $$v
+                      },
+                      expression: "last_name"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.has("middle_name"),
+                          expression: "errors.has('middle_name')"
+                        }
+                      ],
+                      staticClass: "text-danger text-sm"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.first("middle_name")))]
                   )
                 ],
                 1
@@ -857,15 +911,14 @@ render._withStripped = true
 /*!************************************************!*\
   !*** ./resources/js/src/views/Club/Create.vue ***!
   \************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Create_vue_vue_type_template_id_5d7c824a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=5d7c824a& */ "./resources/js/src/views/Club/Create.vue?vue&type=template&id=5d7c824a&");
 /* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/src/views/Club/Create.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _Create_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create.vue?vue&type=style&index=0&lang=css& */ "./resources/js/src/views/Club/Create.vue?vue&type=style&index=0&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _Create_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create.vue?vue&type=style&index=0&lang=css& */ "./resources/js/src/views/Club/Create.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -897,7 +950,7 @@ component.options.__file = "resources/js/src/views/Club/Create.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/src/views/Club/Create.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

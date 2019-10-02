@@ -60873,7 +60873,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/src/views/Home.vue"));
+        return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! ./views/Home.vue */ "./resources/js/src/views/Home.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60882,6 +60882,12 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
         }],
         pageTitle: "Home"
       }
+    }, {
+      path: '/admin/club',
+      name: 'Admin Club',
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 30).then(__webpack_require__.bind(null, /*! ./views/Club/ClubUser.vue */ "./resources/js/src/views/Club/ClubUser.vue"));
+      }
     }, // USER CRUD PAGES
     {
       path: '/user',
@@ -60889,7 +60895,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./views/User/Users.vue */ "./resources/js/src/views/User/Users.vue"));
+        return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! ./views/User/Users.vue */ "./resources/js/src/views/User/Users.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60908,7 +60914,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./views/User/Create.vue */ "./resources/js/src/views/User/Create.vue"));
+        return __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./views/User/Create.vue */ "./resources/js/src/views/User/Create.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60930,7 +60936,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./views/User/View.vue */ "./resources/js/src/views/User/View.vue"));
+        return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./views/User/View.vue */ "./resources/js/src/views/User/View.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60952,7 +60958,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./views/User/Edit.vue */ "./resources/js/src/views/User/Edit.vue"));
+        return __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./views/User/Edit.vue */ "./resources/js/src/views/User/Edit.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60975,7 +60981,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./views/Role/Roles.vue */ "./resources/js/src/views/Role/Roles.vue"));
+        return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./views/Role/Roles.vue */ "./resources/js/src/views/Role/Roles.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -60994,7 +61000,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./views/Role/Create.vue */ "./resources/js/src/views/Role/Create.vue"));
+        return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./views/Role/Create.vue */ "./resources/js/src/views/Role/Create.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61016,7 +61022,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./views/Role/View.vue */ "./resources/js/src/views/Role/View.vue"));
+        return __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./views/Role/View.vue */ "./resources/js/src/views/Role/View.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61038,7 +61044,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./views/Role/Edit.vue */ "./resources/js/src/views/Role/Edit.vue"));
+        return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./views/Role/Edit.vue */ "./resources/js/src/views/Role/Edit.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61061,7 +61067,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./views/Profile/Profile.vue */ "./resources/js/src/views/Profile/Profile.vue"));
+        return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./views/Profile/Profile.vue */ "./resources/js/src/views/Profile/Profile.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61080,7 +61086,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./views/Package/Packages.vue */ "./resources/js/src/views/Package/Packages.vue"));
+        return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./views/Package/Packages.vue */ "./resources/js/src/views/Package/Packages.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61099,7 +61105,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./views/Package/Create.vue */ "./resources/js/src/views/Package/Create.vue"));
+        return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./views/Package/Create.vue */ "./resources/js/src/views/Package/Create.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61121,7 +61127,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ./views/Package/View.vue */ "./resources/js/src/views/Package/View.vue"));
+        return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./views/Package/View.vue */ "./resources/js/src/views/Package/View.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61143,7 +61149,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./views/Package/Edit.vue */ "./resources/js/src/views/Package/Edit.vue"));
+        return __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ./views/Package/Edit.vue */ "./resources/js/src/views/Package/Edit.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61166,7 +61172,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./views/Feature/Features.vue */ "./resources/js/src/views/Feature/Features.vue"));
+        return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./views/Feature/Features.vue */ "./resources/js/src/views/Feature/Features.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61185,7 +61191,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./views/Feature/Create.vue */ "./resources/js/src/views/Feature/Create.vue"));
+        return __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./views/Feature/Create.vue */ "./resources/js/src/views/Feature/Create.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61207,7 +61213,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./views/Feature/View.vue */ "./resources/js/src/views/Feature/View.vue"));
+        return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./views/Feature/View.vue */ "./resources/js/src/views/Feature/View.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61229,7 +61235,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       beforeEnter: guard,
       // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./views/Feature/Edit.vue */ "./resources/js/src/views/Feature/Edit.vue"));
+        return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./views/Feature/Edit.vue */ "./resources/js/src/views/Feature/Edit.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61285,11 +61291,24 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
       }
     }, {
+      path: '/club/create_club',
+      name: 'create-club',
+      component: function component() {
+        return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./views/Club/CreateClub.vue */ "./resources/js/src/views/Club/CreateClub.vue"));
+      },
+      meta: {
+        breadcrumb: [{
+          title: 'Create Clubs',
+          active: true
+        }],
+        pageTitle: "Create Clubs"
+      }
+    }, {
       path: '/club/:id',
       name: 'view-club',
       // beforeEnter: guard, // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./views/Club/View.vue */ "./resources/js/src/views/Club/View.vue"));
+        return __webpack_require__.e(/*! import() */ 27).then(__webpack_require__.bind(null, /*! ./views/Club/View.vue */ "./resources/js/src/views/Club/View.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61306,7 +61325,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       name: 'edit-club',
       // beforeEnter: guard, // Using guard before entering the route
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 28).then(__webpack_require__.bind(null, /*! ./views/Club/Edit.vue */ "./resources/js/src/views/Club/Edit.vue"));
+        return __webpack_require__.e(/*! import() */ 29).then(__webpack_require__.bind(null, /*! ./views/Club/Edit.vue */ "./resources/js/src/views/Club/Edit.vue"));
       },
       meta: {
         breadcrumb: [{
@@ -61348,7 +61367,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   {
     path: '',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! @/layouts/full-page/FullPage.vue */ "./resources/js/src/layouts/full-page/FullPage.vue"));
+      return __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! @/layouts/full-page/FullPage.vue */ "./resources/js/src/layouts/full-page/FullPage.vue"));
     },
     children: [// =============================================================================
     // Auth
@@ -61357,19 +61376,19 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       path: '/login',
       name: 'pageLogin',
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! @/views/auth/Login.vue */ "./resources/js/src/views/auth/Login.vue"));
+        return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! @/views/auth/Login.vue */ "./resources/js/src/views/auth/Login.vue"));
       }
     }, {
       path: '/error-404',
       name: 'pageError404',
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! @/views/auth/Error404.vue */ "./resources/js/src/views/auth/Error404.vue"));
+        return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! @/views/auth/Error404.vue */ "./resources/js/src/views/auth/Error404.vue"));
       }
     }, {
       path: '/error-403',
       name: 'pageError403',
       component: function component() {
-        return __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! @/views/auth/NotAuthorized.vue */ "./resources/js/src/views/auth/NotAuthorized.vue"));
+        return __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! @/views/auth/NotAuthorized.vue */ "./resources/js/src/views/auth/NotAuthorized.vue"));
       }
     }]
   }, // Redirect to 404 page, if no match found
