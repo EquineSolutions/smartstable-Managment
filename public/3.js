@@ -62,11 +62,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var dict = {
   custom: {
-    first_name: {
+    admin_first_name: {
       required: 'Please enter your first name',
       alpha: "Your first name may only contain alphabetic characters"
     },
-    last_name: {
+    admin_last_name: {
       required: 'Please enter your last name',
       alpha: "Your last name may only contain alphabetic characters"
     }

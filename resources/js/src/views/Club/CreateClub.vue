@@ -107,8 +107,13 @@ export default {
 
                 axios.post('/api/clubs', formData, store.state.config).then(function(response){
                     if(response.data.status == 200) {
-                        fire.vs_alert ('Success', 'Club Successfully Added', 'success');
-                        fire.$router.push({ name: "club"})
+                        if(typeof response.data.error !== 'undefined'){
+                            fire.vs_alert ('Oops!', response.data.error, 'warning');
+                        }else{
+                            fire.vs_alert ('Success', 'Club Successfully Added', 'success');
+                            fire.$router.push({ name: "club"})
+                        }
+
                     } else {
                     fire.vs_alert ('Oops!', response.data, 'danger');
                     }
@@ -140,6 +145,7 @@ export default {
         color: color
       });
     }
+
   },
 }
 </script>

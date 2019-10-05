@@ -55,38 +55,60 @@ class ClubController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        $errorExist = false;
+        $message='';
 
-            $club = Club::create([
-                'first_name' => Input::get('first_name'),
-                'middle_name' => Input::get('middle_name'),
-                'last_name' => Input::get('last_name'),
-                'email' => Input::get('email'),
-                'phone' => Input::get('phone'),
-                'business_name' => Input::get('business_name'),
-                'business_type' => Input::get('business_type')
-            ]);
-
-            $verifyUser = VerifyClub::create([
-                'club_id' => $club->id,
-                'token' => str_random(40)
-            ]);
-
-            Mail::to($club->email)->send(new VerifyMail($club));
+        if(Club::where("email",Input::get('email'))->count()>0){
             $status =200;
-            $output = [
-                'status' => $status,
-                'message' => 'club created successfully',
-            ];
-
-        } catch (\Exception $e) {
-            $status =500;
-            $output = [
-                'status' => $status,
-                'error' => $e->getMessage(),
-            ];
-
+            $message = "this Email is existed,";
+            $errorExist = true;
         }
+        if(Club::where("business_name",Input::get('business_name'))->count()>0){
+            $status =200;
+            $message.= " this business name is existed";
+            $errorExist = true;
+        }
+        if(!$errorExist){
+            try{
+
+                $club = Club::create([
+                    'first_name' => Input::get('first_name'),
+                    'middle_name' => Input::get('middle_name'),
+                    'last_name' => Input::get('last_name'),
+                    'email' => Input::get('email'),
+                    'phone' => Input::get('phone'),
+                    'business_name' => Input::get('business_name'),
+                    'business_type' => Input::get('business_type')
+                ]);
+
+                $verifyUser = VerifyClub::create([
+                    'club_id' => $club->id,
+                    'token' => str_random(40)
+                ]);
+
+                Mail::to($club->email)->send(new VerifyMail($club));
+                $status =200;
+                $output = [
+                    'status' => $status,
+                    'message' => 'club created successfully',
+                ];
+
+            } catch (\Exception $e) {
+                $status =500;
+                $output = [
+                    'status' => $status,
+                    'error' => $e->getMessage(),
+                ];
+
+            }
+        }else{
+            $output = [
+                'status' => $status,
+                'error' => $message,
+            ];
+        }
+
+
         return response()->json($output,$status);
 
     }
