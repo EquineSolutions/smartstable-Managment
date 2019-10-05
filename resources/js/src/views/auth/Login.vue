@@ -19,7 +19,7 @@
                         </div>
                         <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
                             <div class="p-8">
-                                <vs-button  style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/club/create_club'>Sign Up</vs-button>
+                                <vs-button  style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/clubs/create_club'>Sign Up</vs-button>
                                 <form @submit.prevent="login(user)">
                                     <div class="vx-card__title mb-8">
                                         <h4 class="mb-4">Login</h4>

@@ -350,28 +350,6 @@ const router = new Router({
                 }
             },
             {
-                path: '/club/create_club',
-                name: 'create-club',
-                component: () => import('./views/Club/CreateClub.vue'),
-                meta: {
-                    breadcrumb: [
-                        { title: 'Create Clubs', active: true}
-                    ],
-                    pageTitle: "Create Clubs",
-                }
-            },
-            {
-                path: '/club/more_data',
-                name: 'create-club',
-                component: () => import('./views/Club/MoreClubData.vue'),
-                meta: {
-                    breadcrumb: [
-                        { title: 'Create Clubs', active: true}
-                    ],
-                    pageTitle: "Create Clubs",
-                }
-            },
-            {
                 path: '/club/:id',
                 name: 'view-club',
                 // beforeEnter: guard, // Using guard before entering the route
@@ -439,6 +417,16 @@ const router = new Router({
             name: 'pageError403',
             component: () => import('@/views/auth/NotAuthorized.vue')
           },
+            {
+                path: '/clubs/create_club',
+                name: 'create-club',
+                component: () => import('@/views/Club/CreateClub.vue')
+            },
+            {
+                path: '/clubs/more_data',
+                name: 'create-club',
+                component: () => import('./views/Club/MoreClubData.vue'),
+            },
         ]
       },
       // Redirect to 404 page, if no match found

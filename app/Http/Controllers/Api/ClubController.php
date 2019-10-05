@@ -411,10 +411,10 @@ class ClubController extends Controller
                 $status = "Your e-mail is already verified. You can now Complete.";
             }
         }else{
-            return redirect('/club/more_data')->with('warning', "Sorry your email cannot be identified.");
+            return redirect('/clubs/more_data')->with('warning', "Sorry your email cannot be identified.");
         }
 
-        return redirect('/club/more_data')->with('status', $status);
+        return redirect('/clubs/more_data')->with('status', $status);
     }
 
 }

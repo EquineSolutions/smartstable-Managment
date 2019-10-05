@@ -140,7 +140,6 @@ export default {
         color: color
       });
     }
-
   },
 }
 </script>
