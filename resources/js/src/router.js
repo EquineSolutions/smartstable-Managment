@@ -361,6 +361,17 @@ const router = new Router({
                 }
             },
             {
+                path: '/club/more_data',
+                name: 'create-club',
+                component: () => import('./views/Club/MoreClubData.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Create Clubs', active: true}
+                    ],
+                    pageTitle: "Create Clubs",
+                }
+            },
+            {
                 path: '/club/:id',
                 name: 'view-club',
                 // beforeEnter: guard, // Using guard before entering the route

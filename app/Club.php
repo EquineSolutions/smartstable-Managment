@@ -14,4 +14,9 @@ class Club extends Model
     {
         return $this->belongsToMany(\App\Package::class , 'club_packages');
     }
+
+    public function verifyClub()
+    {
+        return $this->hasOne('App\VerifyClub');
+    }
 }

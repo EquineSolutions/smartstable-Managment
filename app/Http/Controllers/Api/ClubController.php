@@ -13,6 +13,9 @@ use ZipArchive;
 use mysqli;
 use Illuminate\Console\Command;
 use Illuminate\Redis\Events\CommandExecuted;
+use App\VerifyClub;
+use App\Mail\VerifyMail;
+use Mail;
 
 class ClubController extends Controller
 {
@@ -52,11 +55,9 @@ class ClubController extends Controller
      */
     public function store(Request $request)
     {
-
-        DB::beginTransaction();
         try{
 
-            Club::create([
+            $club = Club::create([
                 'first_name' => Input::get('first_name'),
                 'middle_name' => Input::get('middle_name'),
                 'last_name' => Input::get('last_name'),
@@ -66,19 +67,25 @@ class ClubController extends Controller
                 'business_type' => Input::get('business_type')
             ]);
 
-            DB::commit();
+            $verifyUser = VerifyClub::create([
+                'club_id' => $club->id,
+                'token' => str_random(40)
+            ]);
+
+            Mail::to($club->email)->send(new VerifyMail($club));
+            $status =200;
             $output = [
-                'status' => 200,
+                'status' => $status,
                 'message' => 'club created successfully',
             ];
-            $status =200;
+
         } catch (\Exception $e) {
-            DB::rollback();
+            $status =500;
             $output = [
-                'status' => 500,
+                'status' => $status,
                 'error' => $e->getMessage(),
             ];
-            $status =500;
+
         }
         return response()->json($output,$status);
 
@@ -314,7 +321,7 @@ class ClubController extends Controller
 
 
 
-    public function user_club(Request $request)
+    public function create_user_club(Request $request)
     {
 
         DB::beginTransaction();
@@ -351,6 +358,63 @@ class ClubController extends Controller
         }
         return response()->json($output,$status);
 
+    }
+    public function user_club(Request $request)
+    {
+        try{
+            $business_name =Input::get('business_name');
+            if(null !==Input::get('admin_email')){
+                $admin_info=[
+                    "business_name" => $business_name,
+                    "email" => Input::get('admin_email'),
+                    "first_name"=> Input::get('admin_first_name'),
+                    "last_name"=> Input::get('admin_last_name'),
+                    "password"=> Input::get('admin_password'),
+                    "mobile"=> Input::get('admin_phone'),
+                ];
+
+                ///???? where save user data ...
+                die("here");
+
+            }
+
+            $status =200;
+            $output = [
+                'status' => $status,
+                'message' => 'club created successfully',
+            ];
+
+        } catch (\Exception $e) {
+            $status =500;
+            $output = [
+                'status' => $status,
+                'error' => $e->getMessage(),
+            ];
+
+        }
+        return response()->json($output,$status);
+
+    }
+
+
+
+    public function verifyClub($token)
+    {
+        $verifyClub = VerifyClub::where('token', $token)->orderBy('created_at', 'desc')->first();
+        if(isset($verifyClub) ){
+            $user = $verifyClub->club;
+            if(!$user->verified) {
+                $verifyClub->club->verified = 1;
+                $verifyClub->club->save();
+                $status = "Your e-mail is verified. You can now Complete.";
+            }else{
+                $status = "Your e-mail is already verified. You can now Complete.";
+            }
+        }else{
+            return redirect('/club/more_data')->with('warning', "Sorry your email cannot be identified.");
+        }
+
+        return redirect('/club/more_data')->with('status', $status);
     }
 
 }

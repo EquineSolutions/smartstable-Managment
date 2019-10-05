@@ -12,4 +12,3 @@
 */
 Route::get('/{any}', 'ApplicationController')->where('any', '.*');
 Auth::routes();
-Route::get('/send/email', 'Mail\SendMailController@mail');

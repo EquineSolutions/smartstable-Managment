@@ -105,7 +105,7 @@ export default {
                 formData.append("business_name",this.business_name);
                 formData.append("business_type" , this.typeSelected);
 
-                axios.post('/api/club/user', formData, store.state.config).then(function(response){
+                axios.post('/api/clubs', formData, store.state.config).then(function(response){
                     if(response.data.status == 200) {
                         fire.vs_alert ('Success', 'Club Successfully Added', 'success');
                         fire.$router.push({ name: "club"})
