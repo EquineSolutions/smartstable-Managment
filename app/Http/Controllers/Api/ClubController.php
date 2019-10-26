@@ -15,7 +15,13 @@ use Illuminate\Console\Command;
 use Illuminate\Redis\Events\CommandExecuted;
 use App\VerifyClub;
 use App\Mail\VerifyMail;
+use App\Mail\AdminMail;
+use App\Mail\ApprovalMail;
 use Mail;
+use App\Http\Controllers\Request\AuthController as req_auth;
+use App\Http\Controllers\Request\FileController as Equine_file;
+use App\Http\Controllers\Request\ClubConnectionController;
+use Illuminate\Support\Facades\Hash;
 
 class ClubController extends Controller
 {
@@ -26,7 +32,7 @@ class ClubController extends Controller
      */
     public function index()
     {
-        $data = Club::orderBy('id','ASC')->get();
+        $data = Club::where('Approved',True)->orderBy('id','ASC')->get();
         $output = [
             'status' => 200,
             'message' => 'Clubs loaded successfully',
@@ -55,8 +61,11 @@ class ClubController extends Controller
      */
     public function store(Request $request)
     {
+
         $errorExist = false;
         $message='';
+
+        // check email is exist?
 
         if(Club::where("email",Input::get('email'))->count()>0){
             $status =200;
@@ -68,6 +77,7 @@ class ClubController extends Controller
             $message.= " this business name is existed";
             $errorExist = true;
         }
+
         if(!$errorExist){
             try{
 
@@ -81,12 +91,24 @@ class ClubController extends Controller
                     'business_type' => Input::get('business_type')
                 ]);
 
+                //assign package ...
+
+                $this->assign_packages($club , Input::get('packages'));
+
                 $verifyUser = VerifyClub::create([
                     'club_id' => $club->id,
                     'token' => str_random(40)
                 ]);
 
+                //send mail to club admin "pending req".
+
                 Mail::to($club->email)->send(new VerifyMail($club));
+
+                // send mail to smart admin "New club req".
+
+                Mail::to("maram.ramadan.ebraheem@gmail.com")->send(new AdminMail("dd"));
+
+
                 $status =200;
                 $output = [
                     'status' => $status,
@@ -126,7 +148,7 @@ class ClubController extends Controller
             'message' => 'feature loaded successfully',
             'data' => [
                 'club' => $club,
-                'packages' => $club->packages()
+                'packages' => $club->packages
             ]
         ];
         return response()->json($output,200);
@@ -166,20 +188,42 @@ class ClubController extends Controller
         //
     }
 
+
+    public function assign_packages($club, $packages){
+        $packages_list = Package::find($packages);
+        $club->packages()->attach($packages_list);
+    }
+
     /**
      * @param  \App\Club  $club
      * @return \Illuminate\Http\Response
     **/
 
-    public function assign_packages_to_club(Request $request ,Club $club){
+    public function assign_packages_to_club(Request $request , $club){
+        // extract($request->all());
+        $c =new ClubConnectionController('zamalek');
+        var_dump($c); die;
         $club = Club::find( $request->input('club_id'));
+        $packages = Package::find(Input::get('packages'));
+        $club->packages()->attach($packages);
+
+        if(req_auth::isAdmin()){
+            $this->set_permission_to_club($packages , $club->business_name);
+        }
+
+        $output = [
+            'status' => 200,
+            'message' => 'packages assigned successfully',
+        ];
+        return response()->json($output,200);
+    }
+
+    private function set_permission_to_club($packages , $club){
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
             getenv('DB_PASSWORD'),
-            $club->business_name);
-        $packages = Package::find(Input::get('packages'));
-        $club->packages()->attach($packages);
+            $club);
         $sql = "insert into roles(name,guard_name) values ('club_admin','api')";
         mysqli_query($conn, $sql);
         $last_role_id = $conn->insert_id;
@@ -187,7 +231,6 @@ class ClubController extends Controller
         foreach($packages as $package){
            $features =  $package->features;
            foreach($features as $feature){
-
                foreach($permissions as $permission ){
                     $name = $permission."-".$feature->name;
                     $display_name = ucwords($permission." ".$feature->name);
@@ -205,35 +248,22 @@ class ClubController extends Controller
             }
         }
         $conn->close();
-
-        $output = [
-            'status' => 200,
-            'message' => 'packages assigned successfully',
-        ];
-        return response()->json($output,200);
     }
 
 
     private function create_club_folder($club){
         $zipfile =  base_path('SmartStableClub-master.zip');
         if (file_exists($zipfile)) {
-            $zip = new ZipArchive;
-            $res = $zip->open($zipfile);
-            if ($res === TRUE) {
-                $zip->extractTo( "./../../");
-                $zip->close();
-
-            }
-            rename("./../../SmartStableClub-master" , "./../../$club");
+            Equine_file::unzip_file($zipfile,"./../../");
+            Equine_file::rename("./../../SmartStableClub-master" , "./../../$club");
         }
         echo "Done";
     }
 
+
     private function create_club_DB($club) {
         DB::statement("CREATE DATABASE $club");
-
-//        /// Create connection
-
+        // Create connections
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
@@ -291,14 +321,18 @@ class ClubController extends Controller
         $old_file = $path."/.env.example";
         $new_file = $path."/.env";
         copy( $old_file, $new_file);
-        $str=file_get_contents($new_file);
+        // handle db credentials
+        $this->env_db_credentials($new_file,$club);
+
+        echo "config";
+    }
+
+    private function env_db_credentials($file,$club){
+        $str=file_get_contents($file);
         $str=str_replace("DB_DATABASE=homestead", "DB_DATABASE=$club",$str);
         $str=str_replace("DB_USERNAME=homestead", "DB_USERNAME=root",$str);
         $str=str_replace("DB_PASSWORD=secret", "DB_PASSWORD=iti",$str);
-
-        file_put_contents($new_file, $str);
-
-        echo "config";
+        file_put_contents($file, $str);
     }
 
     private function create_sub_domain($club){
@@ -341,11 +375,14 @@ class ClubController extends Controller
         $conn->close();
     }
 
+    private function close_connection_for_club($conn){
+        $conn->close();
+    }
+
 
 
     public function create_user_club(Request $request)
     {
-
         DB::beginTransaction();
         try{
             $business_name =Input::get('business_name');
@@ -360,7 +397,7 @@ class ClubController extends Controller
                 ];
                 $this->create_club_folder($business_name);
                 $this->create_club_DB($business_name);
-                $this->club_settings($club);
+                // $this->club_settings($club);
                 $this->create_club_user($admin_info);
             }
 
@@ -381,6 +418,7 @@ class ClubController extends Controller
         return response()->json($output,$status);
 
     }
+
     public function user_club(Request $request)
     {
         try{
@@ -418,25 +456,77 @@ class ClubController extends Controller
 
     }
 
-
-
     public function verifyClub($token)
     {
-        $verifyClub = VerifyClub::where('token', $token)->orderBy('created_at', 'desc')->first();
+        $verifyClub = VerifyClub::verifyClubByToken($token);
         if(isset($verifyClub) ){
             $user = $verifyClub->club;
             if(!$user->verified) {
-                $verifyClub->club->verified = 1;
-                $verifyClub->club->save();
+                $user->verified = 1;
+                $user->save();
+                $status_type = 'status';
                 $status = "Your e-mail is verified. You can now Complete.";
             }else{
+                $status_type = 'status';
                 $status = "Your e-mail is already verified. You can now Complete.";
             }
         }else{
-            return redirect('/clubs/more_data')->with('warning', "Sorry your email cannot be identified.");
+            $status = "Sorry your email cannot be identified.";
+            $status_type = 'warning';
         }
+        // var_dump($status); die;
+        return view("emails.verificationMailMag", compact('status_type', 'status'));
+    }
 
-        return redirect('/clubs/more_data')->with('status', $status);
+    public function pending_club()
+    {
+
+        $data = Club::where('Approved',False)->orderBy('id','ASC')->get();
+        $output = [
+            'status' => 200,
+            'message' => 'Clubs loaded successfully',
+            'data' => [
+                'clubs' =>$data
+            ]
+        ];
+        return response()->json($output,200);
+    }
+
+    public function approve_club(Request $request , $club_id)
+    {
+        $password = bin2hex(openssl_random_pseudo_bytes(4));
+        $club = Club::find($club_id);
+        $business_name = $club['business_name'];
+        $admin_info=[
+            "business_name" => $business_name,
+            "email" =>$club['email'],
+            "first_name"=> $club['first_name'],
+            "last_name"=> $club['last_name'],
+            "password"=> Hash::make($password),
+            "mobile"=> $club['phone'],
+        ];
+
+        $this->create_club_folder($business_name);
+        $this->create_club_DB($business_name);
+        $this->create_club_user($admin_info);
+
+        //set permission
+        $packages =  $club->packages->pluck('id')->all();
+
+        // if(req_auth::isAdmin()){
+        //     $this->set_permission_to_club($packages , $business_name);
+        // }
+
+
+        //update approve "club table" ..
+        $club->approve = True;
+        $club->save();
+
+        //send email ...
+        Mail::to($club->email)->send(new ApprovalMail($club,$password));
+
+        die('ddd');
+
     }
 
 }

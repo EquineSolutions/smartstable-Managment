@@ -42,12 +42,27 @@
                   </ul>
               </div>
           </div>
+
+
+        <vx-card title='Assign Packages'>
+                <div class="vx-row mt-5">
+                    <div class="vx-col w-full">
+                        <b>Packages:</b>
+                        <ul class="centerx">
+                            <li v-for="(package_info, index) in packages" :key="index">
+                                <vs-checkbox v-model="clubPackages"  :vs-value="package_info.id">{{package_info.name}}</vs-checkbox>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        </vx-card>
         <div class="vx-row mt-10">
             <div class="vx-col w-full">
                 <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
                 <vs-button color="warning" type="border" class="mb-2" @click.prevent="role_name = '';">Reset</vs-button>
             </div>
         </div>
+
       </form>
     </vx-card>
   </div>
@@ -75,19 +90,41 @@
 
 export default {
 
-    data() {
-        return {
-            businessTypes: [
-                { "id": "stable_center", "name": "Stable Center" },
-                { "id": "stable", "name": "Stable" },
-                { "id": "riding_school", "name": "Riding School" },
-                { "id": "veterinary", "name": "Veterinary" },
-                { "id": "farrier", "name": "Farrier" }
-            ],
-            typeSelected:[],
-        }
-    },
+        mounted() {
+            this.getFeatures();
+        },
+
+        data() {
+            return {
+                businessTypes: [
+                    { "id": "stable_center", "name": "Stable Center" },
+                    { "id": "stable", "name": "Stable" },
+                    { "id": "riding_school", "name": "Riding School" },
+                    { "id": "veterinary", "name": "Veterinary" },
+                    { "id": "farrier", "name": "Farrier" }
+                ],
+                typeSelected:[],
+                clubPackages: [],
+                packages :[]
+            }
+        },
     methods: {
+
+        getFeatures()
+            {
+                let fire = this;
+                axios.get('/api/packages', store.state.config).then(function(response){
+                    console.log(response);
+                    fire.packages = response.data.data.packages;
+                }).catch(function(error){
+                    if(error.response.status == 403) { // Un-Authorized
+                        fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                        fire.$router.push({ name: "pageError403"});
+                    } else if (error.response.status == 401){ // Un-Authenticated
+                        fire.$router.push({ name: "pageLogin"})
+                    }
+                });
+            },
 
     //Create Role Submission
         submitForm()
@@ -104,6 +141,10 @@ export default {
                 formData.append("phone" , this.phone);
                 formData.append("business_name",this.business_name);
                 formData.append("business_type" , this.typeSelected);
+
+                fire.clubPackages.map(function (value, index) {
+                    formData.append('packages[]', value);
+                });
 
                 axios.post('/api/clubs', formData, store.state.config).then(function(response){
                     if(response.data.status == 200) {

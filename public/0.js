@@ -3701,6 +3701,12 @@ __webpack_require__.r(__webpack_exports__);
   slug: "club",
   icon: "ShieldIcon" // permission: 'browse-clubs'
 
+}, {
+  url: "/pending_club",
+  name: "Pending Club",
+  slug: "pending club",
+  icon: "ShieldIcon" // permission: 'browse-clubs'
+
 }]);
 
 /***/ }),

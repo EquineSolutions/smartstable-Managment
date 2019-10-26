@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Laravel 5 - Stripe Payment Gateway Integration Example - ItSolutionStuff.com</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
 
 
@@ -27,8 +26,7 @@
 <body>
 
 <div class="container">
-
-    <h1>Laravel 5 - Stripe Payment Gateway Integration Example <br/> ItSolutionStuff.com</h1>
+        <h1> welcome <?php echo e($club->business_name); ?>  </h1>
 
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -100,7 +98,7 @@
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($<?php echo e($total_cost); ?>)</button>
                             </div>
                         </div>
 

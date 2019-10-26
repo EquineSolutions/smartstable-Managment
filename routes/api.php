@@ -27,11 +27,17 @@ Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
 Route::resource('clubs','Api\ClubController');
 
 
+Route::get('packages','Api\PackageController@index');
+Route::get('pending_club','Api\ClubController@pending_club');
+Route::get('approve_club/{club}','Api\ClubController@approve_club');
+
 Route::middleware('auth:api')->group(function () {
     Route::resource('roles','Api\RoleController');
     Route::resource('users','Api\UserController');
     Route::resource('features','Api\FeatureController');
-    Route::resource('packages','Api\PackageController');
+    Route::resource('packages','Api\PackageController')->except([
+        'index'
+    ]);
     Route::post('assign_packages','Api\ClubController@assign_packages_to_club');
     Route::get('user_info','Api\UserController@all_user_info');
     Route::get('logout', 'Api\PassportController@logout');
@@ -43,5 +49,5 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-Route::get('stripe', 'Payment\StripePaymentController@stripe');
+Route::get('stripe/{club}', 'Payment\StripePaymentController@stripe');
 Route::post('stripe', 'Payment\StripePaymentController@stripePost')->name('stripe.post');

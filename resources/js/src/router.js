@@ -390,6 +390,20 @@ const router = new Router({
                     pageTitle: "Assign packages",
                 }
             },
+
+            {
+                path: '/pending_club',
+                name: 'pending_club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/PendingRequest.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Pending request', active: true}
+                    ],
+                    pageTitle: "Pending request",
+                }
+            },
         ],
       },
     // =============================================================================
