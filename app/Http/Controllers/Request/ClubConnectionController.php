@@ -7,17 +7,18 @@ use mysqli;
 
 class ClubConnectionController extends Controller
 {
-    // public function __construct($club)
-    // {
-    //     $this->open_connection($club);
-    // }
+    public function __construct($club)
+    {
+        $this->club = $club;
+        // $this->open_connection($club);
+    }
 
     public function open_connection($db){
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
             getenv('DB_PASSWORD'),
-            $db);
+            $this->club);
         return $conn;
     }
 

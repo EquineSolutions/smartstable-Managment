@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="can('view-clubs')">
 		<vx-card title="Club Information">
 			<template v-if="club != null">
 				<b>Name: </b> {{club.first_name}}

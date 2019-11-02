@@ -21,11 +21,10 @@ Route::get('copy', 'Api\ClubController@club_settings');
 Route::put('user/role/{user_id}', 'Api\UserRoleController@update');
 
 
-Route::resource('clubs','Api\ClubController');
 Route::post('club/user','Api\ClubController@user_club');
 Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
-Route::resource('clubs','Api\ClubController');
 
+Route::post('clubs','Api\ClubController@store');
 
 Route::get('packages','Api\PackageController@index');
 Route::get('pending_club','Api\ClubController@pending_club');
@@ -44,7 +43,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('profile/{id}', 'Api\UserController@updateProfileData');
     Route::post('authorize', 'Api\PassportController@authorizeUserPermission');
 
+    Route::resource('clubs','Api\ClubController')->except([
+        'store'
+    ]);;
 });
+
 
 
 

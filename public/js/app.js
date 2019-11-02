@@ -61266,13 +61266,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
           title: 'Club',
           active: true
         }],
-        pageTitle: "Clubs" // permission: 'browse-clubs'
-
+        pageTitle: "Clubs",
+        permission: 'browse-clubs'
       }
     }, {
       path: '/club/create',
       name: 'create-club',
-      // beforeEnter: guard, // Using guard before entering the route
+      beforeEnter: guard,
+      // Using guard before entering the route
       component: function component() {
         return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./views/Club/Create.vue */ "./resources/js/src/views/Club/Create.vue"));
       },
@@ -61287,13 +61288,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
           title: 'Create Clubs',
           active: true
         }],
-        pageTitle: "Create Clubs" // permission: 'add-clubs'
-
+        pageTitle: "Create Clubs",
+        permission: 'add-clubs'
       }
     }, {
       path: '/club/:id',
       name: 'view-club',
-      // beforeEnter: guard, // Using guard before entering the route
+      beforeEnter: guard,
+      // Using guard before entering the route
       component: function component() {
         return __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./views/Club/View.vue */ "./resources/js/src/views/Club/View.vue"));
       },
@@ -61305,12 +61307,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
           title: 'Clubs',
           active: true
         }],
-        pageTitle: "Clubs"
+        pageTitle: "Clubs",
+        permission: 'view-clubs'
       }
     }, {
       path: '/club/edit/:id',
       name: 'edit-club',
-      // beforeEnter: guard, // Using guard before entering the route
+      beforeEnter: guard,
+      // Using guard before entering the route
       component: function component() {
         return __webpack_require__.e(/*! import() */ 32).then(__webpack_require__.bind(null, /*! ./views/Club/Edit.vue */ "./resources/js/src/views/Club/Edit.vue"));
       },
@@ -61325,12 +61329,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
           title: 'Edit Club',
           active: true
         }],
-        pageTitle: "Edit Club"
+        pageTitle: "Edit Club",
+        permission: 'edit-clubs'
       }
     }, {
       path: '/club/assign/:id',
       name: 'assign-package',
-      // beforeEnter: guard, // Using guard before entering the route
+      beforeEnter: guard,
+      // Using guard before entering the route
       component: function component() {
         return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./views/Club/ClubPackages.vue */ "./resources/js/src/views/Club/ClubPackages.vue"));
       },
@@ -61350,7 +61356,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     }, {
       path: '/pending_club',
       name: 'pending_club',
-      // beforeEnter: guard, // Using guard before entering the route
+      beforeEnter: guard,
+      // Using guard before entering the route
       component: function component() {
         return __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./views/Club/PendingRequest.vue */ "./resources/js/src/views/Club/PendingRequest.vue"));
       },

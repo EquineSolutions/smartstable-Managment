@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if="can('add-clubs')">
+    <p v-if="loading"  >Loading ... </p>
     <vx-card title='Create New Club'>
       <form>
           <div class="vx-row">
@@ -44,27 +45,6 @@
           </div>
           <br><br><br><hr><hr><br><br><br>
         <vx-card title='Admin Info'>
-
-        <div class="vx-row">
-          <div class="vx-col sm:w-1/2 w-full mb-2">
-            <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="First Name" v-model="admin_first_name" name='admin_first_name' />
-            <span class="text-danger text-sm"  v-show="errors.has('admin_first_name')">{{ errors.first('admin_first_name') }}</span>
-          </div>
-          <div class="vx-col sm:w-1/2 w-full mb-2">
-            <vs-input class="w-full" v-validate="'required|alpha'" icon-pack="feather" icon="icon-user" icon-no-border label-placeholder="Last Name" v-model="admin_last_name" name='admin_last_name' />
-            <span class="text-danger text-sm"  v-show="errors.has('admin_last_name')">{{ errors.first('admin_last_name') }}</span>
-          </div>
-        </div>
-        <div class="vx-row">
-          <div class="vx-col sm:w-1/2 w-full mb-6">
-            <vs-input type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email" v-model="admin_email" name='admin_email' />
-            <span class="text-danger text-sm" v-show="errors.has('admin_email')">{{ errors.first('admin_email') }}</span>
-          </div>
-          <div class="vx-col sm:w-1/2 w-full mb-2">
-            <vs-input class="w-full" v-validate="'decimal:11'" icon-pack="feather" icon="icon-phone" icon-no-border label-placeholder="Mobile" v-model="admin_mobile" name='admin_mobile' />
-            <span class="text-danger text-sm"  v-show="errors.has('admin_mobile')">{{ errors.first('admin_mobile') }}</span>
-          </div>
-        </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-6">
             <vs-input type="password" v-validate="'required'" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="admin_password" v-model="admin_password" class="w-full" />
@@ -115,6 +95,7 @@ export default {
             { "id": "farrier", "name": "Farrier" }
         ],
         typeSelected:[],
+        loading: false
     }
   },
   methods: {
@@ -125,6 +106,7 @@ export default {
       let fire = this;
       this.$validator.validateAll().then(result => {
         if(result) {
+            this.loading = true //the loading begin
           // if form have no errors
           const formData = new FormData();
             formData.append("first_name" ,this.first_name);
@@ -134,16 +116,13 @@ export default {
             formData.append("phone" , this.phone);
             formData.append("business_name",this.business_name);
             formData.append("business_type" , this.typeSelected);
-            formData.append("admin_first_name" ,this.admin_first_name);
-            formData.append("admin_email",this.admin_email);
-            formData.append("admin_last_name" , this.admin_last_name);
-            formData.append("admin_phone" , this.admin_phone);
             formData.append("admin_password" , this.admin_password);
 
           axios.post('/api/clubs', formData, store.state.config).then(function(response){
             if(response.data.status == 200) {
                 fire.vs_alert ('Success', 'Club Successfully Added', 'success');
                 fire.$router.push({ name: "club"})
+
             } else {
               fire.vs_alert ('Oops!', response.data, 'danger');
             }
@@ -161,6 +140,7 @@ export default {
         } else {
           this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
         }
+        self.loading = false
       })
     },
 

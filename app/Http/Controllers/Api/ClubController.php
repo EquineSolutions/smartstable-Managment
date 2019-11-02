@@ -23,6 +23,8 @@ use App\Http\Controllers\Request\FileController as Equine_file;
 use App\Http\Controllers\Request\ClubConnectionController;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Auth;
+
 class ClubController extends Controller
 {
     /**
@@ -62,17 +64,18 @@ class ClubController extends Controller
     public function store(Request $request)
     {
 
+
         $errorExist = false;
         $message='';
 
         // check email is exist?
-
+        $business_name =Input::get('business_name');
         if(Club::where("email",Input::get('email'))->count()>0){
             $status =200;
             $message = "this Email is existed,";
             $errorExist = true;
         }
-        if(Club::where("business_name",Input::get('business_name'))->count()>0){
+        if(Club::where("business_name",$business_name)->count()>0){
             $status =200;
             $message.= " this business name is existed";
             $errorExist = true;
@@ -87,27 +90,44 @@ class ClubController extends Controller
                     'last_name' => Input::get('last_name'),
                     'email' => Input::get('email'),
                     'phone' => Input::get('phone'),
-                    'business_name' => Input::get('business_name'),
+                    'business_name' => $business_name,
                     'business_type' => Input::get('business_type')
                 ]);
+                if(req_auth::isAdmin()){
+                    $club->approved = true;
+                    $club->verified = true;
+                    $club->save();
+                    $admin_info=[
+                        "business_name" => $business_name,
+                        "email" =>$club['email'],
+                        "first_name"=> $club['first_name'],
+                        "last_name"=> $club['last_name'],
+                        "password"=> Hash::make(Input::get('admin_password')),
+                        "mobile"=> $club['phone'],
+                    ];
+                    $this->create_club_folder($business_name);
+                    $this->create_club_DB($business_name);
+                    // $this->club_settings($club);
+                    $this->create_club_user($admin_info);
 
-                //assign package ...
 
-                $this->assign_packages($club , Input::get('packages'));
+                }else{
 
-                $verifyUser = VerifyClub::create([
-                    'club_id' => $club->id,
-                    'token' => str_random(40)
-                ]);
+                    //assign package ...
+                     $this->assign_packages($club , Input::get('packages'));
+                    // verification email ...
+                    $verifyUser = VerifyClub::create([
+                        'club_id' => $club->id,
+                        'token' => str_random(40)
+                    ]);
+                    //send mail to club admin "pending req".
 
-                //send mail to club admin "pending req".
+                    Mail::to($club->email)->send(new VerifyMail($club));
 
-                Mail::to($club->email)->send(new VerifyMail($club));
+                    // send mail to smart admin "New club req".
 
-                // send mail to smart admin "New club req".
-
-                Mail::to("maram.ramadan.ebraheem@gmail.com")->send(new AdminMail("dd"));
-
+                    Mail::to("maram.ramadan.ebraheem@gmail.com")->send(new AdminMail("dd"));
+                }
 
                 $status =200;
                 $output = [
@@ -124,13 +144,12 @@ class ClubController extends Controller
 
             }
         }else{
+            $status =500;
             $output = [
                 'status' => $status,
                 'error' => $message,
             ];
         }
-
-
         return response()->json($output,$status);
 
     }
@@ -194,15 +213,14 @@ class ClubController extends Controller
         $club->packages()->attach($packages_list);
     }
 
+
     /**
      * @param  \App\Club  $club
      * @return \Illuminate\Http\Response
     **/
 
-    public function assign_packages_to_club(Request $request , $club){
-        // extract($request->all());
-        $c =new ClubConnectionController('zamalek');
-        var_dump($c); die;
+    public function assign_packages_to_club(Request $request){
+
         $club = Club::find( $request->input('club_id'));
         $packages = Package::find(Input::get('packages'));
         $club->packages()->attach($packages);
@@ -213,12 +231,14 @@ class ClubController extends Controller
 
         $output = [
             'status' => 200,
+
             'message' => 'packages assigned successfully',
         ];
         return response()->json($output,200);
     }
 
     public function set_permission_to_club($packages , $club){
+
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
@@ -228,8 +248,7 @@ class ClubController extends Controller
         mysqli_query($conn, $sql);
         $last_role_id = $conn->insert_id;
         $permissions = ['browse','view','add','edit','delete'];
-        foreach($packages as $pac){
-            $package = Package::find($pac);
+        foreach($packages as $package){
             $features =  $package->features;
            foreach($features as $feature){
                foreach($permissions as $permission ){
@@ -373,86 +392,9 @@ class ClubController extends Controller
         $conn->close();
     }
 
-    private function close_connection_for_club($conn){
-        $conn->close();
-    }
 
 
 
-    public function create_user_club(Request $request)
-    {
-        DB::beginTransaction();
-        try{
-            $business_name =Input::get('business_name');
-            if(null !==Input::get('admin_email')){
-                $admin_info=[
-                    "business_name" => $business_name,
-                    "email" => Input::get('admin_email'),
-                    "first_name"=> Input::get('admin_first_name'),
-                    "last_name"=> Input::get('admin_last_name'),
-                    "password"=> Input::get('admin_password'),
-                    "mobile"=> Input::get('admin_phone'),
-                ];
-                $this->create_club_folder($business_name);
-                $this->create_club_DB($business_name);
-                // $this->club_settings($club);
-                $this->create_club_user($admin_info);
-            }
-
-            DB::commit();
-            $output = [
-                'status' => 200,
-                'message' => 'club created successfully',
-            ];
-            $status =200;
-        } catch (\Exception $e) {
-            DB::rollback();
-            $output = [
-                'status' => 500,
-                'error' => $e->getMessage(),
-            ];
-            $status =500;
-        }
-        return response()->json($output,$status);
-
-    }
-
-    public function user_club(Request $request)
-    {
-        try{
-            $business_name =Input::get('business_name');
-            if(null !==Input::get('admin_email')){
-                $admin_info=[
-                    "business_name" => $business_name,
-                    "email" => Input::get('admin_email'),
-                    "first_name"=> Input::get('admin_first_name'),
-                    "last_name"=> Input::get('admin_last_name'),
-                    "password"=> Input::get('admin_password'),
-                    "mobile"=> Input::get('admin_phone'),
-                ];
-
-                ///???? where save user data ...
-                die("here");
-
-            }
-
-            $status =200;
-            $output = [
-                'status' => $status,
-                'message' => 'club created successfully',
-            ];
-
-        } catch (\Exception $e) {
-            $status =500;
-            $output = [
-                'status' => $status,
-                'error' => $e->getMessage(),
-            ];
-
-        }
-        return response()->json($output,$status);
-
-    }
 
     public function verifyClub($token)
     {
@@ -504,21 +446,13 @@ class ClubController extends Controller
             "mobile"=> $club['phone'],
         ];
 
-        // $this->create_club_folder($business_name);
-        // $this->create_club_DB($business_name);
-        // $this->create_club_user($admin_info);
-
-        //set permission
-        // $packages =  $club->packages->pluck('id')->all();
-
-        // if(req_auth::isAdmin()){
-        //     $this->set_permission_to_club($packages , $business_name);
-        // }
-
+        $this->create_club_folder($business_name);
+        $this->create_club_DB($business_name);
+        $this->create_club_user($admin_info);
 
         //update approve "club table" ..
         $club->approved = True;
-        // $club->save();
+        $club->save();
 
         //send email ...
         Mail::to($club->email)->send(new ApprovalMail($club,$password));

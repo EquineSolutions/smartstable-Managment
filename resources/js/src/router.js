@@ -331,13 +331,13 @@ const router = new Router({
                         { title: 'Club', active: true}
                     ],
                     pageTitle: "Clubs",
-                    // permission: 'browse-clubs'
+                    permission: 'browse-clubs'
                 }
             },
             {
                 path: '/club/create',
                 name: 'create-club',
-                // beforeEnter: guard, // Using guard before entering the route
+                beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/Create.vue'),
                 meta: {
                     breadcrumb: [
@@ -346,26 +346,27 @@ const router = new Router({
                         { title: 'Create Clubs', active: true}
                     ],
                     pageTitle: "Create Clubs",
-                    // permission: 'add-clubs'
+                    permission: 'add-clubs'
                 }
             },
             {
                 path: '/club/:id',
                 name: 'view-club',
-                // beforeEnter: guard, // Using guard before entering the route
+                beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/View.vue'),
                 meta: {
                     breadcrumb: [
                         { title: 'Home', url: '/'},
                         { title: 'Clubs', active: true}
                     ],
-                    pageTitle: "Clubs"
+                    pageTitle: "Clubs",
+                    permission: 'view-clubs'
                 }
             },
             {
                 path: '/club/edit/:id',
                 name: 'edit-club',
-                // beforeEnter: guard, // Using guard before entering the route
+                beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/Edit.vue'),
                 meta: {
                     breadcrumb: [
@@ -374,12 +375,13 @@ const router = new Router({
                         { title: 'Edit Club', active: true}
                     ],
                     pageTitle: "Edit Club",
+                    permission: 'edit-clubs'
                 }
             },
             {
                 path: '/club/assign/:id',
                 name: 'assign-package',
-                // beforeEnter: guard, // Using guard before entering the route
+                beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/ClubPackages.vue'),
                 meta: {
                     breadcrumb: [
@@ -394,7 +396,7 @@ const router = new Router({
             {
                 path: '/pending_club',
                 name: 'pending_club',
-                // beforeEnter: guard, // Using guard before entering the route
+                beforeEnter: guard, // Using guard before entering the route
                 component: () => import('./views/Club/PendingRequest.vue'),
                 meta: {
                     breadcrumb: [

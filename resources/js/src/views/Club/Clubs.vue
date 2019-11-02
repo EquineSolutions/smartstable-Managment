@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="can('browse-clubs')">
         <vx-card title="Club List">
             <vs-button  style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/club/create'>Create Club</vs-button>
 
