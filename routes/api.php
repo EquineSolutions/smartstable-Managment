@@ -51,3 +51,8 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('stripe/{club}', 'Payment\StripePaymentController@stripe');
 Route::post('stripe', 'Payment\StripePaymentController@stripePost')->name('stripe.post');
+
+Route::get('/charge', function () {
+    return view('payment.index');
+});
+Route::post('/charge/{club}', 'Payment\StripePaymentController@charge');

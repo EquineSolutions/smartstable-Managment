@@ -218,7 +218,7 @@ class ClubController extends Controller
         return response()->json($output,200);
     }
 
-    private function set_permission_to_club($packages , $club){
+    public function set_permission_to_club($packages , $club){
         $conn = new mysqli(
             getenv('DB_HOST'),
             getenv('DB_USERNAME'),
@@ -228,23 +228,21 @@ class ClubController extends Controller
         mysqli_query($conn, $sql);
         $last_role_id = $conn->insert_id;
         $permissions = ['browse','view','add','edit','delete'];
-        foreach($packages as $package){
-           $features =  $package->features;
+        foreach($packages as $pac){
+            $package = Package::find($pac);
+            $features =  $package->features;
            foreach($features as $feature){
                foreach($permissions as $permission ){
                     $name = $permission."-".$feature->name;
                     $display_name = ucwords($permission." ".$feature->name);
                     $sql = "insert into permissions(name,display_name,`group`,guard_name) values ('".$name."','".$display_name."','".$feature->name."','api')";
-                    $last_permission_id = $conn->insert_id;
                     mysqli_query($conn, $sql);
-
+                    $last_permission_id = $conn->insert_id;
                     $sql = "insert into role_has_permissions values ($last_permission_id , 1)";
                     mysqli_query($conn, $sql);
                     $sql = "insert into model_has_roles values (1 , 'App\\\User',1)";
-
                     mysqli_query($conn, $sql);
                 }
-
             }
         }
         $conn->close();
@@ -506,12 +504,12 @@ class ClubController extends Controller
             "mobile"=> $club['phone'],
         ];
 
-        $this->create_club_folder($business_name);
-        $this->create_club_DB($business_name);
-        $this->create_club_user($admin_info);
+        // $this->create_club_folder($business_name);
+        // $this->create_club_DB($business_name);
+        // $this->create_club_user($admin_info);
 
         //set permission
-        $packages =  $club->packages->pluck('id')->all();
+        // $packages =  $club->packages->pluck('id')->all();
 
         // if(req_auth::isAdmin()){
         //     $this->set_permission_to_club($packages , $business_name);
@@ -519,8 +517,8 @@ class ClubController extends Controller
 
 
         //update approve "club table" ..
-        $club->approve = True;
-        $club->save();
+        $club->approved = True;
+        // $club->save();
 
         //send email ...
         Mail::to($club->email)->send(new ApprovalMail($club,$password));

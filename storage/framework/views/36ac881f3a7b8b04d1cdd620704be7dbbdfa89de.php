@@ -89,6 +89,8 @@
                             </div>
                         </div>
 
+                        <input class='form-control card-amount' size='4'value=<?php echo e($total_cost); ?>  type="hidden">
+
                         <div class='form-row row'>
                             <div class='col-md-12 error form-group hide'>
                                 <div class='alert-danger alert'>Please correct the errors and try
@@ -101,7 +103,6 @@
                                 <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($<?php echo e($total_cost); ?>)</button>
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -144,7 +145,7 @@ $(function() {
         number: $('.card-number').val(),
         cvc: $('.card-cvc').val(),
         exp_month: $('.card-expiry-month').val(),
-        exp_year: $('.card-expiry-year').val()
+        exp_year: $('.card-expiry-year').val(),
       }, stripeResponseHandler);
     }
 
@@ -157,6 +158,7 @@ $(function() {
                 .find('.alert')
                 .text(response.error.message);
         } else {
+            console.log(response)
             // token contains id, last4, and card type
             var token = response['id'];
             // insert the token into the form so it gets submitted to the server
