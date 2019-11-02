@@ -38,6 +38,7 @@ class PackageController extends Controller
     public function create()
     {
         $features = Feature::get();
+        dd($features);
         $output = [
             'status' => 200,
             'message' => 'features loaded successfully',
