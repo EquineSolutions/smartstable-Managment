@@ -52,7 +52,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -188,171 +187,187 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.loading ? _c("p", [_vm._v("Loading ... ")]) : _vm._e(),
-      _vm._v(" "),
-      !_vm.loading
-        ? _c(
-            "vx-card",
-            { attrs: { title: "Club List" } },
-            [
-              _c(
-                "vs-button",
-                {
-                  staticClass: "mb-4 md:mb-0",
-                  staticStyle: {
-                    float: "right",
-                    "border-radius": "55px",
-                    "margin-left": "20px"
-                  },
-                  attrs: {
-                    "icon-pack": "feather",
-                    icon: "icon-plus",
-                    to: "/club/create"
-                  }
-                },
-                [_vm._v("Create Club")]
-              ),
-              _vm._v(" "),
-              _c(
-                "vs-table",
-                {
-                  attrs: { search: "", data: _vm.clubs },
-                  scopedSlots: _vm._u(
-                    [
-                      {
-                        key: "default",
-                        fn: function(ref) {
-                          var data = ref.data
-                          return _vm._l(data, function(tr, indextr) {
-                            return _c(
-                              "vs-tr",
-                              { key: indextr },
-                              [
-                                _c(
-                                  "vs-td",
-                                  { attrs: { data: data[indextr].id } },
+  return _vm.can("browse-clubs")
+    ? _c(
+        "div",
+        [
+          _vm.loading ? _c("p", [_vm._v("Loading ... ")]) : _vm._e(),
+          _vm._v(" "),
+          !_vm.loading
+            ? _c(
+                "vx-card",
+                { attrs: { title: "Club List" } },
+                [
+                  _c(
+                    "vs-button",
+                    {
+                      staticClass: "mb-4 md:mb-0",
+                      staticStyle: {
+                        float: "right",
+                        "border-radius": "55px",
+                        "margin-left": "20px"
+                      },
+                      attrs: {
+                        "icon-pack": "feather",
+                        icon: "icon-plus",
+                        to: "/club/create"
+                      }
+                    },
+                    [_vm._v("Create Club")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "vs-table",
+                    {
+                      attrs: { search: "", data: _vm.clubs },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var data = ref.data
+                              return _vm._l(data, function(tr, indextr) {
+                                return _c(
+                                  "vs-tr",
+                                  { key: indextr },
                                   [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(data[indextr].id) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "vs-td",
-                                  { attrs: { data: data[indextr].first_name } },
-                                  [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(
-                                          data[indextr].first_name +
-                                            " " +
-                                            data[indextr].last_name
-                                        ) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "vs-td",
-                                  [
-                                    _c("vs-row", [
-                                      _c("div", { staticClass: "flex mb-4" }, [
-                                        _c(
-                                          "div",
-                                          { staticClass: "w-1/3" },
-                                          [
-                                            _c("vs-button", {
-                                              attrs: {
-                                                to: "/club/" + data[indextr].id,
-                                                radius: "",
-                                                color: "primary",
-                                                type: "border",
-                                                "icon-pack": "feather",
-                                                icon: "icon-eye"
-                                              },
-                                              on: { click: _vm.hideTooltip }
-                                            })
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "w-1/3",
-                                            staticStyle: { margin: "0 15px" }
-                                          },
-                                          [
-                                            _c("vs-button", {
-                                              attrs: {
-                                                radius: "",
-                                                color: "primary",
-                                                type: "border",
-                                                "icon-pack": "feather",
-                                                icon: "icon-user-check"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.approve_club(
-                                                    data[indextr].id
-                                                  )
-                                                }
-                                              }
-                                            })
-                                          ],
-                                          1
+                                    _c(
+                                      "vs-td",
+                                      { attrs: { data: data[indextr].id } },
+                                      [
+                                        _vm._v(
+                                          "\n                        " +
+                                            _vm._s(data[indextr].id) +
+                                            "\n                    "
                                         )
-                                      ])
-                                    ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "vs-td",
+                                      {
+                                        attrs: {
+                                          data: data[indextr].first_name
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                        " +
+                                            _vm._s(
+                                              data[indextr].first_name +
+                                                " " +
+                                                data[indextr].last_name
+                                            ) +
+                                            "\n                    "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "vs-td",
+                                      [
+                                        _c("vs-row", [
+                                          _c(
+                                            "div",
+                                            { staticClass: "flex mb-4" },
+                                            [
+                                              _c(
+                                                "div",
+                                                { staticClass: "w-1/3" },
+                                                [
+                                                  _c("vs-button", {
+                                                    attrs: {
+                                                      to:
+                                                        "/club/" +
+                                                        data[indextr].id,
+                                                      radius: "",
+                                                      color: "primary",
+                                                      type: "border",
+                                                      "icon-pack": "feather",
+                                                      icon: "icon-eye"
+                                                    },
+                                                    on: {
+                                                      click: _vm.hideTooltip
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass: "w-1/3",
+                                                  staticStyle: {
+                                                    margin: "0 15px"
+                                                  }
+                                                },
+                                                [
+                                                  _c("vs-button", {
+                                                    attrs: {
+                                                      radius: "",
+                                                      color: "primary",
+                                                      type: "border",
+                                                      "icon-pack": "feather",
+                                                      icon: "icon-user-check"
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.approve_club(
+                                                          data[indextr].id
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    )
                                   ],
                                   1
                                 )
-                              ],
-                              1
-                            )
-                          })
-                        }
-                      }
-                    ],
-                    null,
-                    false,
-                    4212038005
-                  )
-                },
-                [
-                  _c(
-                    "template",
-                    { slot: "thead" },
+                              })
+                            }
+                          }
+                        ],
+                        null,
+                        false,
+                        4212038005
+                      )
+                    },
                     [
-                      _c("vs-th", { attrs: { "sort-key": "id" } }, [
-                        _vm._v("ID")
-                      ]),
-                      _vm._v(" "),
-                      _c("vs-th", { attrs: { "sort-key": "first_name" } }, [
-                        _vm._v("Club")
-                      ]),
-                      _vm._v(" "),
-                      _c("vs-th", [_vm._v("Action")])
+                      _c(
+                        "template",
+                        { slot: "thead" },
+                        [
+                          _c("vs-th", { attrs: { "sort-key": "id" } }, [
+                            _vm._v("ID")
+                          ]),
+                          _vm._v(" "),
+                          _c("vs-th", { attrs: { "sort-key": "first_name" } }, [
+                            _vm._v("Club")
+                          ]),
+                          _vm._v(" "),
+                          _c("vs-th", [_vm._v("Action")])
+                        ],
+                        1
+                      )
                     ],
-                    1
+                    2
                   )
                 ],
-                2
+                1
               )
-            ],
-            1
-          )
-        : _vm._e()
-    ],
-    1
-  )
+            : _vm._e()
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

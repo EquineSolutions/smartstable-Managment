@@ -94,103 +94,107 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "vx-card",
-        { attrs: { title: "Club Information" } },
+  return _vm.can("view-clubs")
+    ? _c(
+        "div",
         [
-          _vm.club != null
-            ? [
-                _c("b", [_vm._v("Name: ")]),
-                _vm._v(" " + _vm._s(_vm.club.first_name) + "\n\t\t\t\t"),
-                _c("vs-divider"),
-                _vm._v(" "),
-                _c("b", [_vm._v("Email: ")]),
-                _vm._v(" " + _vm._s(_vm.club.email) + "\n\t\t\t\t"),
-                _c("vs-divider"),
-                _vm._v(" "),
-                _c("b", [_vm._v("Mobile: ")]),
-                _vm._v(" " + _vm._s(_vm.club.phone) + "\n                "),
-                _c("vs-divider"),
-                _vm._v(" "),
-                _c(
-                  "vx-card",
-                  { attrs: { title: "Packages" } },
-                  [
-                    _vm._l(_vm.packages, function(club_package, index) {
-                      return [
-                        _vm._v("\n\t\t\t\t\t    " + _vm._s(club_package.name)),
-                        index != _vm.packages.length - 1
-                          ? [_vm._v(" // ")]
-                          : _vm._e()
-                      ]
-                    })
-                  ],
-                  2
-                ),
-                _vm._v(" "),
-                _c("vs-divider")
-              ]
-            : [
-                _c(
-                  "vs-row",
-                  [
-                    _c(
-                      "vs-col",
-                      {
-                        attrs: {
-                          "vs-type": "flex",
-                          "vs-justify": "center",
-                          "vs-align": "center",
-                          "vs-w": "12"
-                        }
-                      },
-                      [_c("b", [_vm._v("Club Is Not Available!")])]
-                    ),
+          _c(
+            "vx-card",
+            { attrs: { title: "Club Information" } },
+            [
+              _vm.club != null
+                ? [
+                    _c("b", [_vm._v("Name: ")]),
+                    _vm._v(" " + _vm._s(_vm.club.first_name) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Email: ")]),
+                    _vm._v(" " + _vm._s(_vm.club.email) + "\n\t\t\t\t"),
+                    _c("vs-divider"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Mobile: ")]),
+                    _vm._v(" " + _vm._s(_vm.club.phone) + "\n                "),
+                    _c("vs-divider"),
                     _vm._v(" "),
                     _c(
-                      "vs-col",
-                      {
-                        attrs: {
-                          "vs-type": "flex",
-                          "vs-justify": "center",
-                          "vs-align": "center",
-                          "vs-w": "12"
-                        }
-                      },
+                      "vx-card",
+                      { attrs: { title: "Packages" } },
+                      [
+                        _vm._l(_vm.packages, function(club_package, index) {
+                          return [
+                            _vm._v(
+                              "\n\t\t\t\t\t    " + _vm._s(club_package.name)
+                            ),
+                            index != _vm.packages.length - 1
+                              ? [_vm._v(" // ")]
+                              : _vm._e()
+                          ]
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("vs-divider")
+                  ]
+                : [
+                    _c(
+                      "vs-row",
                       [
                         _c(
-                          "vs-button",
+                          "vs-col",
                           {
                             attrs: {
-                              size: "small",
-                              type: "gradient",
-                              "icon-pack": "feather",
-                              icon: "icon-arrow-left"
-                            },
-                            on: {
-                              click: function($event) {
-                                return _vm.$router.go(-1)
-                              }
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
                             }
                           },
-                          [_vm._v("Go Back")]
+                          [_c("b", [_vm._v("Club Is Not Available!")])]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "vs-col",
+                          {
+                            attrs: {
+                              "vs-type": "flex",
+                              "vs-justify": "center",
+                              "vs-align": "center",
+                              "vs-w": "12"
+                            }
+                          },
+                          [
+                            _c(
+                              "vs-button",
+                              {
+                                attrs: {
+                                  size: "small",
+                                  type: "gradient",
+                                  "icon-pack": "feather",
+                                  icon: "icon-arrow-left"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.$router.go(-1)
+                                  }
+                                }
+                              },
+                              [_vm._v("Go Back")]
+                            )
+                          ],
+                          1
                         )
                       ],
                       1
                     )
-                  ],
-                  1
-                )
-              ]
+                  ]
+            ],
+            2
+          )
         ],
-        2
+        1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

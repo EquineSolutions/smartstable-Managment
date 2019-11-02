@@ -104,6 +104,28 @@ class PermissionTableSeeder extends Seeder
                     'display_name' => 'Delete Packages',
                 ],
             ],
+            'Clubs' =>[
+                [
+                    'name' => 'browse-clubs',
+                    'display_name' => 'Browse Clubs',
+                ],
+                [
+                    'name' => 'view-clubs',
+                    'display_name' => 'View Clubs',
+                ],
+                [
+                    'name' => 'add-clubs',
+                    'display_name' => 'Add Clubs',
+                ],
+                [
+                    'name' => 'edit-clubs',
+                    'display_name' => 'Edit Clubs',
+                ],
+                [
+                    'name' => 'delete-clubs',
+                    'display_name' => 'Delete Clubs',
+                ],
+            ],
 
         ];
         \Illuminate\Database\Eloquent\Model::unguard();

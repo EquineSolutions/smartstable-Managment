@@ -66,9 +66,8 @@ class StripePaymentController extends Controller
                 'receipt_email' => $customer->email,
                 "description" => "Test payment from smartstable.com."
             ));
-            $packages =  $club->packages->pluck('id')->all();
             $clubObj = new ClubController;
-            $clubObj->set_permission_to_club($packages , $club->business_name);
+            $clubObj->set_permission_to_club($club->packages , $club->business_name);
             return "Payment successful!";
 
         } catch (\Exception $ex) {
