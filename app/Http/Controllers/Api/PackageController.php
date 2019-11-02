@@ -39,6 +39,7 @@ class PackageController extends Controller
     {
         $features = Feature::get();
         dd($features);
+
         $output = [
             'status' => 200,
             'message' => 'features loaded successfully',
