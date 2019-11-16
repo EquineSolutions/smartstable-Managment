@@ -24,7 +24,7 @@ Route::put('user/role/{user_id}', 'Api\UserRoleController@update');
 Route::post('club/user','Api\ClubController@user_club');
 Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
 
-Route::post('clubs','Api\ClubController@store');
+Route::post('club/add','Api\ClubController@pre_store');
 
 Route::get('packages','Api\PackageController@index');
 Route::get('pending_club','Api\ClubController@pending_club');
@@ -43,9 +43,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('profile/{id}', 'Api\UserController@updateProfileData');
     Route::post('authorize', 'Api\PassportController@authorizeUserPermission');
 
-    Route::resource('clubs','Api\ClubController')->except([
-        'store'
-    ]);;
+    Route::resource('clubs','Api\ClubController');
 });
 
 

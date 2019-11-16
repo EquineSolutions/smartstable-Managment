@@ -55,18 +55,24 @@ class ClubController extends Controller
         //
     }
 
+
+    public function store(Request $request){
+
+        $this->pre_store($request);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function pre_store(Request $request)
     {
-
-
         $errorExist = false;
-        $message='';
+        $message ='';
+
 
         // check email is exist?
         $business_name =Input::get('business_name');
@@ -75,6 +81,7 @@ class ClubController extends Controller
             $message = "this Email is existed,";
             $errorExist = true;
         }
+
         if(Club::where("business_name",$business_name)->count()>0){
             $status =200;
             $message.= " this business name is existed";
@@ -83,7 +90,6 @@ class ClubController extends Controller
 
         if(!$errorExist){
             try{
-
                 $club = Club::create([
                     'first_name' => Input::get('first_name'),
                     'middle_name' => Input::get('middle_name'),
@@ -111,6 +117,10 @@ class ClubController extends Controller
                     $this->create_club_user($admin_info);
 
 
+                    //send email ...
+                    Mail::to($club->email)->send(new ApprovalMail($club,Input::get('admin_password')));
+
+
                 }else{
 
                     //assign package ...
@@ -128,6 +138,7 @@ class ClubController extends Controller
 
                     Mail::to("maram.ramadan.ebraheem@gmail.com")->send(new AdminMail("dd"));
                 }
+
 
                 $status =200;
                 $output = [
@@ -460,5 +471,12 @@ class ClubController extends Controller
         die('ddd');
 
     }
+
+    public function createClub(){
+
+    }
+
+
+
 
 }

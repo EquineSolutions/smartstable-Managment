@@ -146,7 +146,7 @@ export default {
                     formData.append('packages[]', value);
                 });
 
-                axios.post('/api/clubs', formData, store.state.config).then(function(response){
+                axios.post('/api/club/add', formData, store.state.config).then(function(response){
                     if(response.data.status == 200) {
                         if(typeof response.data.error !== 'undefined'){
                             fire.vs_alert ('Oops!', response.data.error, 'warning');

@@ -12,5 +12,6 @@ class AuthController extends Controller
             return (Auth::user()->roles->pluck('name')->first() === 'super-admin');
         }
         return false;
+
     }
 }
