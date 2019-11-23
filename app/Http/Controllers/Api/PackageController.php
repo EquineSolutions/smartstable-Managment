@@ -47,6 +47,7 @@ class PackageController extends Controller
                 'features' =>$features
             ]
         ];
+        var_dump($response); die('dd');
         return response()->json($output,200);
     }
 
