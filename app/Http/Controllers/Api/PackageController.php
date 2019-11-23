@@ -38,7 +38,7 @@ class PackageController extends Controller
     public function create()
     {
         $features = Feature::get();
-        //dd($features);
+        // dd($features);
 
         $output = [
             'status' => 200,
@@ -47,7 +47,6 @@ class PackageController extends Controller
                 'features' =>$features
             ]
         ];
-        var_dump($response); die('dd');
         return response()->json($output,200);
     }
 
