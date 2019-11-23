@@ -57,10 +57,12 @@ Vue.mixin(AuthMixin);
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard);
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
 
 new Vue({
     router,
     store,
     render: h => h(App)
 }).$mount('#app')
+
+Vue.config.devtools = true;

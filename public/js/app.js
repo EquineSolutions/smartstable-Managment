@@ -60916,7 +60916,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(_mixins_auth_js__WEBPACK_IMPORT
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_clipboard2__WEBPACK_IMPORTED_MODULE_12___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.productionTip = true;
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: _router__WEBPACK_IMPORTED_MODULE_6__["default"],
   store: _store_store__WEBPACK_IMPORTED_MODULE_7__["default"],
@@ -60924,6 +60924,7 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
   }
 }).$mount('#app');
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.devtools = true;
 
 /***/ }),
 
