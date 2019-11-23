@@ -38,7 +38,7 @@ class PackageController extends Controller
     public function create()
     {
         $features = Feature::get();
-        dd($features);
+        //dd($features);
 
         $output = [
             'status' => 200,
