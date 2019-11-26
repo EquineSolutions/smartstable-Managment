@@ -434,6 +434,7 @@ class ClubController extends Controller
 
     public function approve_club(Request $request , $club_id)
     {
+
         $password = bin2hex(openssl_random_pseudo_bytes(4));
         $club = Club::find($club_id);
         $business_name = $club['business_name'];
@@ -457,7 +458,7 @@ class ClubController extends Controller
         //send email ...
         Mail::to($club->email)->send(new ApprovalMail($club,$password));
 
-        die('ddd');
+        return $this->pending_club();
 
     }
 

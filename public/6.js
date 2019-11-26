@@ -125,8 +125,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_0__["Validator"].localize('en', dict);
   methods: {
     getFeatures: function getFeatures() {
       var fire = this;
-      axios.get('/api/packages', store.state.config).then(function (response) {
-        console.log(response);
+      axios.get('/api/list_package', store.state.config).then(function (response) {
         fire.packages = response.data.data.packages;
       })["catch"](function (error) {
         if (error.response.status == 403) {

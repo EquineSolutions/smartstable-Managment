@@ -174,4 +174,8 @@ class PackageController extends Controller
         ];
         return response()->json($output,200);
     }
+
+    public function get_packages(){
+        return $this->index();
+    }
 }

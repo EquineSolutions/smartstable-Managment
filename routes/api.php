@@ -26,7 +26,7 @@ Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
 
 Route::post('clubs','Api\ClubController@store');
 
-// Route::get('packages','Api\PackageController@index');
+Route::get('list_package','Api\PackageController@get_packages');
 Route::get('pending_club','Api\ClubController@pending_club');
 Route::get('approve_club/{club}','Api\ClubController@approve_club');
 
@@ -43,7 +43,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::resource('clubs','Api\ClubController')->except([
         'store'
-    ]);;
+    ]);
 });
 
 

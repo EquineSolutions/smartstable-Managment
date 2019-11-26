@@ -27,7 +27,7 @@
                                         <vs-button @click="hideTooltip" :to="`/club/${data[indextr].id}`" radius color="primary" type="border" icon-pack="feather" icon="icon-eye"></vs-button>
                                     </div>
                                     <div class="w-1/3" style="margin: 0 15px;">
-                                        <vs-button @click="approve_club(data[indextr].id)" radius color="primary" type="border" icon-pack="feather" icon="icon-user-check"></vs-button>
+                                        <vs-button @click="approve_club(data[indextr].id , indextr)" radius color="primary" type="border" icon-pack="feather" icon="icon-user-check"></vs-button>
                                     </div>
                                 </div>
                             </vs-row>
@@ -51,19 +51,21 @@
         data() {
             return {
                 clubs: [],
-                loading: false
+                loading: false,
             }
         },
         methods: {
-            approve_club(club){
+            approve_club(club , index){
                 let self = this;
                 this.club = club;
                 this.loading = true //the loading begin
                 axios.get(`/api/approve_club/${this.club}`, store.state.config).then(function(response){
-                    self.loading = false
+                    self.loading = false;
+                    self.clubs = response.data.data.clubs;
                 }).catch(function(error){
+                    console.log(error);
                     self.loading = false
-                    fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                    self.vs_alert ('Oops!', error.response.data.message, 'danger');
                     router.push({ name: "pageError403"});
 
                 });

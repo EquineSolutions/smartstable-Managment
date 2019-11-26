@@ -63,16 +63,18 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    approve_club: function approve_club(club) {
+    approve_club: function approve_club(club, index) {
       var self = this;
       this.club = club;
       this.loading = true; //the loading begin
 
       axios.get("/api/approve_club/".concat(this.club), store.state.config).then(function (response) {
         self.loading = false;
+        self.clubs = response.data.data.clubs;
       })["catch"](function (error) {
+        console.log(error);
         self.loading = false;
-        fire.vs_alert('Oops!', error.response.data.message, 'danger');
+        self.vs_alert('Oops!', error.response.data.message, 'danger');
         router.push({
           name: "pageError403"
         });
@@ -314,7 +316,8 @@ var render = function() {
                                                     on: {
                                                       click: function($event) {
                                                         return _vm.approve_club(
-                                                          data[indextr].id
+                                                          data[indextr].id,
+                                                          indextr
                                                         )
                                                       }
                                                     }
@@ -337,7 +340,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        4212038005
+                        1428650753
                       )
                     },
                     [
