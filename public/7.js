@@ -129,7 +129,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".centerx li {\n  display: inline-flex;\n  margin: 10px;\n}\n", ""]);
+exports.push([module.i, ".centerx li {\n  display: -webkit-inline-box;\n  display: inline-flex;\n  margin: 10px;\n}\n", ""]);
 
 // exports
 

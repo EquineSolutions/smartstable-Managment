@@ -113,8 +113,7 @@ export default {
         getFeatures()
             {
                 let fire = this;
-                axios.get('/api/packages', store.state.config).then(function(response){
-                    console.log(response);
+                axios.get('/api/list_package', store.state.config).then(function(response){
                     fire.packages = response.data.data.packages;
                 }).catch(function(error){
                     if(error.response.status == 403) { // Un-Authorized

@@ -38,6 +38,8 @@ class PackageController extends Controller
     public function create()
     {
         $features = Feature::get();
+        // dd($features);
+
         $output = [
             'status' => 200,
             'message' => 'features loaded successfully',
@@ -171,5 +173,9 @@ class PackageController extends Controller
             'message' => 'Package deleted successfully',
         ];
         return response()->json($output,200);
+    }
+
+    public function get_packages(){
+        return $this->index();
     }
 }

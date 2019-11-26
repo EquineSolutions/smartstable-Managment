@@ -26,7 +26,7 @@ Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
 
 Route::post('club/add','Api\ClubController@pre_store');
 
-Route::get('packages','Api\PackageController@index');
+Route::get('list_package','Api\PackageController@get_packages');
 Route::get('pending_club','Api\ClubController@pending_club');
 Route::get('approve_club/{club}','Api\ClubController@approve_club');
 
@@ -34,19 +34,15 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('roles','Api\RoleController');
     Route::resource('users','Api\UserController');
     Route::resource('features','Api\FeatureController');
-    Route::resource('packages','Api\PackageController')->except([
-        'index'
-    ]);
+    Route::resource('packages','Api\PackageController');
     Route::post('assign_packages','Api\ClubController@assign_packages_to_club');
     Route::get('user_info','Api\UserController@all_user_info');
     Route::get('logout', 'Api\PassportController@logout');
     Route::post('profile/{id}', 'Api\UserController@updateProfileData');
     Route::post('authorize', 'Api\PassportController@authorizeUserPermission');
-
     Route::resource('clubs','Api\ClubController');
+
 });
-
-
 
 
 
