@@ -285,7 +285,7 @@ class ClubController extends Controller
             Equine_file::unzip_file($zipfile,"./../../");
             Equine_file::rename("./../../SmartStableClub-master" , "./../../$club");
         }
-        echo "Done";
+        // echo "Done";
     }
 
 
@@ -336,7 +336,7 @@ class ClubController extends Controller
             $this->club_settings($club);
         }
 
-        echo $message;
+        // echo $message;
     }
 
     private function club_settings($club){
@@ -352,7 +352,7 @@ class ClubController extends Controller
         // handle db credentials
         $this->env_db_credentials($new_file,$club);
 
-        echo "config";
+        // echo "config";
     }
 
     private function env_db_credentials($file,$club){
