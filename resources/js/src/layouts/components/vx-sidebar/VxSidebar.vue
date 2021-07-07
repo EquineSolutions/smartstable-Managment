@@ -18,7 +18,7 @@
                         <img :src="logo" alt="logo" class="w-10 mr-4" v-if="logo">
                         <span class="logo-text" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
                     </div>
-                    <div>
+                    <dhoiv>
                         <template v-if="showCloseButton">
                             <feather-icon icon="XIcon" class="m-0 cursor-pointer" @click="$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false)"></feather-icon>
                         </template>
@@ -26,13 +26,13 @@
                             <feather-icon icon="DiscIcon" class="mr-0 cursor-pointer" svg-classes="stroke-current" v-show="!reduce" @click="toggleReduce(true)" id="btnSidebarToggler"></feather-icon>
                             <feather-icon icon="CircleIcon" class="mr-0 cursor-pointer" svg-classes="stroke-current" v-show="reduce" @click="toggleReduce(false)" id="btnSidebarToggler"></feather-icon>
                         </template>
-                    </div>
+                    </dhoiv>
                 </div>
 
                 <div class="shadow-bottom" v-show="showShadowBottom"></div>
 
                 <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--main-sidebar pt-2" :settings="settings" @ps-scroll-y="psSectionScroll">
-                    <template v-for="(sidebarItem, index) in sidebarItems">
+                    <template v-for="(sidebarItem, index) in sidebarItems" v-if="can(sidebarItem.permission)||sidebarItem.permission == undefined">
 
                         <!-- GROUP ITEM HEADER -->
                         <span :key="`header-${index}`" v-if="sidebarItem.header && !sidebarItemsMin" class="navigation-header truncate">{{ sidebarItem.header }}</span>

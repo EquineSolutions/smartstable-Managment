@@ -31,11 +31,42 @@ export default [
     name: "User",
     slug: "user",
     icon: "UserIcon",
+    permission: 'browse-users'
   },
   {
     url: "/role",
     name: "Role",
     slug: "role",
     icon: "ShieldIcon",
-  }
+    permission: 'browse-roles'
+  },
+    {
+        url: "/package",
+        name: "Package",
+        slug: "package",
+        icon: "ShieldIcon",
+        permission: 'browse-packages'
+    },
+    {
+        url: "/feature",
+        name: "Feature",
+        slug: "feature",
+        icon: "ShieldIcon",
+        permission: 'browse-features'
+    },
+    {
+        url: "/club",
+        name: "Club",
+        slug: "club",
+        icon: "ShieldIcon",
+        // permission: 'browse-clubs'
+    },
+    {
+        url: "/pending_club",
+        name: "Pending Club",
+        slug: "pending club",
+        icon: "ShieldIcon",
+        // permission: 'browse-clubs'
+    }
+
 ]

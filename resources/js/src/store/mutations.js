@@ -7,6 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+import router from '../router';
 
 const mutations = {
 
@@ -95,7 +96,48 @@ const mutations = {
     // ////////////////////////////////////////////
 
     updateTokens(state, tokens) {
-        state.tokens = tokens;
+        state.tokens = tokens.data;
+    },
+
+    updateUser(state, data)
+    {
+        state.config = {
+            headers: {'Authorization': "Bearer " + state.tokens.access_token}
+        };
+
+        state.currentUser = data.user;
+
+        state.userRole = data.role;
+
+        state.userPermissions = data.rolePermissions;
+
+        router.push({ path: `/` });
+    },
+
+    updateUserInfo(state, data) {
+        state.currentUser = data;
+    },
+
+    resetUser(state, data) {
+        state.tokens= {
+            access_token: null,
+            expires_at: null,
+            token_type: null,
+            user_id: null
+        };
+
+        state.userRole = null;
+
+        state.currentUser = {
+            id: null,
+            first_name: null,
+            last_name: null,
+            email: null,
+            mobile: null,
+            image: null,
+        };
+
+        state.config = null;
     }
 
 

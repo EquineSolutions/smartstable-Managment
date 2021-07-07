@@ -13,20 +13,43 @@ use Illuminate\Http\Request;
 |
 */
 
-
 Route::post('login', 'Api\PassportController@login');
-Route::post('register', 'Api\PassportController@register');
+Route::get('copy', 'Api\ClubController@club_settings');
+
+
+//??? why ?
+Route::put('user/role/{user_id}', 'Api\UserRoleController@update');
+
+
+Route::post('club/user','Api\ClubController@user_club');
+Route::get('club/verify/{token}', 'Api\ClubController@verifyClub');
+
+Route::post('club/add','Api\ClubController@pre_store');
+
+Route::get('list_package','Api\PackageController@get_packages');
+Route::get('pending_club','Api\ClubController@pending_club');
+Route::get('approve_club/{club}','Api\ClubController@approve_club');
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('roles','Api\RoleController');
     Route::resource('users','Api\UserController');
+    Route::resource('features','Api\FeatureController');
+    Route::resource('packages','Api\PackageController');
+    Route::post('assign_packages','Api\ClubController@assign_packages_to_club');
+    Route::get('user_info','Api\UserController@all_user_info');
+    Route::get('logout', 'Api\PassportController@logout');
+    Route::post('profile/{id}', 'Api\UserController@updateProfileData');
+    Route::post('authorize', 'Api\PassportController@authorizeUserPermission');
+    Route::resource('clubs','Api\ClubController');
+
 });
 
-//Route::group(['prefix' => 'user'], function () {
-//    Route::get('', 'Api\UserController@index');
-//    Route::get('{id}', 'Api\UserController@show');
-//    Route::post('', 'Api\UserController@store');
-//    Route::delete('{id}', 'Api\UserController@destroy');
-//    Route::patch('{id}', 'Api\UserController@edit');
-//    Route::put('{id}', 'Api\UserController@update');
-//});
+
+
+Route::get('stripe/{club}', 'Payment\StripePaymentController@stripe');
+Route::post('stripe', 'Payment\StripePaymentController@stripePost')->name('stripe.post');
+
+Route::get('/charge', function () {
+    return view('payment.index');
+});
+Route::post('/charge/{club}', 'Payment\StripePaymentController@charge');

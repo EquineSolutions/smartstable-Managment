@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Events\ClubProcess' => [
+            'App\Listeners\ClubProcessNotification',
+        ],
     ];
 
     /**
@@ -28,6 +31,10 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Event::listen('event.name', function ($foo, $bar) {
+            //
+        });
 
         //
     }

@@ -19,6 +19,7 @@
 
 import Vue from 'vue';
 import Router from 'vue-router';
+window.axios = require('axios');
 
 Vue.use(Router);
 
@@ -45,13 +46,14 @@ const router = new Router({
               breadcrumb: [
                 { title: 'Home', active: true}
               ],
-              pageTitle: "Home"
+              pageTitle: "Home",
             }
           },
+
           {
-            path: '/page2',
-            name: 'page2',
-            component: () => import('./views/Page2.vue'),
+            path: '/admin/club',
+            name: 'Admin Club',
+            component: () => import('./views/Club/ClubUser.vue'),
           },
 
 
@@ -66,7 +68,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'User', active: true}
               ],
-              pageTitle: "Users"
+              pageTitle: "Users",
+              permission: 'browse-users'
             }
           },
           {
@@ -80,7 +83,8 @@ const router = new Router({
                 { title: 'User', url: '/user'},
                 { title: 'Create User', active: true}
               ],
-              pageTitle: "Create User"
+              pageTitle: "Create User",
+              permission: 'add-users'
             }
           },
           {
@@ -94,7 +98,8 @@ const router = new Router({
                 { title: 'User', url: '/user'},
                 { title: 'User Information', active: true}
               ],
-              pageTitle: "User Information"
+              pageTitle: "User Information",
+              permission: 'view-users'
             }
           },
           {
@@ -108,7 +113,8 @@ const router = new Router({
                 { title: 'Users', url: '/user'},
                 { title: 'Edit User', active: true}
               ],
-              pageTitle: "Edit User"
+              pageTitle: "Edit User",
+              permission: 'edit-users'
             }
           },
 
@@ -126,7 +132,8 @@ const router = new Router({
                 { title: 'Home', url: '/'},
                 { title: 'Roles', active: true}
               ],
-              pageTitle: "Roles"
+              pageTitle: "Roles",
+              permission: 'browse-roles'
             }
           },
           {
@@ -140,7 +147,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Create Role', active: true}
               ],
-              pageTitle: "Create Role"
+              pageTitle: "Create Role",
+              permission: 'add-roles'
             }
           },
           {
@@ -154,7 +162,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Role Information', active: true}
               ],
-              pageTitle: "Role Information"
+              pageTitle: "Role Information",
+              permission: 'view-roles'
             }
           },
           {
@@ -168,7 +177,8 @@ const router = new Router({
                 { title: 'Roles', url: '/role'},
                 { title: 'Edit Role', active: true}
               ],
-              pageTitle: "Edit Role"
+              pageTitle: "Edit Role",
+              permission: 'edit-roles'
             }
           },
 
@@ -188,6 +198,214 @@ const router = new Router({
               pageTitle: "Profile"
             }
           },
+
+          // PACKAGES CRUD PAGES
+          {
+            path: '/package',
+            name: 'package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Packages.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', active: true}
+              ],
+              pageTitle: "Packages",
+              permission: 'browse-packages'
+            }
+          },
+          {
+            path: '/package/create',
+            name: 'create-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Create.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Create Package', active: true}
+              ],
+              pageTitle: "Create Packages",
+              permission: 'add-packages'
+            }
+          },
+          {
+            path: '/package/:id',
+            name: 'view-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/View.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Package Information', active: true}
+              ],
+              pageTitle: "Package Information",
+              permission: 'browse-packages'
+            }
+          },
+          {
+            path: '/package/edit/:id',
+            name: 'edit-package',
+            beforeEnter: guard, // Using guard before entering the route
+            component: () => import('./views/Package/Edit.vue'),
+            meta: {
+              breadcrumb: [
+                { title: 'Home', url: '/'},
+                { title: 'Package', url: '/package'},
+                { title: 'Edit Package', active: true}
+              ],
+              pageTitle: "Edit Package",
+              permission: 'edit-packages'
+            }
+          },
+
+            // FEATURE CRUD PAGES
+            {
+                path: '/feature',
+                name: 'feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Features.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', active: true}
+                    ],
+                    pageTitle: "Feature",
+                    permission: 'browse-features'
+                }
+            },
+            {
+                path: '/feature/create',
+                name: 'create-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Create Feature', active: true}
+                    ],
+                    pageTitle: "Create Features",
+                    permission: 'add-features'
+                }
+            },
+            {
+                path: '/feature/:id',
+                name: 'view-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/View.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Feature Information', active: true}
+                    ],
+                    pageTitle: "Feature Information",
+                    permission: 'browse-features'
+                }
+            },
+            {
+                path: '/feature/edit/:id',
+                name: 'edit-feature',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Feature/Edit.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Feature', url: '/feature'},
+                        { title: 'Edit Feature', active: true}
+                    ],
+                    pageTitle: "Edit Feature",
+                    permission: 'edit-features'
+                }
+            },
+            {
+                path: '/club',
+                name: 'Club',
+                // beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Clubs.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', active: true}
+                    ],
+                    pageTitle: "Clubs",
+                    permission: 'browse-clubs'
+                }
+            },
+            {
+                path: '/club/create',
+                name: 'create-club',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Create.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Create Clubs', active: true}
+                    ],
+                    pageTitle: "Create Clubs",
+                    permission: 'add-clubs'
+                }
+            },
+            {
+                path: '/club/:id',
+                name: 'view-club',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/View.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Clubs', active: true}
+                    ],
+                    pageTitle: "Clubs",
+                    permission: 'view-clubs'
+                }
+            },
+            {
+                path: '/club/edit/:id',
+                name: 'edit-club',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/Edit.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Edit Club', active: true}
+                    ],
+                    pageTitle: "Edit Club",
+                    permission: 'edit-clubs'
+                }
+            },
+            {
+                path: '/club/assign/:id',
+                name: 'assign-package',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/ClubPackages.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Club', url: '/club'},
+                        { title: 'Assign package', active: true}
+                    ],
+                    pageTitle: "Assign packages",
+                }
+            },
+
+            {
+                path: '/pending_club',
+                name: 'pending_club',
+                beforeEnter: guard, // Using guard before entering the route
+                component: () => import('./views/Club/PendingRequest.vue'),
+                meta: {
+                    breadcrumb: [
+                        { title: 'Home', url: '/'},
+                        { title: 'Pending request', active: true}
+                    ],
+                    pageTitle: "Pending request",
+                }
+            },
         ],
       },
     // =============================================================================
@@ -210,13 +428,28 @@ const router = new Router({
             name: 'pageError404',
             component: () => import('@/views/auth/Error404.vue')
           },
+          {
+            path: '/error-403',
+            name: 'pageError403',
+            component: () => import('@/views/auth/NotAuthorized.vue')
+          },
+            {
+                path: '/clubs/create_club',
+                name: 'create-club',
+                component: () => import('@/views/Club/CreateClub.vue')
+            },
+            {
+                path: '/clubs/more_data',
+                name: 'create-club',
+                component: () => import('./views/Club/MoreClubData.vue'),
+            },
         ]
       },
       // Redirect to 404 page, if no match found
       {
         path: '*',
         redirect: '/error-404'
-      }
+      },
     ],
 });
 
@@ -231,16 +464,38 @@ router.afterEach(() => {
 });
 
 
+/**
+ * Check if the authenticated user can perform an action.
+ *
+ * @param permission
+ * @returns {boolean}
+ */
+function can(permission) {
+  let hasPermission = false;
+  store.state.userPermissions.forEach((userPermission) => {
+    if(userPermission.name == permission){
+      hasPermission = true;
+    }
+  });
 
-function guard(to, from, next){
-  let now = Date.now();
-  console.log(store.state);
-  if(store.state.tokens.access_token != null || now >= store.state.tokens.expires_in ) {
-    // or however you store your logged in state
-    next(); // allow to enter route
-  } else{
-    next('/login'); // go to '/login';
+  return hasPermission;
+}
+
+
+function guard(to, from, next) {
+  const formData = new FormData();
+  if (to.meta.permission != undefined){
+    formData.append('permissions', to.meta.permission);
   }
+  axios.post('/api/authorize', formData, store.state.config).then(function(response){
+    next();
+  }).catch(error=>{
+    if (error.response.status == 403){ // unauthorized
+      next('/error-403');
+    }else if (error.response.status == 401){ // unauthenticated
+      next('/login');
+    }
+  });
 }
 
 

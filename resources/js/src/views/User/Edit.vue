@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="can('edit-users')">
     <div>
       <vx-card title='Update User'>
         <form>
@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="vx-row">
-            <div class="vx-col sm:w-1/2 w-full mb-6">
+            <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input type="email" v-validate="'required|email'" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border label-placeholder="Email*" v-model="email" name='email' />
               <span class="text-danger text-sm" v-show="errors.has('email')">{{ errors.first('email') }}</span>
             </div>
@@ -25,8 +25,8 @@
           </div>
 
           <div class="vx-row">
-            <div class="vx-col sm:w-1/2 w-full mb-6">
-              <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-bind="password" class="w-full" ref="password" />
+            <div class="vx-col sm:w-1/2 w-full mb-2">
+              <vs-input type="password" icon-pack="feather" icon="icon-lock" icon-no-border label-placeholder="Password" name="password" v-model="password" class="w-full" ref="password" />
               <span class="text-danger text-sm" v-show="errors.has('password')">{{ errors.first('password') }}</span>
             </div>
             <div class="vx-col sm:w-1/2 w-full mb-2">
@@ -45,6 +45,8 @@
               </ul>
             </div>
           </div>
+
+
 
           <div class="vx-row">
             <div class="vx-col w-full">
@@ -81,6 +83,11 @@
     },
     data() {
       return {
+        user: {
+
+        },
+        user_role: "",
+
         userRoles: [],
 
         fname: "",
@@ -88,29 +95,34 @@
         email: "",
         mobile: "",
         password: "",
-        confirm_password: "",
-        user_role: ""
+        confirm_password: ""
+
       }
     },
     methods: {
+      //Get User Data
       getData(){
         let fire = this;
-        let config = {
-          headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-        };
-        axios.get(`/api/users/${this.$route.params.id}/edit`, config).then(function(response){
-          let user = response.data.user;
+        axios.get(`/api/users/${this.$route.params.id}/edit`, store.state.config).then(function(response){
+          let user = response.data.data.user;
           fire.fname = user.first_name;
           fire.lname = user.last_name;
           fire.email = user.email;
           fire.mobile = user.mobile;
           fire.password = '';
-          fire.userRoles = response.data.roles;
-          fire.user_role = response.data.userRole;
+          fire.userRoles = response.data.data.roles;
+          fire.user_role = response.data.data.userRole;
         }).catch(function(error){
-          console.log(error);
+          if(error.response.status == 403) { // Un-Authorized
+            fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+            router.push({ name: "pageError403"});
+          } else if (error.response.status == 401){ // Un-Authenticated
+            router.push({ name: "pageLogin"})
+          }
         });
       },
+
+      //Update User Submission
       submitForm() {
         let fire = this;
         this.$validator.validateAll().then(result => {
@@ -121,47 +133,47 @@
               last_name: this.lname,
               email: this.email,
               mobile: this.mobile,
-              password: this.password,
               roles: this.user_role
             };
 
-            let config = {
-              headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-            };
+            if(this.password != "") {
+              data["password"] = this.password;
+            }
 
-            axios.put(`/api/users/${fire.$route.params.id}`, data, config).then(function(response){
-              if(response.data.success) {
-                fire.$vs.notify({
-                  title:'Success',
-                  text:'User Successfully Updated',
-                  color:'success',
-                  iconPack: 'feather',
-                  icon:'icon-check'
-                });
+            axios.put(`/api/users/${this.$route.params.id}`, data, store.state.config).then(function(response){
+              if(response.data.status == 200) {
+                fire.vs_alert ('Success', 'User Successfully Updated', 'success');
                 router.push({ name: "user"})
               } else {
-                fire.$vs.notify({
-                  title:'Oops!',
-                  text: response.data,
-                  color:'danger'
-                });
+                fire.vs_alert ('Oops!', response.data, 'danger');
               }
             }).catch(function(error){
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+              if (error.response.status == 422){ // Validation Error
+                let errors = error.response.data.errors;
+                fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+              } else if(error.response.status == 403) { // Un-Authorized
+                fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+                router.push({ name: "pageError403"});
+              } else if (error.response.status == 401){ // Un-Authenticated
+                router.push({ name: "pageLogin"})
+              }
             });
-          }else{
-            fire.$vs.notify({
-              title:'Oops!',
-              text:'Please, solve all issues before submitting.',
-              color:'danger'
-            });
+          } else {
+            this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
         })
+      },
+
+      //Vuesax alert
+      vs_alert (title, text, color)
+      {
+        this.$vs.notify({
+          title: title,
+          text: text,
+          color: color
+        });
       }
+
     },
   }
 </script>

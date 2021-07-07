@@ -14,8 +14,8 @@ class UserTransformer extends TransformerAbstract
      */
     public function transform(User $user)
     {
+
         $users = $user->toArray();
-        $users['image'] = $users['image']? '/uploads/images/user/'.$users['image']:'';
         return $users;
     }
 

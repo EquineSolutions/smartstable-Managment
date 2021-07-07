@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Requests\RoleRequest;
-use App\Transformers\RoleTranformer;
+use App\Http\Requests\UpdateRoleRequest;
+use App\Transformers\PermissionTransformer;
+use App\Transformers\RoleTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
-
 
 class RoleController extends Controller
 {
@@ -24,9 +25,17 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('index', Role::class);
+        $this->authorize('browse', Role::class);
+
         $roles = Role::orderBy('id','DESC')->get();
-        return response()->json(['roles' =>$roles ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Roles loaded successfully',
+            'data' => [
+                'roles' =>$roles
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -34,11 +43,20 @@ class RoleController extends Controller
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create()
     {
-        $permission = Permission::get();
-        return response()->json(['permission' =>$permission ], 200);
+        $permission = Permission::get()->groupBy('group');
+        $this->authorize('create', Role::class);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'permission' =>$permission
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -51,38 +69,57 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $this->authorize('index', Role::class);
+        $this->authorize('create', Role::class);
 
         $data = $request->validated();
 
+        DB::beginTransaction();
         try{
             $role = Role::create(['name' => $data['name']]);
             $role->syncPermissions($data['permission']);
             DB::commit();
-            return response()->json(['success' =>'Role created successfully' ], 200);
 
+            $output = [
+                'status' => 200,
+                'message' => 'Role created successfully',
+            ];
+            $status =200;
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['error' =>$e->getMessage() ], 500);
+            $output = [
+                'status' => 500,
+                'error' => $e->getMessage(),
+            ];
+            $status =500;
         }
+
+        return response()->json($output,$status);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Role $role
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
+        $this->authorize('view', Role::class);
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$role->id)
             ->get();
 
-        return response()->json(['role' => $role , 'rolePermissions' => $rolePermissions], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role ,
+                'rolePermissions' => $rolePermissions
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -95,17 +132,18 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $role->id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
-
-        return response()->json([
-            'role' => $role,
-            'permission' => $permission,
-            'rolePermissions' => $rolePermissions,
-        ], 200);
+        $this->authorize('edit', Role::class);
+        $permissions = Permission::get()->groupBy('group');
+        $output = [
+            'status' => 200,
+            'message' => 'Permissions loaded successfully',
+            'data' => [
+                'role' => $role,
+                'permission' => $permissions,
+                'rolePermissions' => $role->permissions,
+            ]
+        ];
+        return response()->json($output,200);
     }
 
 
@@ -117,33 +155,40 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
+        $this->authorize('edit', Role::class);
 
-        $data = $request->validated();
+        $data = $request->all();
 
         $role->name = $data['name'];
         $role->save();
 
-
         $role->syncPermissions($data['permission']);
 
-        return response()->json(['success' =>'Role updated successfully' ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Role updated successfully',
+        ];
+        return response()->json($output,200);
     }
 
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Role $role
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Role $role)
     {
-        $this->authorize('show', [Role::class, $role]);
+        $this->authorize('destroy', Role::class);
         DB::table("roles")->where('id',$role->id)->delete();
-        return response()->json(['success' =>'Role deleted successfully' ], 200);
+        $output = [
+            'status' => 200,
+            'message' => 'Role deleted successfully',
+        ];
+        return response()->json($output,200);
     }
 }

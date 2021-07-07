@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="can('add-roles')">
     <vx-card title='Create New Role'>
       <form>
         <div class="vx-row">
@@ -12,13 +12,16 @@
         <div class="vx-row mt-5">
           <div class="vx-col w-full">
             <b>Role Permissions:</b>
-            <ul class="centerx">
-              <li v-for="(permission, index) in permissions" :key="index">
-                <vs-checkbox v-model="rolePermissions" :vs-value="permission.name">{{permission.name}}</vs-checkbox>
+            <ul v-for="(group, groupName) in permissions">
+                <br>
+                <vs-checkbox v-model="groupPermissions" :vs-value="groupName" @change="groupPressed(group)"><b>{{groupName}}</b></vs-checkbox>
+              <li class="ml-8" v-for="(permission, index) in group" :key="index">
+                <vs-checkbox v-model="rolePermissions" :vs-value="permission.name">{{permission.display_name}}</vs-checkbox>
               </li>
             </ul>
           </div>
         </div>
+
         <div class="vx-row mt-10">
           <div class="vx-col w-full">
             <vs-button class="mr-3 mb-2" @click.prevent="submitForm">Submit</vs-button>
@@ -54,78 +57,95 @@ export default {
   },
   data() {
     return {
-      permissions: [],
+        permissions: [],
 
-      role_name: "",
-      rolePermissions: []
+        role_name: "",
+        rolePermissions: [],
+        groupPermissions:[]
     }
   },
   methods: {
+    //Get All Permissions
     getPermissions()
     {
       let fire = this;
-      let config = {
-        headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-      };
-
-      axios.get('/api/roles/create', config).then(function(response){
-        fire.permissions = response.data.permission;
-      }).catch(function(error){
-        console.log(error);
-      });
+      axios.get('/api/roles/create', store.state.config).then(function(response){
+      fire.permissions = response.data.data.permission;
+    }).catch(function(error){
+        if(error.response.status == 403) { // Un-Authorized
+          fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+          router.push({ name: "pageError403"});
+        } else if (error.response.status == 401){ // Un-Authenticated
+          router.push({ name: "pageLogin"})
+        }
+    });
     },
 
+    //Create Role Submission
     submitForm()
     {
       let fire = this;
       this.$validator.validateAll().then(result => {
         if(result) {
-          let config = {
-            headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-          };
-
           // if form have no errors
           const formData = new FormData();
           formData.append('name', this.role_name);
-          // formData.append('permission[]', ['rr', 'vdfvf']);
           for (var i = 0; i < fire.rolePermissions.length; i++) {
             formData.append('permission[]', fire.rolePermissions[i]);
           }
 
-          axios.post('/api/roles', formData, config).then(function(response){
-            if(response.data.success) {
-              fire.$vs.notify({
-                title:'Success',
-                text:'Role Successfully Added',
-                color:'success',
-                iconPack: 'feather',
-                icon:'icon-check'
-              });
+          axios.post('/api/roles', formData, store.state.config).then(function(response){
+            if(response.data.status == 200) {
+              fire.vs_alert ('Success', 'Role Successfully Added', 'success');
               router.push({ name: "role"})
             } else {
-                fire.$vs.notify({
-                    title:'Oops!',
-                    text: response.data,
-                    color:'danger'
-                });
-
+              fire.vs_alert ('Oops!', response.data, 'danger');
             }
           }).catch(function(error){
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+            if (error.response.status == 422){ // Validation Error
+              let errors = error.response.data.errors;
+              fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if(error.response.status == 403) { // Un-Authorized
+              fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+              router.push({ name: "pageError403"});
+            } else if (error.response.status == 401){ // Un-Authenticated
+              router.push({ name: "pageLogin"})
+            }
           });
-        }else{
-            fire.$vs.notify({
-                title:'Oops!',
-                text:'Please, solve all issues before submitting.',
-                color:'danger'
-              });
-          }
+        } else {
+          this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
+        }
       })
+    },
+
+      //Check and Un-Check by group
+      groupPressed(group)
+      {
+          if (this.groupPermissions.includes(group[0].group)) {
+            for(var i = 0; i< group.length; i++)
+            {
+                if (!this.rolePermissions.includes(group[i].name))
+                    this.rolePermissions.push(group[i].name)
+            }
+          } else {
+              for(var i = 0; i< group.length; i++)
+              {
+                  if (this.rolePermissions.includes(group[i].name))
+                      this.rolePermissions.splice(this.rolePermissions.indexOf(group[i].name), 1);
+              }
+          }
+      },
+
+    //Vuesax alert
+    vs_alert (title, text, color)
+    {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
     }
+
   },
 }
 </script>

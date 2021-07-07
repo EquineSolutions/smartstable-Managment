@@ -19,6 +19,7 @@
                         </div>
                         <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
                             <div class="p-8">
+                                <vs-button  style="float: right;border-radius: 55px;margin-left: 20px;" icon-pack="feather" icon="icon-plus" class="mb-4 md:mb-0" to='/clubs/create_club'>Sign Up</vs-button>
                                 <form @submit.prevent="login(user)">
                                     <div class="vx-card__title mb-8">
                                         <h4 class="mb-4">Login</h4>
@@ -40,12 +41,13 @@
                                         label-placeholder="Password"
                                         v-model="user.password"
                                         class="w-full mt-6 no-icon-border" />
-                                    <div class="flex flex-wrap justify-between my-5">
-                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
-                                        <router-link to="#">Forgot Password?</router-link>
-                                    </div>
+<!--                                    <div class="flex flex-wrap justify-between my-5">-->
+<!--                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>-->
+<!--                                        <router-link to="#">Forgot Password?</router-link>-->
+<!--                                    </div>-->
                                     <div class="p-8">
                                         <vs-button class="float-right">Login</vs-button>
+
                                     </div>
                                 </form>
                             </div>
@@ -58,9 +60,6 @@
 </template>
 
 <script>
-
-    import router from '../../router';
-
 export default {
     data() {
         return {
@@ -76,21 +75,19 @@ export default {
         login(user){
             let fire = this;
             store.dispatch('login', user).then(response => {
-                console.log(response);
                 fire.$vs.notify({
                     title:'Welcome Back!',
                     text:'We are happy to see you again.',
                     color:'success'
                 });
-                router.push({ path: `/` });
-            }).catch(response => {
+            }).catch(error => {
                 fire.$vs.notify({
                     title:'Oops!',
-                    text:'The email or password that you\'ve entered is incorrect.',
+                    text:error.response.data.message,
                     color:'danger'
                 });
                 fire.resetUser();
-            })
+            });
         },
 
         resetUser() {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="can('add-users')">
     <vx-card title='Create New User'>
       <form>
         <div class="vx-row">
@@ -97,15 +97,16 @@ export default {
     getUserRoles()
     {
       let fire = this;
-      let config = {
-        headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-      };
-
-      axios.get('/api/users/create', config).then(function(response){
-        fire.userRoles = response.data.roles;
+      axios.get('/api/users/create', store.state.config).then(function(response){
+        fire.userRoles = response.data.data;
         fire.user_role = fire.userRoles[0];
       }).catch(function(error){
-        console.log(error);
+        if(error.response.status == 403) { // Un-Authorized
+          fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+          router.push({ name: "pageError403"});
+        } else if (error.response.status == 401){ // Un-Authenticated
+          router.push({ name: "pageLogin"})
+        }
       });
     },
 
@@ -114,12 +115,8 @@ export default {
       let fire = this;
       this.$validator.validateAll().then(result => {
         if(result) {
-          let config = {
-            headers: {'Authorization': "Bearer " + store.state.tokens.access_token}
-          };
-          console.log(store.state.tokens.access_token);
-
           // if form have no errors
+
           const formData = new FormData();
           formData.append('first_name', this.first_name);
           formData.append('last_name', this.last_name);
@@ -128,42 +125,40 @@ export default {
           formData.append('password', this.password);
           formData.append('roles', this.user_role);
 
-          axios.post('/api/users', formData, config).then(function(response){
-            console.log(response);
-            if(response.data.success) {
-              fire.$vs.notify({
-                title:'Success',
-                text:'User Successfully Added',
-                color:'success',
-                iconPack: 'feather',
-                icon:'icon-check'
-              });
+          axios.post('/api/users', formData, store.state.config).then(function(response){
+            if(response.data.status == 200) {
+              fire.vs_alert ('Success', 'User Successfully Added', 'success');
               router.push({ name: "user"})
             } else {
-                fire.$vs.notify({
-                    title:'Oops!',
-                    text: response.data,
-                    color:'danger'
-                });
-
+              fire.vs_alert ('Oops!', response.data, 'danger');
             }
           }).catch(function(error){
-              // console.log(error);
-              fire.$vs.notify({
-                title:'Oops!',
-                text:'An error has been occurred.',
-                color:'danger'
-              });
+            if (error.response.status == 422){ // Validation Error
+              let errors = error.response.data.errors;
+              fire.vs_alert ('Oops!', errors[Object.keys(errors)[0]][0], 'danger');
+            } else if(error.response.status == 403) { // Un-Authorized
+              fire.vs_alert ('Oops!', error.response.data.message, 'danger');
+              router.push({ name: "pageError403"});
+            } else if (error.response.status == 401){ // Un-Authenticated
+              router.push({ name: "pageLogin"})
+            }
           });
-        }else{
-            fire.$vs.notify({
-                title:'Oops!',
-                text:'Please, solve all issues before submitting.',
-                color:'danger'
-              });
+        } else {
+            this.vs_alert ('Oops!', 'Please, solve all issues before submitting.', 'danger');
           }
       })
+    },
+
+    //Vuesax alert
+    vs_alert (title, text, color)
+    {
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
     }
+
   },
 }
 </script>

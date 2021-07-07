@@ -21,13 +21,28 @@ class RolePolicy
         //
     }
 
-    public function index(User $user)
+    public function browse(User $user)
     {
-        return $user->hasRole('super-admin');
+        return $user->hasPermissionTo('browse-roles');
     }
 
-    public function show(User $user, Role $role)
+    public function view(User $user)
     {
-        return $user->hasRole('super-admin');
+        return $user->hasPermissionTo('view-roles');
+    }
+
+    public function create(User $user)
+    {
+        return $user->hasPermissionTo('add-roles');
+    }
+
+    public function edit(User $user)
+    {
+        return $user->hasPermissionTo('edit-roles');
+    }
+
+    public function delete(User $user)
+    {
+        return $user->hasPermissionTo('delete-roles');
     }
 }
