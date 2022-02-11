@@ -22,7 +22,7 @@
         "sass-loader": "^7.1.0",
         "@babel/plugin-syntax-dynamic-import": "^7.2.0",
         "@fullhuman/postcss-purgecss": "^1.2.0",
-        "node-sass": "^4.12.0",
+        "node-sass": "^7.0.0",
         "purgecss": "^1.3.0",
         "vue-template-compiler": "^2.6.10",
         "@chenfengyuan/vue-countdown": "^1.1.2",
